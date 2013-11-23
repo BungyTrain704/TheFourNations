@@ -1,0 +1,6 @@
+
+public enum UnitSkill {
+
+	HARVESTING, STONEBREAKING, CRAFTING, COOKING;
+	
+}
