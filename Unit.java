@@ -19,6 +19,8 @@ public abstract class Unit {
 	private Task currentTask;
 	private Queue<Integer> movementQueue;
 	private boolean currentlyWorking = false;
+	private int location;
+	private final int COLS; //TODO: figure out how to initialize
 	
 	/**
 	 * Creates a unit that has a specific set of skills
@@ -29,7 +31,7 @@ public abstract class Unit {
 	 * @param maxHungerLevel The maximum amount of food energy that this unit can have. They start the game at 75% of their max hunger
 	 * 							level. They will need to eat at 15% of their max energy level.
 	 */
-	public Unit( String name, HashMap<UnitSkill, Integer> skills, int maxEnergyLevel, int maxHungerLevel ) {
+	public Unit( String name, HashMap<UnitSkill, Integer> skills, int maxEnergyLevel, int maxHungerLevel, int location, int cols ) {
 		this.name = name;
 		this.energyLevel = (int)(maxEnergyLevel * 0.75);
 		this.hungerLevel = (int)(maxHungerLevel * 0.75);
@@ -37,6 +39,8 @@ public abstract class Unit {
 		this.MAX_HUNGER_LEVEL = maxHungerLevel;
 		this.skills = skills;
 		this.movementQueue = new LinkedList<Integer>();
+		this.location = location;
+		this.COLS = cols;
 	}
 	
 	/**
@@ -47,12 +51,13 @@ public abstract class Unit {
 	 * @param maxHungerLevel The maximum amount of food energy that this unit can have. They start the game at 75% of their max hunger
 	 * 							level. They will need to eat at 15% of their max energy level.
 	 */
-	public Unit( String name, int maxEnergyLevel, int maxHungerLevel ) {
+	public Unit( String name, int maxEnergyLevel, int maxHungerLevel, int cols) {
 		this.name = name;
 		this.energyLevel = (int)(maxEnergyLevel * 0.75);
 		this.hungerLevel = (int)(maxHungerLevel * 0.75);
 		this.MAX_ENERGY_LEVEL = maxEnergyLevel;
 		this.MAX_HUNGER_LEVEL = maxHungerLevel;
+		this.COLS = cols;
 		this.movementQueue = new LinkedList<Integer>();
 
 		//Initialize all skills at one
@@ -107,6 +112,26 @@ public abstract class Unit {
 	 */
 	public void generatePath( int destination ) {
 		this.movementQueue.clear();
+		
+		int tempLocation = location;
+		while(tempLocation != destination)
+		{
+			if(tempLocation % COLS < destination % COLS)
+				movementQueue.add(++tempLocation);
+			else if(tempLocation % COLS > destination % COLS)
+				movementQueue.add(--tempLocation);
+			
+			if(tempLocation/COLS < destination/COLS)
+			{
+				tempLocation += COLS;
+				movementQueue.add(tempLocation);
+			}
+			else
+			{
+				tempLocation -= COLS;
+				movementQueue.add(tempLocation);
+			}	
+		}	
 		//TODO: WRITE PATHING 
 	}
 	
