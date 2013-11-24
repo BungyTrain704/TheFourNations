@@ -7,9 +7,16 @@ public abstract class Task
 {
 	private int remainingWorkRequirement; //amount of work required for this task
 	private int locationOfWorker; //location where unit needs to be to work on this task
-	private int locationOfTask; //location where work is being done (i.e. where something is being built)
-	private Map map;
+	protected int locationOfTask; //location where work is being done (i.e. where something is being built)
+	protected Map map;
 	
+	/**
+	 * Creates a task
+	 * @param work The amount of work required to complete the task (ticks).
+	 * @param locWorker The location that the worker will be located in when working on this task
+	 * @param locTask The location that will be changed when the task is completed.
+	 * @param map The map that this task is taking place on
+	 */
 	public Task(int work, int locWorker, int locTask, Map map )
 	{
 		remainingWorkRequirement = work;
@@ -23,7 +30,7 @@ public abstract class Task
 		remainingWorkRequirement -= workDone;
 		if(remainingWorkRequirement <= 0)
 		{
-			performAction( this.map );
+			performAction();
 			return true;
 		}
 		return false;
@@ -45,7 +52,6 @@ public abstract class Task
 	
 	/**
 	 * Performs the action for the call
-	 * @param map The map that the task is being performed on
 	 */
-	public abstract void performAction( Map map ); 
+	public abstract void performAction(); 
 }
