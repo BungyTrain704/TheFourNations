@@ -1,9 +1,21 @@
-
+/**
+ * Superclass to all in-game structures. A structure is a building
+ * that is located within a room on the map is provides some sort
+ * of functionality to the civilization. This functionality could be
+ * stat bonuses, resource storage, etc.
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public abstract class AbstractStructure {
 
 	private int location;
 	private String name;
 	
+	/**
+	 * Creates a structure with a specified name and location.
+	 * @param location
+	 * @param name
+	 */
 	public AbstractStructure(int location, String name) {
 		this.location = location;
 		this.name = name;
