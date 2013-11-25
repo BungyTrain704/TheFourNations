@@ -132,13 +132,65 @@ public abstract class Unit {
 				movementQueue.add(tempLocation);
 			}	
 		}	
-		//TODO: WRITE PATHING 
+		//TODO: WRITE ADVANCED PATHING 
 	}
+	
+	/**
+	 * Moves the unit to the given location.
+	 */
+	public void move()
+	{
+		if(movementQueue.size()<=1) {
+			movementQueue.clear();
+			this.setCurrentlyWorking(true);
+			return;
+		}
+		location = movementQueue.remove();
+	}
+	
+	/**
+	 * The method that is called every tick by Civilization
+	 */
+	public void update()
+	{
+		updateUnitCounters();
+		if(this.needsToEat())
+		{
+			//put current task back, go eat
+		}
+		else if(this.needsToSleep())
+		{
+			//put current task back, go sleep
+		}
+		/*else*/if(!movementQueue.isEmpty())
+		{
+			move();
+			System.out.println("moving");
+		}
+		else if(this.currentlyWorking)
+		{
+			if(currentTask.decrement(1))
+				currentlyWorking = false;
+		}	
+		else
+		{
+			if(Civilization.getInstance().isAvailableTask())
+			{	
+				currentTask = Civilization.getInstance().getNextTask();
+				generatePath(currentTask.getTaskLocation());
+				System.out.println("generating");
+			}
+			else
+				System.out.println("idle");
+		}	
+	}
+	
+	
 	
 	/**
 	 * Updates the unit's hunger and energy levels. Called every tick.
 	 */
-	public abstract void updateUnitCounters();
+	protected abstract void updateUnitCounters();
 
 	/**
 	 * @return the name
@@ -173,6 +225,14 @@ public abstract class Unit {
 	 */
 	public Task getCurrentTask() {
 		return currentTask;
+	}
+	
+	public int getLocation() {
+		return location;
+	}
+	
+	public void setLocation(int loc) {
+		location = loc;
 	}
 
 	/**

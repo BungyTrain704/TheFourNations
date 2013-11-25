@@ -14,7 +14,11 @@ public class GameRunner
 	{
 		board = new Map();
 		System.out.println(board.toString());
+		Civilization civ = Civilization.getInstance();
+		civ.setMap(board);
 		
+		
+		civ.addTaskToQueue(new BuildStructureTask(10, 941, 940, board, new BasicStructure(941, "S")));
 		//TODO: initialize commands (either hardcode, or user input)
 		
 		int delay = 300;
@@ -22,6 +26,7 @@ public class GameRunner
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//TODO: perform updates on board
+				Civilization.getInstance().update();
 				System.out.println(board);
 			}
 		};

@@ -28,7 +28,11 @@ public class Map {
 		String mapString = "";
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				if (map[i][j].hasResource()) {
+				if (map[i][j].hasUnit())
+					mapString += "U";
+				else if(map[i][j].hasStructure())
+					mapString += "S";
+				else if (map[i][j].hasResource()) {
 					mapString += map[i][j].getResource();
 				} else {
 					mapString += map[i][j].getTerrain();
@@ -121,6 +125,11 @@ public class Map {
 					map[i][j].removeResource();
 				}
 		}
+	}
+	
+	public Cell getCell(int location)
+	{
+		return map[location/cols][location%cols];
 	}
 
 }

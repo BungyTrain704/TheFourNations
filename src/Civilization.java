@@ -12,8 +12,9 @@ public class Civilization {
 	private Queue<Task> taskQueue;
 	private ArrayList<Unit> units;
 	private ArrayList<AbstractStructure> structures;
-	private static Civilization instance = new Civilization( 4 );
+	private static Civilization instance = new Civilization( 1 );
 	private int currentFoodCount;
+	private Map map;
 	
 	/**
 	 * Creates a civilization with a specified number of starting units
@@ -21,10 +22,27 @@ public class Civilization {
 	 */
 	private Civilization( int numberOfStartingUnits ) {
 		//TODO: Generate some units
+		
+		
 		this.taskQueue = new LinkedList<Task>();
 		this.units = new ArrayList<Unit>();
+		for(int i = 0; i < numberOfStartingUnits; i++)
+		{
+			units.add(new BasicUnit("U", 100, 100, 70));
+		}	
 		this.structures = new ArrayList<AbstractStructure>();
 		this.setCurrentFoodCount(0);
+	}
+	
+	public void setMap(Map m)
+	{
+		this.map = m;
+		for(Unit u: units)
+		{
+			u.setLocation(1085);
+		}
+		map.getCell(1085).removeResource();
+		map.getCell(1085).setUnit(true);
 	}
 	
 	/**
@@ -132,5 +150,16 @@ public class Civilization {
 	 */
 	public void addToFoodCount( int foodToAdd ) {
 		this.currentFoodCount += foodToAdd;
+	}
+	
+	public void update()
+	{
+		for(Unit person: units)
+		{
+			Cell currentCell = map.getCell(person.getLocation());
+			person.update();
+			currentCell.setUnit(false);
+			map.getCell(person.getLocation()).setUnit(true);
+		}	
 	}
 }

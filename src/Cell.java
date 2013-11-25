@@ -9,6 +9,7 @@ public class Cell {
 	private Resource resource;
 	private int average;
 	private Random rand = new Random();
+	private AbstractStructure item;
 	
 	public Cell() {
 		terrain= Terrain.plains;
@@ -16,6 +17,7 @@ public class Cell {
 		hasUnit = false;
 		isVisible = false;
 		average = rand.nextInt(300);
+		item = null;
 	}
 
 	public void setTerrain(Terrain t) {
@@ -66,5 +68,13 @@ public class Cell {
 	public void removeResource() {
 		resource = null;
 		hasResource = false;
+	}
+	
+	public boolean hasStructure()
+	{
+		return item != null;
+	}
+	public void addStructure(AbstractStructure built)	{
+		item = built;
 	}
 }

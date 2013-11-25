@@ -25,7 +25,7 @@ public class BuildStructureTask extends Task {
 	 * <p>Adds the structure to the map and to the civilization</p>
 	 */
 	@Override public void performAction() {
-		//TODO: Add structure to the map
+		super.map.getCell(super.locationOfTask).addStructure(this.structureToBuild);
 		Civilization.getInstance().addStructure( this.structureToBuild );
 	}
 }
