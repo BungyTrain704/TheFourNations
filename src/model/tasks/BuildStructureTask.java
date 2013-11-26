@@ -1,3 +1,11 @@
+package model.tasks;
+import model.Civilization;
+import model.map.Map;
+import model.structures.AbstractStructure;
+
+
+
+
 /**
  * Builds a structure at a specified location
  * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
@@ -27,5 +35,6 @@ public class BuildStructureTask extends Task {
 	@Override public void performAction() {
 		super.map.getCell(super.locationOfTask).addStructure(this.structureToBuild);
 		Civilization.getInstance().addStructure( this.structureToBuild );
+		Civilization.getInstance().useResource( this.structureToBuild.getResourceUsed() );
 	}
 }

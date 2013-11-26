@@ -1,3 +1,7 @@
+package model.tasks;
+import model.map.Map;
+import model.units.Unit;
+
 /**
  * A task is an action performed on the map that makes some sort of meaningful change to the map
  * @author Christopher Chapline, James Fagan, Michelle Yung, Emile Leones
@@ -9,6 +13,7 @@ public abstract class Task
 	private int locationOfWorker; //location where unit needs to be to work on this task
 	protected int locationOfTask; //location where work is being done (i.e. where something is being built)
 	protected Map map;
+	protected Unit unit;
 	
 	/**
 	 * Creates a task
@@ -23,9 +28,10 @@ public abstract class Task
 		locationOfWorker = locWorker;
 		locationOfTask = locTask;
 		this.map = map;
+		this.unit = null;
 	}
 	
-	public boolean decrement(int workDone)
+	public final boolean decrement(int workDone)
 	{
 		remainingWorkRequirement -= workDone;
 		if(remainingWorkRequirement <= 0)
@@ -50,8 +56,16 @@ public abstract class Task
 		return this.remainingWorkRequirement;
 	}
 	
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+	
 	/**
 	 * Performs the action for the call
 	 */
-	public abstract void performAction(); 
+	public abstract void performAction();
 }

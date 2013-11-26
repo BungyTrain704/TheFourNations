@@ -1,6 +1,17 @@
+package model.units;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import model.Civilization;
+import model.map.Map;
+import model.map.Terrain;
+import model.tasks.EatTask;
+import model.tasks.Task;
+
+
 
 /**
  * The unit is the basic entity of the game. It it the superclass to all other autonomous units within the game.
@@ -14,7 +25,7 @@ public abstract class Unit {
 	
 	private String name;
 	private HashMap<UnitSkill, Integer> skills;
-	private int energyLevel, hungerLevel;
+	protected int energyLevel, hungerLevel;
 	private final int MAX_HUNGER_LEVEL, MAX_ENERGY_LEVEL;
 	private Task currentTask;
 	private Queue<Integer> movementQueue;
@@ -73,6 +84,8 @@ public abstract class Unit {
 	 */
 	public void setCurrentTask( Task task ) {
 		this.currentTask = task;
+		
+		generatePath(this.currentTask.getWorkerLocation() );
 	}
 	
 	/**
@@ -126,7 +139,7 @@ public abstract class Unit {
 				tempLocation += COLS;
 				movementQueue.add(tempLocation);
 			}
-			else
+			else if(tempLocation/COLS > destination/COLS)
 			{
 				tempLocation -= COLS;
 				movementQueue.add(tempLocation);
@@ -156,19 +169,38 @@ public abstract class Unit {
 		updateUnitCounters();
 		if(this.needsToEat())
 		{
-			//put current task back, go eat
+			//Place task back on queue
+			Civilization.getInstance().addTaskToQueue( this.currentTask );
+			this.currentTask.setUnit(null);
+			this.currentTask = null;
+			
+			//Find nearest kitchen
+			Map m = Civilization.getInstance().getMap();
+			
+			ArrayList<Integer> storedCells = new ArrayList<Integer>();
+			
+			//Find on the map
+			for( int i = 0; i < m.getMapSize(); i++ ) {
+				if( m.getCell(i).getTerrain() == Terrain.kitchen ) {
+					storedCells.add( i );
+				}
+			}
+			
+			//Create task to eat
+			this.currentTask = new EatTask( 1, storedCells.get(0), storedCells.get(0), Civilization.getInstance().getMap(), this );
 		}
 		else if(this.needsToSleep())
 		{
 			//put current task back, go sleep
 		}
-		/*else*/if(!movementQueue.isEmpty())
+		if(!movementQueue.isEmpty())
 		{
 			move();
 			System.out.println("moving");
 		}
 		else if(this.currentlyWorking)
 		{
+			if( this.currentTask.getUnit() == null ) this.currentTask.setUnit( this );
 			if(currentTask.decrement(1))
 				currentlyWorking = false;
 		}	
@@ -275,5 +307,19 @@ public abstract class Unit {
 	 */
 	public void setCurrentlyWorking(boolean currentlyWorking) {
 		this.currentlyWorking = currentlyWorking;
+	}
+
+	/**
+	 * @return the mAX_HUNGER_LEVEL
+	 */
+	public int getMAX_HUNGER_LEVEL() {
+		return MAX_HUNGER_LEVEL;
+	}
+
+	/**
+	 * @return the mAX_ENERGY_LEVEL
+	 */
+	public int getMAX_ENERGY_LEVEL() {
+		return MAX_ENERGY_LEVEL;
 	}
 }

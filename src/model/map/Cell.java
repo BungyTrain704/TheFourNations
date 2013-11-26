@@ -1,4 +1,7 @@
+package model.map;
 import java.util.Random;
+
+import model.structures.AbstractStructure;
 
 public class Cell {
 	
@@ -24,8 +27,8 @@ public class Cell {
 		terrain = t;
 	}
 	
-	public String getTerrain(){
-		return terrain.getTerrain();
+	public Terrain getTerrain(){
+		return terrain;
 	}
 	
 	public void setUnit(boolean unitHere) {
@@ -57,8 +60,8 @@ public class Cell {
 		hasResource = true;
 	}
 	
-	public String getResource() {
-		return resource.getResource();
+	public Resource getResource() {
+		return resource;
 	}
 	
 	public boolean hasResource() {
@@ -70,10 +73,10 @@ public class Cell {
 		hasResource = false;
 	}
 	
-	public boolean hasStructure()
-	{
+	public boolean hasStructure() {
 		return item != null;
 	}
+	
 	public void addStructure(AbstractStructure built)	{
 		item = built;
 	}

@@ -1,3 +1,6 @@
+package model.map;
+import model.Civilization;
+
 public class Map {
 
 	public static void main(String[] args) {
@@ -7,7 +10,7 @@ public class Map {
 
 	private int rows = 30;
 	private int cols = 70;
-	private int waterBorder = 3;
+	private int waterBorder = rows / 10;
 
 	private Cell[][] map;
 
@@ -33,9 +36,9 @@ public class Map {
 				else if(map[i][j].hasStructure())
 					mapString += "S";
 				else if (map[i][j].hasResource()) {
-					mapString += map[i][j].getResource();
+					mapString += map[i][j].getResource().toString();
 				} else {
-					mapString += map[i][j].getTerrain();
+					mapString += map[i][j].getTerrain().toString();
 				}
 			}
 			mapString += "\n";
@@ -69,11 +72,14 @@ public class Map {
 		}
 	}
 
+	public int getMapSize() {
+		return this.cols * this.rows;
+	}
+	
 	private void generateWater() {
 
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				// HAVE A GOOD NIGHT, MICHELLITO!! -MLE
 				if (i < waterBorder || j < waterBorder || i > (rows - waterBorder - 1) || j > (cols - waterBorder - 1)) {
 					map[i][j].setTerrain(Terrain.water);
 				}
@@ -83,28 +89,23 @@ public class Map {
 		for (int k = waterBorder; k < rows * .75; k++) {
 			for (int i = waterBorder - 1; i <= rows - waterBorder; i++) {
 				for (int j = waterBorder - 1; j <= cols - waterBorder; j++) {
-					if (map[i][j].getTerrain().equals(
-							(Terrain.water).getTerrain())
+					if (map[i][j].getTerrain().equals(Terrain.water)
 							&& map[i][j].getAverage() < 200) {
 						if (j == k - 1) {
 							map[i][j  + 1].setTerrain(Terrain.water);
 							map[i][j + 1].removeResource();
-//							map[i][j + 2].setTerrain(Terrain.plains);
 						}
 						if (j == cols - k) {
 							map[i][j - 1].setTerrain(Terrain.water);
 							map[i][j - 1].removeResource();
-//							map[i][j - 2].setTerrain(Terrain.plains);
 						}
 						if (i == k - 1) {
 							map[i + 1][j].setTerrain(Terrain.water);
 							map[i + 1][j].removeResource();
-//							map[i + 2][j].setTerrain(Terrain.plains);
 						}
 						if (i == rows - k) {
 							map[i - 1][j].setTerrain(Terrain.water);
 							map[i - 1][j].removeResource();
-//							map[i - 2][j].setTerrain(Terrain.plains);
 						}
 					}
 				}
@@ -113,14 +114,10 @@ public class Map {
 
 		for (int i = 1; i < rows - 1; i++) {
 			for (int j = 1; j < cols - 1; j++)
-				if (map[i + 1][j].getTerrain().equals(
-						(Terrain.water).getTerrain())
-						&& map[i - 1][j].getTerrain().equals(
-								(Terrain.water).getTerrain())
-						&& map[i][j + 1].getTerrain().equals(
-								(Terrain.water).getTerrain())
-						&& map[i][j - 1].getTerrain().equals(
-								(Terrain.water).getTerrain())) {
+				if (map[i + 1][j].getTerrain().equals(Terrain.water)
+						&& map[i - 1][j].getTerrain().equals(Terrain.water)
+						&& map[i][j + 1].getTerrain().equals(Terrain.water)
+						&& map[i][j - 1].getTerrain().equals(Terrain.water)) {
 					map[i][j].setTerrain(Terrain.water);
 					map[i][j].removeResource();
 				}
@@ -131,5 +128,47 @@ public class Map {
 	{
 		return map[location/cols][location%cols];
 	}
+	
+	public Cell[][] getMapArray() {
+		return map;
+	}
+	
+    public void buildRoom(int x, int y, int q, int r, Terrain roomType) {
+    	
+    	int startRow, startCol, endRow, endCol;
+    	
+    	
+    	if (x <= q && y <= r) {
+    		startRow = x;
+    		startCol = y;
+    		endRow = q;
+    		endCol = r;
+    	} else {
+    		startRow = q;
+    		startCol = r;
+    		endRow = x;
+    		endCol = y;
+    	}
+    	
+    	for(int i = startRow; i <= endRow; i++) {
+    		for (int j = startCol; j <= endCol; j++) {
+//    			if (Civilization.getInstance().getMap().getMapArray()[i][j].getTerrain().equals(Terrain.water)) {
+//    				System.out.println("You cannot build a room here on water.");
+//    				return;
+//    			}
+    			if (Civilization.getInstance().getMap().getMapArray()[i][j].hasResource()) {
+    				Civilization.getInstance().getMap().getMapArray()[i][j].removeResource();
+    			}
+    		}
+    	}
+    		
+    	for(int i = startRow; i <= endRow; i++) {
+        		for (int j = startCol; j <= endCol; j++) {
+        			Civilization.getInstance().getMap().getMapArray()[i][j].setTerrain(roomType);
+        		}
+    	}	
+    }
+
+
 
 }

@@ -1,3 +1,4 @@
+package model.units;
 
 public class BasicUnit extends Unit{
 
@@ -7,10 +8,11 @@ public class BasicUnit extends Unit{
 		
 	}
 
-	@Override
-	protected void updateUnitCounters() {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * Lose 1 hunger per update
+	 */
+	@Override protected void updateUnitCounters() {
+		this.hungerLevel -= 1;
 	}
 
 }

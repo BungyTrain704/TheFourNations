@@ -1,3 +1,4 @@
+package model.map;
 /**
  * The different types of terrain that can exist on the map,
  * along with a symbol that can be used in their toString
@@ -7,7 +8,7 @@
 public enum Terrain {
 
 	//Enumeration declarations
-	plains(true, " "), water(false, "~");
+	plains(true, "."), water(false, "~"), stockpile( true, "C"), kitchen(true, "K");;
 
 	//Instance variables
 	private boolean accessible;
@@ -36,8 +37,9 @@ public enum Terrain {
 	 * The ASCII representation of this terrain type
 	 * @return The String that represents this terrain type
 	 */
-	public String getTerrain() {
+	public String toString() {
 		return this.symbol;
 	}
+	
 
 }
