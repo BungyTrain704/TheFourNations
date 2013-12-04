@@ -44,6 +44,20 @@ public class Map {
 		}
 		return toString.toString();
 	}
+	
+	/**
+	 * Returns the number of rows in the map array
+	 */
+	public int getRows() {
+		return rows;
+	}
+
+	/**
+	 * Returns the number of columns in the map array
+	 */
+	public int getCols() {
+		return cols;
+	}
 
 	/**
 	 * Returns the number of tiles in the map
