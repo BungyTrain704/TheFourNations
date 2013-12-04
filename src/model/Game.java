@@ -1,3 +1,5 @@
+package model;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -207,68 +209,30 @@ public class Game extends JFrame {
 		try {
 			grassImg = ImageIO.read(new File("images" + File.separator
 					+ "grass.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'grass.png'");
-		}
-		try {
 			waterImg = ImageIO.read(new File("images" + File.separator
 					+ "water.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'water.png'");
-		}
-		try {
 			snowImg = ImageIO.read(new File("images" + File.separator
 					+ "snow.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'snow.png'");
-		}
-		try {
 			desertImg = ImageIO.read(new File("images" + File.separator
 					+ "desert.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'desert.png'");
-		}
-		try {
 			cloudImg = ImageIO.read(new File("images" + File.separator
 					+ "clouds.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'cloud.png'");
-		}
-		try {
 			treeImg = ImageIO.read(new File("images" + File.separator
 					+ "trees.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'trees.png'");
-		}
-		try {
 			snowTreeImg = ImageIO.read(new File("images" + File.separator
 					+ "coldTrees.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'coldTrees.png'");
-		}
-		try {
 			bareTreeImg = ImageIO.read(new File("images" + File.separator
 					+ "bareTrees.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'bareTrees.png'");
-		}
-		try {
 			stoneImg = ImageIO.read(new File("images" + File.separator
 					+ "stones.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'stones.png'");
-		}
-		try {
-			snowStoneImg = ImageIO.read(new File("images" + File.separator
-					+ "snowStones.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'snowStones.png'");
-		}
-		try {
 			earthStoneImg = ImageIO.read(new File("images" + File.separator
 					+ "earthStones.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'earthStones.png'");
+			snowStoneImg = ImageIO.read(new File("images" + File.separator
+					+ "snowStones.png"));
+		}
+		catch( IOException ioe ) {
+			System.out.println( "Could not find locate image file!" );
+			ioe.printStackTrace();
 		}
 	}
 
