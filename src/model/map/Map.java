@@ -1,13 +1,15 @@
 package model.map;
-import model.Civilization;
 
 public class Map {
 
+	//TODO: Remove - used for testing purposes
 	public static void main(String[] args) {
 		Map board = new Map();
+		board.buildRoom(12, 27, 14, 30, Terrain.kitchen);
 		System.out.print(board.toString());
 	}
 
+	//TODO: Modularize
 	private int rows = 30;
 	private int cols = 70;
 	private int waterBorder = rows / 10;
@@ -15,115 +17,61 @@ public class Map {
 	private Cell[][] map;
 
 	public Map() {
-
-		map = new Cell[rows][cols];
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				map[i][j] = new Cell();
-			}
-		}
-		setTerrain();
-		generateWater();
-
+		this.map = MapGenerator.generateMap(rows, cols, waterBorder );
 	}
 
+	/**
+	 * Generates a textual representation of the map
+	 */
 	public String toString() {
-		String mapString = "";
+		StringBuilder toString = new StringBuilder();
+		String lineSeparator = System.lineSeparator();
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				if (map[i][j].hasUnit())
-					mapString += "U";
-				else if(map[i][j].hasStructure())
-					mapString += "S";
-				else if (map[i][j].hasResource()) {
-					mapString += map[i][j].getResource().toString();
+				Cell c = map[i][j];
+				
+				if ( c.hasUnit() )
+					toString.append("U");
+				else if( c.hasStructure() )
+					toString.append("S");
+				else if ( c.hasResource() ) {
+					toString.append( c.getResource() );
 				} else {
-					mapString += map[i][j].getTerrain().toString();
+					toString.append( c.getTerrain() );
 				}
 			}
-			mapString += "\n";
+			toString.append( lineSeparator );
 		}
-		return mapString;
+		return toString.toString();
 	}
 
-	private void setTerrain() {
-		int average;
-		for (int i = 1; i < rows - 1; i++) {
-			for (int j = 1; j < cols - 1; j++) {
-				average = 0;
-				for (int m = i - 1; m <= i + 1; m++) {
-					for (int n = j - 1; n <= j + 1; n++) {
-						average += map[i][j].getAverage();
-					}
-				}
-				map[i][j].setAverage(average / 9);
-			}
-		}
-
-		for (int i = 1; i < rows - 1; i++) {
-			for (int j = 1; j < cols - 1; j++) {
-				int a = map[i][j].getAverage();
-				if (a < 10) {
-					map[i][j].setResource(Resource.tree);
-				} else if (290 < a) {
-					map[i][j].setResource(Resource.stone);
-				}
-			}
-		}
-	}
-
+	/**
+	 * Returns the number of tiles in the map
+	 */
 	public int getMapSize() {
 		return this.cols * this.rows;
 	}
 	
-	private void generateWater() {
-
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				if (i < waterBorder || j < waterBorder || i > (rows - waterBorder - 1) || j > (cols - waterBorder - 1)) {
-					map[i][j].setTerrain(Terrain.water);
-				}
-			}
-		}
-
-		for (int k = waterBorder; k < rows * .75; k++) {
-			for (int i = waterBorder - 1; i <= rows - waterBorder; i++) {
-				for (int j = waterBorder - 1; j <= cols - waterBorder; j++) {
-					if (map[i][j].getTerrain().equals(Terrain.water)
-							&& map[i][j].getAverage() < 200) {
-						if (j == k - 1) {
-							map[i][j  + 1].setTerrain(Terrain.water);
-							map[i][j + 1].removeResource();
-						}
-						if (j == cols - k) {
-							map[i][j - 1].setTerrain(Terrain.water);
-							map[i][j - 1].removeResource();
-						}
-						if (i == k - 1) {
-							map[i + 1][j].setTerrain(Terrain.water);
-							map[i + 1][j].removeResource();
-						}
-						if (i == rows - k) {
-							map[i - 1][j].setTerrain(Terrain.water);
-							map[i - 1][j].removeResource();
-						}
-					}
-				}
-			}
-		}
-
-		for (int i = 1; i < rows - 1; i++) {
-			for (int j = 1; j < cols - 1; j++)
-				if (map[i + 1][j].getTerrain().equals(Terrain.water)
-						&& map[i - 1][j].getTerrain().equals(Terrain.water)
-						&& map[i][j + 1].getTerrain().equals(Terrain.water)
-						&& map[i][j - 1].getTerrain().equals(Terrain.water)) {
-					map[i][j].setTerrain(Terrain.water);
-					map[i][j].removeResource();
-				}
-		}
-	}
-	
+	/**
+	 * Returns the cell at the specified location. The are numbered as such:
+	 * 
+	 * <tt><p><br>0 1 2 3 4 5 6 7<br>
+	 * +- - - - - - - -+<br>
+	 * |. . . . . . . .|0<br>
+	 * |. . . . . . . .|1<br>
+	 * |. . . . . . . .|2<br>
+	 * |. . . . . . . .|3<br>
+	 * |. . . . . . . .|4<br>
+	 * |. . . . . . . .|5<br>
+	 *  +- - - - - - - -+<br></tt></p>
+	 *  
+	 *  <p>And the location of a specific cell is given by the product of it's row and column.
+	 *  Moving backwards from a specified cell, a row is given by the <code>location / columns</code>
+	 *  and the column is given by <code>location % columns</code>.
+	 * 
+	 * @param location The cell's location within the map
+	 * @return The cell at the given location
+	 */
 	public Cell getCell(int location)
 	{
 		return map[location/cols][location%cols];
@@ -133,38 +81,81 @@ public class Map {
 		return map;
 	}
 	
-    public void buildRoom(int x, int y, int q, int r, Terrain roomType) {
+	/**
+	 * Fills the tiles between specified points with room tiles.
+	 * 
+	 * <p>Example: If it where called as such <code>buildRoom( 2, 2, 4, 4, Terrain.KITCHEN)</code>
+	 * on the map below where the period character (".") represents valid tiles:</p>
+	 * <tt>
+	 * +---------------------+<br>
+	 * |.....................|<br>
+	 * |.....................|<br>
+	 * |.....................|<br>
+	 * |.....................|<br>
+	 * |.....................|<br>
+	 * |.....................|<br>
+	 * +---------------------+<br></tt>
+	 * 
+	 * <p>Would become:</p>
+	 * <tt>
+	 * +---------------------+<br>
+	 * |.....................|<br>
+	 * |.....................|<br>
+	 * |..KKK................|<br>
+	 * |..KKK................|<br>
+	 * |..KKK................|<br>
+	 * |.....................|<br>
+	 * +---------------------+<br></tt>
+	 * 
+	 * @param topLeftX The x-coordinate of the top left point of the room
+	 * @param topLeftY The y-coordinate of the top left point of the room
+	 * @param bottomRightX The x-coordinate of the bottom right point of the room
+	 * @param bottomRightY The y-coordinate of the bottom right point of the room
+	 * @param roomType The terrain to fill the given area with
+	 * 
+	 */
+    public void buildRoom(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY, Terrain roomType) {
     	
     	int startRow, startCol, endRow, endCol;
     	
-    	
-    	if (x <= q && y <= r) {
-    		startRow = x;
-    		startCol = y;
-    		endRow = q;
-    		endCol = r;
+    	//Check bounds
+    	if (topLeftX <= bottomRightX && topLeftY <= bottomRightY) {
+    		startRow = topLeftX;
+    		startCol = topLeftY;
+    		endRow = bottomRightX;
+    		endCol = bottomRightY;
     	} else {
-    		startRow = q;
-    		startCol = r;
-    		endRow = x;
-    		endCol = y;
+    		startRow = bottomRightX;
+    		startCol = bottomRightY;
+    		endRow = topLeftX;
+    		endCol = topLeftY;
     	}
     	
+    	//TODO: Check for water and resources within the given area
+    	
+    	//Change the tiles in the given area to the specified terrain type
     	for(int i = startRow; i <= endRow; i++) {
     		for (int j = startCol; j <= endCol; j++) {
+    			//TODO: Remove singleton references
 //    			if (Civilization.getInstance().getMap().getMapArray()[i][j].getTerrain().equals(Terrain.water)) {
 //    				System.out.println("You cannot build a room here on water.");
 //    				return;
 //    			}
-    			if (Civilization.getInstance().getMap().getMapArray()[i][j].hasResource()) {
-    				Civilization.getInstance().getMap().getMapArray()[i][j].removeResource();
-    			}
+    			//Check for resources on the location
+    			if( this.map[i][j].hasResource() ) this.map[i][j].removeResource();
+    			
+    			//TODO: Remove singleton references
+//    			if (Civilization.getInstance().getMap().getMapArray()[i][j].hasResource()) {
+//    				Civilization.getInstance().getMap().getMapArray()[i][j].removeResource();
+//    			}
     		}
     	}
     		
     	for(int i = startRow; i <= endRow; i++) {
         		for (int j = startCol; j <= endCol; j++) {
-        			Civilization.getInstance().getMap().getMapArray()[i][j].setTerrain(roomType);
+        			//TODO: Remove singleton reference
+//        			Civilization.getInstance().getMap().getMapArray()[i][j].setTerrain(roomType);
+        			this.map[i][j].setTerrain(roomType);
         		}
     	}	
     }

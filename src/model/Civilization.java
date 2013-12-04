@@ -91,7 +91,6 @@ public class Civilization {
 	/**
 	 * Pulls a job from the job queue and returns it.
 	 * @return The next job at the top of the job queue. If no job is available, null is returned.
-	 * @see Queue.#poll() Queue.poll()
 	 */
 	public Task getNextTask() {
 		return this.taskQueue.poll();
