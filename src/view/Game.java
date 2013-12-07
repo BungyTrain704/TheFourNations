@@ -1,4 +1,4 @@
-package model;
+package view;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -204,34 +204,26 @@ public class Game extends JFrame {
 
 	}
 
+	// Load all of the map images
 	static {
-		// Load all of the map images
+		String fileSep = File.separator;
+		String baseDir = System.getProperty("user.dir");
+		String imagesFolder = baseDir + fileSep + "images" + fileSep;
 		try {
-			grassImg = ImageIO.read(new File("images" + File.separator
-					+ "grass.png"));
-			waterImg = ImageIO.read(new File("images" + File.separator
-					+ "water.png"));
-			snowImg = ImageIO.read(new File("images" + File.separator
-					+ "snow.png"));
-			desertImg = ImageIO.read(new File("images" + File.separator
-					+ "desert.png"));
-			cloudImg = ImageIO.read(new File("images" + File.separator
-					+ "clouds.png"));
-			treeImg = ImageIO.read(new File("images" + File.separator
-					+ "trees.png"));
-			snowTreeImg = ImageIO.read(new File("images" + File.separator
-					+ "coldTrees.png"));
-			bareTreeImg = ImageIO.read(new File("images" + File.separator
-					+ "bareTrees.png"));
-			stoneImg = ImageIO.read(new File("images" + File.separator
-					+ "stones.png"));
-			earthStoneImg = ImageIO.read(new File("images" + File.separator
-					+ "earthStones.png"));
-			snowStoneImg = ImageIO.read(new File("images" + File.separator
-					+ "snowStones.png"));
+			grassImg = ImageIO.read( new File( imagesFolder + "grass.png" ) );
+			waterImg = ImageIO.read( new File( imagesFolder + "water.png" ) );
+			snowImg = ImageIO.read( new File( imagesFolder + "snow.png" ) );
+			desertImg = ImageIO.read( new File( imagesFolder + "desert.png" ) );
+			cloudImg = ImageIO.read( new File( imagesFolder + "clouds.png" ) );
+			treeImg = ImageIO.read( new File( imagesFolder + "trees.png" ) );
+			snowTreeImg = ImageIO.read( new File( imagesFolder + "coldTrees.png" ) );
+			bareTreeImg = ImageIO.read( new File( imagesFolder + "bareTrees.png" ) );
+			stoneImg = ImageIO.read( new File( imagesFolder + "stones.png" ) );
+			earthStoneImg = ImageIO.read( new File( imagesFolder + "earthStones.png" ) );
+			snowStoneImg = ImageIO.read( new File( imagesFolder + "snowStones.png" ) );
 		}
 		catch( IOException ioe ) {
-			System.out.println( "Could not find locate image file!" );
+			System.out.println( "Could not locate image file!" );
 			ioe.printStackTrace();
 		}
 	}
