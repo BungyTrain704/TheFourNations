@@ -67,7 +67,12 @@ public class Game extends JFrame {
 	private boolean playEarth;
 	private boolean playAir;
 	private boolean playing;
-	
+
+	//Load sprite files from images folder
+	private static String fileSep = File.separator;
+	private static String baseDirectory = System.getProperty("user.dir");
+	private static String spritesFolder = baseDirectory + fileSep + "images" + fileSep;
+
 	/**
 	 * Loads a BufferedImage from a file located in a directory
 	 * @param directory The directory that the image file is located in
@@ -83,15 +88,11 @@ public class Game extends JFrame {
 			System.out.println( "Could not locate " + directory + name );
 			ioe.printStackTrace();
 		}
-		
+
 		return bi;
 	}
 
 	static {
-		//Load sprite files from images folder
-		String fileSep = File.separator;
-		String baseDirectory = System.getProperty("user.dir");
-		String spritesFolder = baseDirectory + fileSep + "images" + fileSep;
 		grassImg 		= loadImage( spritesFolder, "grass.png" );
 		waterImg 		= loadImage( spritesFolder, "water.png" );
 		snowImg 		= loadImage( spritesFolder, "snow.png" );
@@ -103,6 +104,7 @@ public class Game extends JFrame {
 		stoneImg 		= loadImage( spritesFolder, "stones.png" );
 		snowStoneImg 	= loadImage( spritesFolder, "snowStones.png" );
 		earthStoneImg 	= loadImage( spritesFolder, "earthStones.png" );
+		menuImg 		= loadImage( spritesFolder, "bkg.png" );
 	}
 
 	public static void main(String[] args) {
@@ -240,19 +242,9 @@ public class Game extends JFrame {
 		gamePanel.add(infoPanel);
 
 	}
-	
+
 	// Special Menu Panel for drawing Four Nation Map background
 	public class MenuPanel extends JPanel {
-
-		public MenuPanel() {
-
-			try {
-				menuImg = ImageIO.read(new File("images" + File.separator
-						+ "bkg.png"));
-			} catch (IOException e) {
-				System.out.println("Could not find 'bkg.png'");
-			}
-		}
 
 		@Override
 		protected void paintComponent(Graphics g) {
@@ -351,53 +343,53 @@ public class Game extends JFrame {
 	public class MiniMapPanel extends JPanel implements MouseListener {
 
 		private BufferedImage mapImg;
-		
+
 		public MiniMapPanel() {
 
-            mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
-                            BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = mapImg.createGraphics();
-            g2d.scale(.175, .175);
-            drawMap(g2d);
-            g2d.dispose();
-    }
+			mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
+					BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = mapImg.createGraphics();
+			g2d.scale(.175, .175);
+			drawMap(g2d);
+			g2d.dispose();
+		}
 
-    @Override
-    protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g;
-            g2.drawImage(mapImg, 0, 0, null);
-            g2.setPaint(Color.RED);
-            g2.drawRect(3, 3,(int)(gameView.getWidth()*.175), (int)(gameView.getHeight()*.175));
-    }
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			Graphics2D g2 = (Graphics2D) g;
+			g2.drawImage(mapImg, 0, 0, null);
+			g2.setPaint(Color.RED);
+			g2.drawRect(3, 3,(int)(gameView.getWidth()*.175), (int)(gameView.getHeight()*.175));
+		}
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			
+
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
@@ -407,7 +399,7 @@ public class Game extends JFrame {
 				// Draw plains of the map
 				if (map.getMapArray()[i][j].getTerrain().equals(Terrain.plains)) {
 					if (playFire || playAir) { // for fire and air, draw grass
-												// plains
+						// plains
 						g2.drawImage(grassImg, i * 16, j * 16, null);
 					} else if (playWater) { // for water, draw snow plains
 						g2.drawImage(snowImg, i * 16, j * 16, null);
@@ -419,7 +411,7 @@ public class Game extends JFrame {
 				else if (map.getMapArray()[i][j].getTerrain().equals(
 						Terrain.water)) {
 					if (playFire || playEarth || playWater) { // for non-air,
-																// draw water
+						// draw water
 						g2.drawImage(waterImg, i * 16, j * 16, null);
 					} else { // for air, draw clouds
 						g2.drawImage(cloudImg, i * 16, j * 16, null);
@@ -433,7 +425,7 @@ public class Game extends JFrame {
 						if (playWater) { // for water, draw snow-covered trees
 							g2.drawImage(snowTreeImg, i * 16, j * 16, null);
 						} else if (playEarth) { // for earth, draw less bushy
-												// trees
+							// trees
 							g2.drawImage(bareTreeImg, i * 16, j * 16, null);
 						} else { // for fire and air, draw bushy trees
 							g2.drawImage(treeImg, i * 16, j * 16, null);
