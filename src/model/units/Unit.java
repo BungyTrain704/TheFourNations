@@ -227,6 +227,14 @@ public abstract class Unit {
 	 * Updates the unit's hunger and energy levels. Called every tick.
 	 */
 	protected abstract void updateUnitCounters();
+	
+	public void die() {
+		Civilization civ = Civilization.getInstance();
+		if( this.currentTask != null )
+			civ.addTaskToQueue(this.currentTask);
+		civ.removeUnit(this);
+		civ.getMap().getCell(this.location).setUnit(false);
+	}
 
 	/**
 	 * @return the name

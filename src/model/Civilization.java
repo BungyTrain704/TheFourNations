@@ -23,7 +23,7 @@ import model.units.Unit;
 public class Civilization {
 
 	private Queue<Task> taskQueue;
-	private ArrayList<Unit> units;
+	private ArrayList<Unit> units, unitsToKill;
 	private ArrayList<AbstractStructure> structures;
 	private HashMap<ResourceType, Integer> globalResourcePool;
 	private static Civilization instance = new Civilization( 1 );
@@ -39,6 +39,7 @@ public class Civilization {
 
 		this.taskQueue = new LinkedList<Task>();
 		this.units = new ArrayList<Unit>();
+		this.unitsToKill = new ArrayList<>();
 		for(int i = 0; i < numberOfStartingUnits; i++)
 		{
 			units.add(new BasicUnit("U", 100, 500, 70));
@@ -162,7 +163,13 @@ public class Civilization {
 			person.update();
 			currentCell.setUnit(false);
 			map.getCell(person.getLocation()).setUnit(true);
-		}	
+		}
+		
+		for( Unit unit : unitsToKill ) {
+			unit.die();
+		}
+		
+		unitsToKill.clear();
 	}
 
 	/**
@@ -194,5 +201,9 @@ public class Civilization {
 		return structures;
 	}
 
+	public void sentenceToDeath( Unit unit ) {
+		this.unitsToKill.add( unit );
+		System.out.println( unit.getName() + " has died :\'(" );
+	}
 
 }

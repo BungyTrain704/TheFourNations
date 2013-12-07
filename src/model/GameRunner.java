@@ -24,7 +24,7 @@ public class GameRunner
 		System.out.println(board.toString());
 		Civilization civ = Civilization.getInstance();
 		civ.setMap(board);
-		civ.setResourceAmount(ResourceType.food, 10000 );
+		civ.setResourceAmount(ResourceType.food, 0 );
 		civ.getMap().getCell(950).setResource(Resource.tree);
 		civ.getMap().getCell(1420).setTerrain(Terrain.stockpile);
 		civ.addTaskToQueue(new CollectResourceTask(5, 951, 950, board));
