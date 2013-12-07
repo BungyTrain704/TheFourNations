@@ -204,70 +204,41 @@ public class Game extends JFrame {
 
 	}
 
+	/**
+	 * Loads a BufferedImage from a file located in a directory
+	 * @param directory The directory that the image file is located in
+	 * @param name The name of the image file
+	 * @return The buffered image that is loaded
+	 */
+	private static BufferedImage loadImage( String directory, String name ) {
+		BufferedImage bi = null;
+		try {
+			bi = ImageIO.read( new File( directory, name ) );
+		}
+		catch( IOException ioe ) {
+			System.out.println( "Could not locate " + directory + name );
+			ioe.printStackTrace();
+		}
+
+		return bi;
+	}
+
 	static {
-		// Load all of the map images
-		try {
-			grassImg = ImageIO.read(new File("images" + File.separator + "grass.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'grass.png'");
-		}
-		try {
-			waterImg = ImageIO.read(new File("images" + File.separator + "water.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'water.png'");
-		}
-		try {
-			snowImg = ImageIO.read(new File("images" + File.separator + "snow.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'snow.png'");
-		}
-		try {
-			desertImg = ImageIO.read(new File("images" + File.separator + "desert.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'desert.png'");
-		}
-		try {
-			cloudImg = ImageIO.read(new File("images" + File.separator
-					+ "clouds.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'cloud.png'");
-		}
-		try {
-			treeImg = ImageIO.read(new File("images" + File.separator
-					+ "trees.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'trees.png'");
-		}
-		try {
-			snowTreeImg = ImageIO.read(new File("images" + File.separator
-					+ "coldTrees.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'coldTrees.png'");
-		}
-		try {
-			bareTreeImg = ImageIO.read(new File("images" + File.separator
-					+ "bareTrees.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'bareTrees.png'");
-		}
-		try {
-			stoneImg = ImageIO.read(new File("images" + File.separator
-					+ "stones.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'stones.png'");
-		}
-		try {
-			snowStoneImg = ImageIO.read(new File("images" + File.separator
-					+ "snowStones.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'snowStones.png'");
-		}
-		try {
-			earthStoneImg = ImageIO.read(new File("images" + File.separator
-					+ "earthStones.png"));
-		} catch (IOException e) {
-			System.out.println("Could not find 'earthStones.png'");
-		}
+		//Load sprite files from images folder
+		String fileSep = File.separator;
+		String baseDirectory = System.getProperty("user.dir");
+		String spritesFolder = baseDirectory + fileSep + "images" + fileSep;
+		grassImg 		= loadImage( spritesFolder, "grass.png" );
+		waterImg 		= loadImage( spritesFolder, "water.png" );
+		snowImg 		= loadImage( spritesFolder, "snow.png" );
+		desertImg 		= loadImage( spritesFolder, "desert.png" );
+		cloudImg		= loadImage( spritesFolder, "clouds.png" );
+		treeImg			= loadImage( spritesFolder, "trees.png" );
+		snowTreeImg 	= loadImage( spritesFolder, "coldTrees.png" );
+		bareTreeImg 	= loadImage( spritesFolder, "bareTrees.png" );
+		stoneImg 		= loadImage( spritesFolder, "stones.png" );
+		snowStoneImg 	= loadImage( spritesFolder, "snowStones.png" );
+		earthStoneImg 	= loadImage( spritesFolder, "earthStones.png" );
 	}
 
 	// Special Menu Panel for drawing Four Nation Map background
@@ -380,7 +351,7 @@ public class Game extends JFrame {
 	public class MiniMapPanel extends JPanel implements MouseListener {
 
 		private BufferedImage mapImg;
-		
+
 		public MiniMapPanel() {
 
 			mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
@@ -402,31 +373,31 @@ public class Game extends JFrame {
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			
+
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
@@ -436,7 +407,7 @@ public class Game extends JFrame {
 				// Draw plains of the map
 				if (map.getMapArray()[i][j].getTerrain().equals(Terrain.plains)) {
 					if (playFire || playAir) { // for fire and air, draw grass
-												// plains
+						// plains
 						g2.drawImage(grassImg, i * 16, j * 16, null);
 					} else if (playWater) { // for water, draw snow plains
 						g2.drawImage(snowImg, i * 16, j * 16, null);
@@ -448,7 +419,7 @@ public class Game extends JFrame {
 				else if (map.getMapArray()[i][j].getTerrain().equals(
 						Terrain.water)) {
 					if (playFire || playEarth || playWater) { // for non-air,
-																// draw water
+						// draw water
 						g2.drawImage(waterImg, i * 16, j * 16, null);
 					} else { // for air, draw clouds
 						g2.drawImage(cloudImg, i * 16, j * 16, null);
@@ -462,7 +433,7 @@ public class Game extends JFrame {
 						if (playWater) { // for water, draw snow-covered trees
 							g2.drawImage(snowTreeImg, i * 16, j * 16, null);
 						} else if (playEarth) { // for earth, draw less bushy
-												// trees
+							// trees
 							g2.drawImage(bareTreeImg, i * 16, j * 16, null);
 						} else { // for fire and air, draw bushy trees
 							g2.drawImage(treeImg, i * 16, j * 16, null);
