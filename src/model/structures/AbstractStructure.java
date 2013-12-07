@@ -32,6 +32,14 @@ public abstract class AbstractStructure {
 	public int getLocation() {
 		return location;
 	}
+	
+	public boolean providesFood() {
+		return false;
+	}
+	
+	public boolean providesBed() {
+		return false;
+	}
 
 	/**
 	 * @return the name

@@ -189,6 +189,10 @@ public class Civilization {
 	public ArrayList<Unit> getUnits() {
 		return units;
 	}
+	
+	public ArrayList<AbstractStructure> getStructures() {
+		return structures;
+	}
 
 
 }

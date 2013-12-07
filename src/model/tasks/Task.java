@@ -14,6 +14,7 @@ public abstract class Task
 	protected int locationOfTask; //location where work is being done (i.e. where something is being built)
 	protected Map map;
 	protected Unit unit;
+	protected boolean isDone;
 	
 	/**
 	 * Creates a task
@@ -29,6 +30,7 @@ public abstract class Task
 		locationOfTask = locTask;
 		this.map = map;
 		this.unit = null;
+		this.isDone = false;
 	}
 	
 	public final boolean decrement(int workDone)
@@ -68,4 +70,8 @@ public abstract class Task
 	 * Performs the action for the call
 	 */
 	public abstract void performAction();
+
+	public boolean isDone() {
+		return isDone;
+	}
 }

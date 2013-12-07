@@ -31,7 +31,7 @@ public class GameRunner
 		civ.addTaskToQueue( new BuildStructureTask( 10, 941, 940, board, new BasicStructure( 941, "S", Resource.tree ) ) );
 		civ.getMap().buildRoom(12, 27, 14, 30, Terrain.kitchen);
 		
-		int delay = 300;
+		int delay = 20;
 		/**
 		 * Handles the game events
 		 */
