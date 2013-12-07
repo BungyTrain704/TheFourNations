@@ -1,5 +1,3 @@
-package view;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -204,27 +202,69 @@ public class Game extends JFrame {
 
 	}
 
-	// Load all of the map images
 	static {
-		String fileSep = File.separator;
-		String baseDir = System.getProperty("user.dir");
-		String imagesFolder = baseDir + fileSep + "images" + fileSep;
+		// Load all of the map images
 		try {
-			grassImg = ImageIO.read( new File( imagesFolder + "grass.png" ) );
-			waterImg = ImageIO.read( new File( imagesFolder + "water.png" ) );
-			snowImg = ImageIO.read( new File( imagesFolder + "snow.png" ) );
-			desertImg = ImageIO.read( new File( imagesFolder + "desert.png" ) );
-			cloudImg = ImageIO.read( new File( imagesFolder + "clouds.png" ) );
-			treeImg = ImageIO.read( new File( imagesFolder + "trees.png" ) );
-			snowTreeImg = ImageIO.read( new File( imagesFolder + "coldTrees.png" ) );
-			bareTreeImg = ImageIO.read( new File( imagesFolder + "bareTrees.png" ) );
-			stoneImg = ImageIO.read( new File( imagesFolder + "stones.png" ) );
-			earthStoneImg = ImageIO.read( new File( imagesFolder + "earthStones.png" ) );
-			snowStoneImg = ImageIO.read( new File( imagesFolder + "snowStones.png" ) );
+			grassImg = ImageIO.read(new File("images" + File.separator + "grass.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'grass.png'");
 		}
-		catch( IOException ioe ) {
-			System.out.println( "Could not locate image file!" );
-			ioe.printStackTrace();
+		try {
+			waterImg = ImageIO.read(new File("images" + File.separator + "water.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'water.png'");
+		}
+		try {
+			snowImg = ImageIO.read(new File("images" + File.separator + "snow.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'snow.png'");
+		}
+		try {
+			desertImg = ImageIO.read(new File("images" + File.separator + "desert.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'desert.png'");
+		}
+		try {
+			cloudImg = ImageIO.read(new File("images" + File.separator
+					+ "clouds.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'cloud.png'");
+		}
+		try {
+			treeImg = ImageIO.read(new File("images" + File.separator
+					+ "trees.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'trees.png'");
+		}
+		try {
+			snowTreeImg = ImageIO.read(new File("images" + File.separator
+					+ "coldTrees.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'coldTrees.png'");
+		}
+		try {
+			bareTreeImg = ImageIO.read(new File("images" + File.separator
+					+ "bareTrees.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'bareTrees.png'");
+		}
+		try {
+			stoneImg = ImageIO.read(new File("images" + File.separator
+					+ "stones.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'stones.png'");
+		}
+		try {
+			snowStoneImg = ImageIO.read(new File("images" + File.separator
+					+ "snowStones.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'snowStones.png'");
+		}
+		try {
+			earthStoneImg = ImageIO.read(new File("images" + File.separator
+					+ "earthStones.png"));
+		} catch (IOException e) {
+			System.out.println("Could not find 'earthStones.png'");
 		}
 	}
 
@@ -315,32 +355,22 @@ public class Game extends JFrame {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 	}
 
