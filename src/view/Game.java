@@ -1,5 +1,7 @@
 package view;
 
+import static model.GameImageLoader.getImage;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -47,20 +49,25 @@ public class Game extends JFrame {
 	// Map scroll pane -- not yet used
 	private JScrollPane scrollPane;
 
-	// BufferedImage set
-	private static BufferedImage menuImg;
-	private static BufferedImage grassImg;
-	private static BufferedImage waterImg;
-	private static BufferedImage snowImg;
-	private static BufferedImage desertImg;
-	private static BufferedImage cloudImg;
-	private static BufferedImage snowTreeImg;
-	private static BufferedImage treeImg;
-	private static BufferedImage bareTreeImg;
-	private static BufferedImage stoneImg;
-	private static BufferedImage snowStoneImg;
-	private static BufferedImage earthStoneImg;
+	//Resource locations
+	private static String fileSep = File.separator;
+	private static String baseDirectory = System.getProperty("user.dir");
+	private static String imagesFolder = baseDirectory + fileSep + "images" + fileSep;
 
+	// BufferedImage set
+	private static BufferedImage grassImg 		= getImage( imagesFolder + "grass.png" );
+	private static BufferedImage waterImg 		= getImage( imagesFolder + "water.png" );
+	private static BufferedImage snowImg 		= getImage( imagesFolder + "snow.png" );
+	private static BufferedImage desertImg 		= getImage( imagesFolder + "desert.png" );
+	private static BufferedImage cloudImg 		= getImage( imagesFolder + "clouds.png" );
+	private static BufferedImage snowTreeImg 	= getImage( imagesFolder + "coldTrees.png" );
+	private static BufferedImage treeImg 		= getImage( imagesFolder + "trees.png" );
+	private static BufferedImage bareTreeImg 	= getImage( imagesFolder + "bareTrees.png" );
+	private static BufferedImage stoneImg 		= getImage( imagesFolder + "stones.png" );
+	private static BufferedImage snowStoneImg 	= getImage( imagesFolder + "snowStones.png" );
+	private static BufferedImage earthStoneImg 	= getImage( imagesFolder + "earthStones.png" );
+	private static BufferedImage menuImg 		= getImage( imagesFolder + "bkg.png" );
+	
 	// Play type booleans
 	private boolean playWater;
 	private boolean playFire;
@@ -68,44 +75,7 @@ public class Game extends JFrame {
 	private boolean playAir;
 	private boolean playing;
 
-	//Load sprite files from images folder
-	private static String fileSep = File.separator;
-	private static String baseDirectory = System.getProperty("user.dir");
-	private static String spritesFolder = baseDirectory + fileSep + "images" + fileSep;
-
-	/**
-	 * Loads a BufferedImage from a file located in a directory
-	 * @param directory The directory that the image file is located in
-	 * @param name The name of the image file
-	 * @return The buffered image that is loaded
-	 */
-	private static BufferedImage loadImage( String directory, String name ) {
-		BufferedImage bi = null;
-		try {
-			bi = ImageIO.read( new File( directory, name ) );
-		}
-		catch( IOException ioe ) {
-			System.out.println( "Could not locate " + directory + name );
-			ioe.printStackTrace();
-		}
-
-		return bi;
-	}
-
-	static {
-		grassImg 		= loadImage( spritesFolder, "grass.png" );
-		waterImg 		= loadImage( spritesFolder, "water.png" );
-		snowImg 		= loadImage( spritesFolder, "snow.png" );
-		desertImg 		= loadImage( spritesFolder, "desert.png" );
-		cloudImg		= loadImage( spritesFolder, "clouds.png" );
-		treeImg			= loadImage( spritesFolder, "trees.png" );
-		snowTreeImg 	= loadImage( spritesFolder, "coldTrees.png" );
-		bareTreeImg 	= loadImage( spritesFolder, "bareTrees.png" );
-		stoneImg 		= loadImage( spritesFolder, "stones.png" );
-		snowStoneImg 	= loadImage( spritesFolder, "snowStones.png" );
-		earthStoneImg 	= loadImage( spritesFolder, "earthStones.png" );
-		menuImg 		= loadImage( spritesFolder, "bkg.png" );
-	}
+	
 
 	public static void main(String[] args) {
 		JFrame window = new Game();
