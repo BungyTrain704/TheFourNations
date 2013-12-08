@@ -16,17 +16,32 @@ import javax.swing.border.Border;
  */
 public class InvisibleButton extends JPanel implements MouseListener {
 	private static final long serialVersionUID = -6894259703329191579L;
-	private Border whiteBorder = BorderFactory.createLineBorder(Color.WHITE, 5);
+	private Border border = BorderFactory.createLineBorder(Color.WHITE, 5);
 	private ClickHandler handler;
 
+	/**
+	 * Creates an invisbile button that is white and 5 pixels thick
+	 * @param handler The object that handles when the mouse clicks within the panel area
+	 */
 	public InvisibleButton( ClickHandler handler ) {
+		this( handler, Color.white, 5 );
+	}
+	
+	/**
+	 * Creates an invisible button with a variable color and border witdth
+	 * @param handler The object that handles when the mouse clicks within the panel area
+	 * @param borderColor The color of the mouse-over border
+	 * @param borderThickness The thickness of the generated border
+	 */
+	public InvisibleButton( ClickHandler handler, Color borderColor, int borderThickness ) {
 		super.addMouseListener( this );
-		super.setOpaque(false);
+		super.setOpaque( false );
 		this.handler = handler;
+		this.border = BorderFactory.createLineBorder( borderColor, borderThickness );
 	}
 
 	@Override public void mouseEntered(MouseEvent e) {
-		this.setBorder( whiteBorder );
+		this.setBorder( border );
 	}
 
 
