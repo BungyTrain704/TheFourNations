@@ -14,8 +14,14 @@ import javax.imageio.ImageIO;
  */
 public class GameImageLoader {
 
+	//Image map
 	private static HashMap<String, BufferedImage> gameImages = new HashMap<>();
-	
+
+	//Resource locations
+	private static String fileSep = File.separator;
+	private static String baseDirectory = System.getProperty("user.dir");
+	public final static String imagesFolder = baseDirectory + fileSep + "images" + fileSep;
+
 	/**
 	 * Returns the image if it has already been loaded, otherwise it loads and stores it
 	 * @param locationOnDisk The location on the disk that this image is located at.
@@ -27,10 +33,10 @@ public class GameImageLoader {
 			return gameImages.get(locationOnDisk);
 		else return loadImageAt( locationOnDisk );
 	}
-	
+
 	private static BufferedImage loadImageAt( String locationOnDisk ) {
 		BufferedImage image = null;
-		
+
 		try {
 			image = ImageIO.read( new File( locationOnDisk ) );
 			gameImages.put(locationOnDisk, image);
@@ -39,7 +45,7 @@ public class GameImageLoader {
 			System.out.println( "Could not load image at: " + locationOnDisk );
 			ioe.printStackTrace();
 		}
-		
+
 		return image;
 	}
 }

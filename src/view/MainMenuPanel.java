@@ -1,24 +1,19 @@
 package view;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import model.GameImageLoader;
 
-public class MainMenuPanel extends JPanel {
+public class MainMenuPanel extends JPanel implements ClickHandler {
 
 	private static final long serialVersionUID = 3507196282474890639L;
 
@@ -34,6 +29,8 @@ public class MainMenuPanel extends JPanel {
 	private final int BUTTON_WIDTH = 237;
 	private final int BUTTON_HEIGHT = 75;
 	private InvisibleButton newGame, loadGame, howToPlay, quit;
+	
+	private JFrame parent;
 
 
 	//TODO: REMOVE - FOR TESTING
@@ -41,27 +38,31 @@ public class MainMenuPanel extends JPanel {
 		JFrame jf = new JFrame();
 		jf.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		jf.setVisible( true );
+		jf.setResizable( false );
 		jf.setSize( new Dimension( background.getWidth() + 10, background.getHeight() + 20 ) );
-		jf.add( new MainMenuPanel() );
+		jf.setLocationRelativeTo( null );
+		jf.add( new MainMenuPanel( jf ) );
 	}
 	
-	public MainMenuPanel() {
+	public MainMenuPanel( JFrame parent ) {
 		super.setLayout( null );
 		
+		this.parent = parent;
+		
 		//Create buttons
-		this.newGame = new InvisibleButton();
+		this.newGame = new InvisibleButton( this );
 		this.newGame.setLocation( 394, 167 );
 		this.newGame.setSize( new Dimension( BUTTON_WIDTH, BUTTON_HEIGHT ) );
 		
-		this.loadGame = new InvisibleButton();
+		this.loadGame = new InvisibleButton( this );
 		this.loadGame.setLocation( 394, 267 );
 		this.loadGame.setSize( new Dimension( BUTTON_WIDTH, BUTTON_HEIGHT ) );
 		
-		this.howToPlay = new InvisibleButton();
+		this.howToPlay = new InvisibleButton( this );
 		this.howToPlay.setLocation( 394, 367 );
 		this.howToPlay.setSize( new Dimension( BUTTON_WIDTH, BUTTON_HEIGHT ) );
 		
-		this.quit = new InvisibleButton();
+		this.quit = new InvisibleButton( this );
 		this.quit.setLocation(394, 467 );
 		this.quit.setSize( new Dimension( BUTTON_WIDTH, BUTTON_HEIGHT ) );
 		
@@ -86,57 +87,24 @@ public class MainMenuPanel extends JPanel {
 	 * Performs an action based on which component was clicked. Called within
 	 * the inner class InvisibleButton
 	 */
-	private void handleClick( Component clickedComponent ) {
-		if( clickedComponent == this.newGame ) {
+	@Override public void handleClick( Component component ) {
+		if( component == this.newGame ) {
 			System.out.println( "New game " );
 		}
 		
-		else if( clickedComponent == this.loadGame ) {
+		else if( component == this.loadGame ) {
 			System.out.println( "Load game" );
 		}
 		
-		else if( clickedComponent == this.howToPlay ) {
+		else if( component == this.howToPlay ) {
 			System.out.println( "How to play" );
+			new HowToPlayDialog( this.parent );
 		}
 		
-		else if( clickedComponent == this.quit ) {
+		else if( component == this.quit ) {
 			System.out.println( "Quit" );
 			int confirm = JOptionPane.showConfirmDialog( this, "Do you want to quit?", "Quit?", JOptionPane.YES_NO_OPTION );
 			if( confirm == JOptionPane.YES_OPTION ) System.exit(0);
 		}
-	}
-
-	/**
-	 * A transparent JPanel that gains a white border when moused over. It will
-	 * also pass itself to MainMenuPanel when clicked.
-	 * @author Christopher
-	 *
-	 */
-	private class InvisibleButton extends JPanel implements MouseListener {
-		private static final long serialVersionUID = -6894259703329191579L;
-		private Border whiteBorder = BorderFactory.createLineBorder(Color.WHITE, 5);
-		
-		public InvisibleButton() {
-			super.addMouseListener( this );
-			super.setOpaque(false);
-		}
-		
-		@Override public void mouseEntered(MouseEvent e) {
-			this.setBorder( whiteBorder );
-		}
-
-		
-		@Override public void mouseExited(MouseEvent e) {
-			this.setBorder( null );
-		}
-		
-		@Override public void mouseClicked(MouseEvent e) { 
-			handleClick(this);
-		}
-		
-		/* Unused inherited methods */
-		@Override public void mousePressed(MouseEvent e) { }
-		@Override public void mouseReleased(MouseEvent e) { }
-		
 	}
 }
