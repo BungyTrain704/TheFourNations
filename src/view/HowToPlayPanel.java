@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -23,8 +22,7 @@ public class HowToPlayPanel extends JPanel{
 	private static final long serialVersionUID = -6401990241674052192L;
 	
 	//Images
-	private BufferedImage howToPlay = GameImageLoader.getImage( GameImageLoader.imagesFolder + "HowToPlay.png" );
-	private BufferedImage exitButton = GameImageLoader.getImage( GameImageLoader.imagesFolder + "exit.png" );
+	private BufferedImage howToPlay = GameImageLoader.getImage( GameImageLoader.imagesFolder + "HowToPlayScroll.png" );
 	
 	//Components
 	private InvisibleButton exitButtonHandler;
@@ -33,12 +31,13 @@ public class HowToPlayPanel extends JPanel{
 		//Panel settings
 		super.setLayout( null );
 		super.setSize( new Dimension( howToPlay.getWidth(), howToPlay.getHeight() ) );
+		super.setBackground( new Color( 0, 0, 0, 0 ) );
 		super.setBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED ) );
 		
-		//Invsiible button
+		//Invisible button
 		this.exitButtonHandler = new InvisibleButton( handler, Color.white, 3 );
-		this.exitButtonHandler.setSize( exitButton.getWidth(), exitButton.getHeight() );
-		this.exitButtonHandler.setLocation( super.getWidth() - exitButton.getWidth(), 0 );
+		this.exitButtonHandler.setSize( 105, 45 );
+		this.exitButtonHandler.setLocation( 240, 630 );
 		
 		//Add button
 		super.add( exitButtonHandler );
@@ -48,6 +47,5 @@ public class HowToPlayPanel extends JPanel{
 		super.paintComponent( g );
 		Graphics2D g2 = (Graphics2D)g;
 		g2.drawImage( howToPlay, 0, 0, null );
-		g2.drawImage( exitButton, getSize().width - exitButton.getWidth(), 0, null );
 	}
 }

@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JDialog;
@@ -19,11 +20,12 @@ public class HowToPlayDialog extends JDialog implements ClickHandler {
 		super.setSize( this.hpp.getWidth(), this.hpp.getHeight() );
 		super.setResizable( false );
 		super.setUndecorated( true );
+		super.setBackground( new Color( 0, 0, 0, 0) );
 		super.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
 		super.setVisible( true );
 		super.setLocationRelativeTo( parent );
 		
-		super.add( this.hpp );
+		super.setContentPane( this.hpp );
 	}
 
 	//TODO: For testing purposes

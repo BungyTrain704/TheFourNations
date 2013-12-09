@@ -40,7 +40,7 @@ public class MainMenuPanel extends JPanel implements ClickHandler {
 		jf.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		jf.setResizable( false );
 		jf.setUndecorated( true ); //Remove frame borders
-		jf.setBackground( new Color( 0, 0, 0, 0 ) ); //Give the background of the frame no color
+		jf.setBackground( new Color( 0, 0, 0, 0 ) ); //Makes the frame background transparent
 		jf.setVisible( true );
 		jf.setContentPane( new MainMenuPanel( jf ) ); //Set our main menu panel as the frame's content pane
 		jf.setSize( new Dimension( background.getWidth() + 10, background.getHeight() + 20 ) );
