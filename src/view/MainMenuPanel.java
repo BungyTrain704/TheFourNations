@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -37,8 +38,11 @@ public class MainMenuPanel extends JPanel implements ClickHandler {
 	public static void main( String[] args ) {
 		JFrame jf = new JFrame();
 		jf.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		jf.setVisible( true );
 		jf.setResizable( false );
+		jf.setUndecorated( true ); //Remove frame borders
+		jf.setBackground( new Color( 0, 0, 0, 0 ) ); //Give the background of the frame no color
+		jf.setVisible( true );
+		jf.setContentPane( new MainMenuPanel( jf ) ); //Set our main menu panel as the frame's content pane
 		jf.setSize( new Dimension( background.getWidth() + 10, background.getHeight() + 20 ) );
 		jf.setLocationRelativeTo( null );
 		jf.add( new MainMenuPanel( jf ) );
@@ -46,6 +50,7 @@ public class MainMenuPanel extends JPanel implements ClickHandler {
 	
 	public MainMenuPanel( JFrame parent ) {
 		super.setLayout( null );
+		super.setBackground( new Color(0, 0, 0, 0 ) ); //Makes frame background transparent
 		
 		this.parent = parent;
 		
