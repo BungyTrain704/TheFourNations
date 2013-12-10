@@ -1,7 +1,10 @@
 package model.structures;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import model.map.Resource;
+import model.map.Terrain;
 
 /**
  * Superclass to all in-game structures. A structure is a building
@@ -16,6 +19,7 @@ public abstract class AbstractStructure implements Serializable {
 	private static final long serialVersionUID = -2955392819275955126L;
 	private int location;
 	private Resource resourceUsed;
+	private Set<Terrain> validTerrainTypes;
 	private String name;
 	
 	/**
@@ -23,10 +27,11 @@ public abstract class AbstractStructure implements Serializable {
 	 * @param location
 	 * @param name
 	 */
-	public AbstractStructure(int location, String name, Resource resourceUsed) {
+	public AbstractStructure(int location, String name, Resource resourceUsed, Terrain... validTerrainTypes) {
 		this.location = location;
 		this.name = name;
 		this.resourceUsed = resourceUsed;
+		this.validTerrainTypes = new HashSet<>( this.validTerrainTypes );
 	}
 
 	/**
@@ -85,5 +90,9 @@ public abstract class AbstractStructure implements Serializable {
 	 */
 	public void setResourceUsed(Resource resourceUsed) {
 		this.resourceUsed = resourceUsed;
+	}
+	
+	public Set<Terrain> getValidTerrainTypes() {
+		return this.validTerrainTypes;
 	}
 }

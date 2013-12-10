@@ -1,10 +1,8 @@
 package model.tasks;
 import model.Civilization;
+import model.exceptions.DisallowedTaskException;
 import model.map.Map;
 import model.structures.AbstractStructure;
-
-
-
 
 /**
  * Builds a structure at a specified location
@@ -27,6 +25,14 @@ public class BuildStructureTask extends Task {
 	public BuildStructureTask(int work, int locWorker, int locTask, Map map, AbstractStructure structure ) {
 		super(work, locWorker, locTask, map);
 		this.structureToBuild = structure;
+		
+		if( ! isValidStructureLocation() ) {
+			throw new DisallowedTaskException( this );
+		}
+	}
+	
+	private boolean isValidStructureLocation() {
+		return structureToBuild.getValidTerrainTypes().contains( civ.getMap().getCell(locationOfTask).getTerrain() );
 	}
 
 	/**

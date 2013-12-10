@@ -1,6 +1,7 @@
 package model.tasks;
 import java.io.Serializable;
 
+import model.Civilization;
 import model.map.Map;
 import model.units.Unit;
 
@@ -18,6 +19,7 @@ public abstract class Task implements Serializable
 	protected Map map;
 	protected Unit unit;
 	protected boolean isDone;
+	protected Civilization civ = Civilization.getInstance();
 	
 	/**
 	 * Creates a task
