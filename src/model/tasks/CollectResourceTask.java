@@ -13,6 +13,8 @@ import model.map.Terrain;
 
 public class CollectResourceTask extends Task{
 	
+	private static final long serialVersionUID = -5974294099911726904L;
+
 	public CollectResourceTask(int work, int locWorker, int locTask, Map map) {
 		super(work, locWorker, locTask, map);
 	}

@@ -189,6 +189,18 @@ public class Civilization {
 		this.globalResourcePool.put(resource.getResourceType(), 
 				this.globalResourcePool.get(resource.getResourceType() ) - resource.getResourceValue() );
 	}
+	
+	public Queue<Task> getTaskQueue() {
+		return this.taskQueue;
+	}
+	
+	public ArrayList<Unit> getUnitsToKill() {
+		return this.unitsToKill;
+	}
+	
+	public HashMap<ResourceType, Integer> getGlobalResourcePool() {
+		return this.globalResourcePool;
+	}
 
 	/**
 	 * @return the units

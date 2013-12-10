@@ -9,6 +9,7 @@ import model.Civilization;
  */
 public class StoreResourceTask extends Task {
 
+	private static final long serialVersionUID = -142993928361461443L;
 	private Resource resource;
 	
 	public StoreResourceTask(int work, int locWorker, int locTask, Map map, Resource resource) {

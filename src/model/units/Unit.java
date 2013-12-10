@@ -1,13 +1,12 @@
 package model.units;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import model.Civilization;
-import model.map.Map;
-import model.map.Terrain;
 import model.structures.AbstractStructure;
 import model.tasks.EatTask;
 import model.tasks.Task;
@@ -22,8 +21,9 @@ import model.tasks.Task;
  * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
  *
  */
-public abstract class Unit {
-	
+public abstract class Unit implements Serializable {
+
+	private static final long serialVersionUID = 5975310412672383975L;
 	private String name;
 	private HashMap<UnitSkill, Integer> skills;
 	protected int energyLevel, hungerLevel;

@@ -13,6 +13,7 @@ import model.structures.AbstractStructure;
  */
 public class BuildStructureTask extends Task {
 
+	private static final long serialVersionUID = 2155606028566751830L;
 	private AbstractStructure structureToBuild;
 	
 	/**

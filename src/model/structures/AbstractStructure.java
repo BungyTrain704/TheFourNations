@@ -1,4 +1,6 @@
 package model.structures;
+import java.io.Serializable;
+
 import model.map.Resource;
 
 /**
@@ -9,8 +11,9 @@ import model.map.Resource;
  * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
  *
  */
-public abstract class AbstractStructure {
+public abstract class AbstractStructure implements Serializable {
 
+	private static final long serialVersionUID = -2955392819275955126L;
 	private int location;
 	private Resource resourceUsed;
 	private String name;

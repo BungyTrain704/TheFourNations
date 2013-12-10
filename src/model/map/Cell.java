@@ -1,10 +1,12 @@
 package model.map;
+import java.io.Serializable;
 import java.util.Random;
 
 import model.structures.AbstractStructure;
 
-public class Cell {
-	
+public class Cell implements Serializable {
+
+	private static final long serialVersionUID = -6950090612251717629L;
 	private boolean hasUnit;
 	private boolean isVisible;
 	private boolean hasResource;

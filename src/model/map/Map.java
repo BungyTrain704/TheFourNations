@@ -1,10 +1,10 @@
 package model.map;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-import model.Civilization;
+public class Map implements Serializable {
 
-public class Map {
+	private static final long serialVersionUID = -6973886976003208870L;
 
 	//TODO: Remove - used for testing purposes
 	public static void main(String[] args) {

@@ -1,4 +1,6 @@
 package model.tasks;
+import java.io.Serializable;
+
 import model.map.Map;
 import model.units.Unit;
 
@@ -7,8 +9,9 @@ import model.units.Unit;
  * @author Christopher Chapline, James Fagan, Michelle Yung, Emile Leones
  *
  */
-public abstract class Task 
+public abstract class Task implements Serializable
 {
+	private static final long serialVersionUID = -8217627590340674929L;
 	private int remainingWorkRequirement; //amount of work required for this task
 	private int locationOfWorker; //location where unit needs to be to work on this task
 	protected int locationOfTask; //location where work is being done (i.e. where something is being built)

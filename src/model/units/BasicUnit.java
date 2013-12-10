@@ -2,7 +2,9 @@ package model.units;
 
 import model.Civilization;
 
-public class BasicUnit extends Unit{
+public class BasicUnit extends Unit {
+
+	private static final long serialVersionUID = -1305684877971681010L;
 
 	public BasicUnit(String name, int maxEnergyLevel, int maxHungerLevel,
 			int cols) {
