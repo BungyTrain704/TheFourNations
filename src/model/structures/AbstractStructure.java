@@ -1,5 +1,6 @@
 package model.structures;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public abstract class AbstractStructure implements Serializable {
 		this.location = location;
 		this.name = name;
 		this.resourceUsed = resourceUsed;
-		this.validTerrainTypes = new HashSet<>( this.validTerrainTypes );
+		this.validTerrainTypes = new HashSet<>( Arrays.asList( validTerrainTypes ) );
 	}
 
 	/**

@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Queue;
 
 import model.map.Map;
@@ -25,13 +26,14 @@ public class CivilizationState implements Serializable {
 		this( civ.getTaskQueue(), civ.getUnits(), civ.getUnitsToKill(), civ.getStructures(), civ.getGlobalResourcePool(), civ.getMap() );
 	}
 
+	@SuppressWarnings("unchecked")
 	public CivilizationState( Queue<Task> taskQueue, ArrayList<Unit> units, ArrayList<Unit> unitsToKill, 
 			ArrayList<AbstractStructure> structures, HashMap<ResourceType, Integer> globalResourcePool, Map map ) {
-		this.taskQueue = taskQueue;
-		this.units = units;
-		this.unitsToKill = unitsToKill;
-		this.structures = structures;
-		this.globalResourcePool = globalResourcePool;
+		this.taskQueue = new LinkedList<>( taskQueue );
+		this.units = (ArrayList<Unit>) units.clone();
+		this.unitsToKill = (ArrayList<Unit>) unitsToKill.clone();
+		this.structures = (ArrayList<AbstractStructure>) structures.clone();
+		this.globalResourcePool = (HashMap<ResourceType, Integer>) globalResourcePool.clone();
 		this.map = map;
 	}
 
