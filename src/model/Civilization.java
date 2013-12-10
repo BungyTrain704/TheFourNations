@@ -50,6 +50,15 @@ public class Civilization {
 			this.globalResourcePool.put(rt, 0 );
 		}
 	}
+	
+	public void parseCivilizationState( CivilizationState state ) {
+		this.globalResourcePool = state.getGlobalResourcePool();
+		this.taskQueue = state.getTaskQueue();
+		this.structures = state.getStructures();
+		this.units = state.getUnits();
+		this.unitsToKill = state.getUnitsToKill();
+		this.map = state.getMap();
+	}
 
 	public void setMap(Map m)
 	{

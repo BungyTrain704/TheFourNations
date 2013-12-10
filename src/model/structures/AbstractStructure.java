@@ -43,6 +43,14 @@ public abstract class AbstractStructure implements Serializable {
 	public boolean providesBed() {
 		return false;
 	}
+	
+	public boolean providesWater() {
+		return false;
+	}
+	
+	public boolean isAContainer() {
+		return false;
+	}
 
 	/**
 	 * @return the name

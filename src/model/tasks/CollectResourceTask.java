@@ -22,8 +22,8 @@ public class CollectResourceTask extends Task{
 	@Override
 	public void performAction() {
 		Map m = Civilization.getInstance().getMap();
-		Resource res = m.getCell(super.getTaskLocation()).getResource();
-		m.getCell(super.getTaskLocation()).removeResource();
+		Resource res = m.getCell(locationOfTask).getResource();
+		m.getCell(locationOfTask).removeResource();
 		
 		ArrayList<Integer> storedCells = new ArrayList<Integer>();
 		

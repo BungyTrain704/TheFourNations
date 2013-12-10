@@ -11,6 +11,7 @@ import model.structures.AbstractStructure;
 import model.tasks.Task;
 import model.units.Unit;
 
+//TODO: Create and Serialize game runner
 public class CivilizationState implements Serializable {
 
 	private static final long serialVersionUID = 50960125111940890L;

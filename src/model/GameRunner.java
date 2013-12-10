@@ -8,7 +8,7 @@ import model.map.Map;
 import model.map.Resource;
 import model.map.ResourceType;
 import model.map.Terrain;
-import model.structures.BasicStructure;
+import model.structures.Table;
 import model.tasks.BuildStructureTask;
 import model.tasks.CollectResourceTask;
 import model.units.Unit;
