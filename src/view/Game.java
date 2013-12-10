@@ -57,34 +57,41 @@ public class Game extends JFrame {
 	// Map scroll pane -- not yet used
 	private JScrollPane scrollPane;
 
-	//Resource locations
+	// Resource locations
 	private static String fileSep = File.separator;
 	private static String baseDirectory = System.getProperty("user.dir");
-	private static String imagesFolder = baseDirectory + fileSep + "images" + fileSep;
+	private static String imagesFolder = baseDirectory + fileSep + "images"
+			+ fileSep;
 
 	// BufferedImage set
-	private static BufferedImage grassImg 		= getImage( imagesFolder + "grass.png" );
-	private static BufferedImage waterImg 		= getImage( imagesFolder + "water.png" );
-	private static BufferedImage snowImg 		= getImage( imagesFolder + "snow.png" );
-	private static BufferedImage desertImg 		= getImage( imagesFolder + "desert.png" );
-	private static BufferedImage cloudImg 		= getImage( imagesFolder + "clouds.png" );
-	private static BufferedImage snowTreeImg 	= getImage( imagesFolder + "coldTrees.png" );
-	private static BufferedImage treeImg 		= getImage( imagesFolder + "trees.png" );
-	private static BufferedImage bareTreeImg 	= getImage( imagesFolder + "bareTrees.png" );
-	private static BufferedImage stoneImg 		= getImage( imagesFolder + "stones.png" );
-	private static BufferedImage snowStoneImg 	= getImage( imagesFolder + "snowStones.png" );
-	private static BufferedImage earthStoneImg 	= getImage( imagesFolder + "earthStones.png" );
-	private static BufferedImage menuImg 		= getImage( imagesFolder + "bkg.png" );
-	private static BufferedImage waterDudeImg 	= getImage( imagesFolder + "waterDude.png" );
-	
+	private static BufferedImage grassImg = getImage(imagesFolder + "grass.png");
+	private static BufferedImage waterImg = getImage(imagesFolder + "water.png");
+	private static BufferedImage snowImg = getImage(imagesFolder + "snow.png");
+	private static BufferedImage desertImg = getImage(imagesFolder
+			+ "desert.png");
+	private static BufferedImage cloudImg = getImage(imagesFolder
+			+ "clouds.png");
+	private static BufferedImage snowTreeImg = getImage(imagesFolder
+			+ "snowTree.png");
+	private static BufferedImage treeImg = getImage(imagesFolder + "tree.png");
+	private static BufferedImage bareTreeImg = getImage(imagesFolder
+			+ "earthTree.png");
+	private static BufferedImage stoneImg = getImage(imagesFolder
+			+ "stones.png");
+	private static BufferedImage snowStoneImg = getImage(imagesFolder
+			+ "snowStones.png");
+	private static BufferedImage earthStoneImg = getImage(imagesFolder
+			+ "earthStones.png");
+	private static BufferedImage menuImg = getImage(imagesFolder + "bkg.png");
+	private static BufferedImage waterDudeImg = getImage(imagesFolder
+			+ "waterDude.png");
+
 	// Play type booleans
 	private boolean playWater;
 	private boolean playFire;
 	private boolean playEarth;
 	private boolean playAir;
 	private boolean playing;
-
-	
 
 	public static void main(String[] args) {
 		JFrame window = new Game();
@@ -222,10 +229,8 @@ public class Game extends JFrame {
 		infoPanel.setBackground(Color.DARK_GRAY);
 		infoPanel.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		gamePanel.add(infoPanel);
-		
-		
-	}
 
+	}
 
 	// Special Menu Panel for drawing Four Nation Map background
 	public class MenuPanel extends JPanel {
@@ -266,8 +271,7 @@ public class Game extends JFrame {
 			initializeGameView();
 			menuView.setVisible(!playing);
 			gamePanel.setVisible(playing);
-			
-			
+
 		}
 
 		@Override
@@ -293,22 +297,23 @@ public class Game extends JFrame {
 	public class MainMapPanel extends JPanel implements MouseListener {
 
 		Timer timer;
-		
+
 		public MainMapPanel() {
-			ActionListener timeListener = new ActionListener(){
-				
+			ActionListener timeListener = new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					civ.update();
 					repaint();
 				}
 			};
-			
+
 			civ.getMap().getCell(975).setResource(Resource.tree);
 			civ.getMap().getCell(1420).setTerrain(Terrain.stockpile);
-			civ.addTaskToQueue(new CollectResourceTask(5, 975, 975, civ.getMap()));
-			
-			//Start timer
+			civ.addTaskToQueue(new CollectResourceTask(5, 975, 975, civ
+					.getMap()));
+
+			// Start timer
 			timer = new Timer(300, timeListener);
 			timer.start();
 		}
@@ -363,7 +368,8 @@ public class Game extends JFrame {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.drawImage(mapImg, 0, 0, null);
 			g2.setPaint(Color.RED);
-			g2.drawRect(3, 3,(int)(gameView.getWidth()*.175), (int)(gameView.getHeight()*.175));
+			g2.drawRect(3, 3, (int) (gameView.getWidth() * .175),
+					(int) (gameView.getHeight() * .175));
 		}
 
 		@Override
@@ -400,53 +406,76 @@ public class Game extends JFrame {
 		for (int i = 0; i < map.getRows(); i++) {
 			for (int j = 0; j < map.getCols(); j++) {
 				// Draw plains of the map
-				if (civ.getMap().getCell(i,j).getTerrain().equals(Terrain.plains)) {
+				if (civ.getMap().getCell(i, j).getTerrain()
+						.equals(Terrain.plains)) {
 					if (playFire || playAir) { // for fire and air, draw grass
 												// plains
-						g2.drawImage(grassImg, j * 16, i * 16, null);
+						g2.drawImage(grassImg, i * 16, j * 16, null);
 					} else if (playWater) { // for water, draw snow plains
-						g2.drawImage(snowImg, j * 16, i * 16, null);
+						g2.drawImage(snowImg, i * 16, j * 16, null);
 					} else { // for earth, draw sand/desert plains
-						g2.drawImage(desertImg, j * 16, i * 16, null);
+						g2.drawImage(desertImg, i * 16, j * 16, null);
 					}
 				}
 				// Draw water
-				else if (civ.getMap().getCell(i,j).getTerrain().equals(
-						Terrain.water)) {
+				else if (civ.getMap().getCell(i, j).getTerrain()
+						.equals(Terrain.water)) {
 					if (playFire || playEarth || playWater) { // for non-air,
-										// draw water
-						g2.drawImage(waterImg, j * 16, i * 16, null);
+																// draw water
+						g2.drawImage(waterImg, i * 16, j * 16, null);
 					} else { // for air, draw clouds
-						g2.drawImage(cloudImg, j * 16, i * 16, null);
+						g2.drawImage(cloudImg, i * 16, j * 16, null);
 					}
 				}
 				// Overlay resources
-				if (civ.getMap().getCell(i,j).hasResource()) {
+				if (civ.getMap().getCell(i, j).hasResource()) {
 					// Draw trees
-					if (civ.getMap().getCell(i,j).getResource().equals(
-							Resource.tree)) {
+					if (civ.getMap().getCell(i, j).getResource()
+							.equals(Resource.tree)) {
 						if (playWater) { // for water, draw snow-covered trees
-							g2.drawImage(snowTreeImg, j * 16, i * 16, null);
+							g2.drawImage(
+									snowTreeImg.getSubimage(0, 16, 16, 16),
+									i * 16, j * 16, null);
 						} else if (playEarth) { // for earth, draw less bushy
 												// trees
-							g2.drawImage(bareTreeImg, j * 16, i * 16, null);
+							g2.drawImage(
+									bareTreeImg.getSubimage(0, 16, 16, 16),
+									i * 16, j * 16, null);
 						} else { // for fire and air, draw bushy trees
-							g2.drawImage(treeImg, j * 16, i * 16, null);
+							g2.drawImage(treeImg.getSubimage(0, 16, 16, 16),
+									i * 16, j * 16, null);
 						}
 					}
 					// Draw stones
-					else if (civ.getMap().getCell(i,j).getResource().equals(
-							Resource.stone)) {
+					else if (civ.getMap().getCell(i, j).getResource()
+							.equals(Resource.stone)) {
 						if (playWater) { // for water, draw snow-covered stones
-							g2.drawImage(snowStoneImg, j * 16, i * 16, null);
+							g2.drawImage(snowStoneImg, i * 16, j * 16, null);
 						} else if (playEarth) { // for earth, draw darker stones
-							g2.drawImage(earthStoneImg, j * 16, i * 16, null);
+							g2.drawImage(earthStoneImg, i * 16, j * 16, null);
 						} else { // for fire and air, draw lighter stones
-							g2.drawImage(stoneImg, j * 16, i * 16, null);
+							g2.drawImage(stoneImg, i * 16, j * 16, null);
 						}
 					}
 				}
-				
+				// Draw tops of trees
+				if (j + 1 < map.getRows()
+						&& civ.getMap().getCell(i, j + 1).hasResource()) {
+					if (civ.getMap().getCell(i, j + 1).getResource()
+							.equals(Resource.tree)) {
+						if (playWater) { // for water, draw snow-covered trees
+							g2.drawImage(snowTreeImg.getSubimage(0, 0, 16, 16),
+									i * 16, j * 16, null);
+						} else if (playEarth) { // for earth, draw less bushy
+												// trees
+							g2.drawImage(bareTreeImg.getSubimage(0, 0, 16, 16),
+									i * 16, j * 16, null);
+						} else { // for fire and air, draw bushy trees
+							g2.drawImage(treeImg.getSubimage(0, 0, 16, 16),
+									i * 16, j * 16, null);
+						}
+					}
+				}
 				for (int k = 0; k < civ.getUnits().size(); k++) {
 					int location = civ.getUnits().get(k).getLocation();
 					int row = location/50;
