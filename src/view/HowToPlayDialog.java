@@ -33,7 +33,6 @@ public class HowToPlayDialog extends JDialog implements ClickHandler {
 		new HowToPlayDialog( null );
 	}
 
-	
 	@Override public void handleClick(Component component) {
 		dispose();
 	}
