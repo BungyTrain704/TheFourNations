@@ -8,6 +8,7 @@ import java.util.Queue;
 import model.Civilization;
 import model.map.Map;
 import model.map.Terrain;
+import model.structures.AbstractStructure;
 import model.tasks.EatTask;
 import model.tasks.Task;
 
@@ -166,28 +167,27 @@ public abstract class Unit {
 	 */
 	public void update()
 	{
+		Civilization civ = Civilization.getInstance();
 		updateUnitCounters();
 		if(this.needsToEat())
 		{
 			//Place task back on queue
-			Civilization.getInstance().addTaskToQueue( this.currentTask );
-			this.currentTask.setUnit(null);
-			this.currentTask = null;
+			if( this.currentTask != null ) {
+				civ.addTaskToQueue( this.currentTask );
+				this.currentTask.setUnit(null);
+				this.currentTask = null;
+			}
 			
-			//Find nearest kitchen
-			Map m = Civilization.getInstance().getMap();
+			ArrayList<AbstractStructure> structures = civ.getStructures();
 			
-			ArrayList<Integer> storedCells = new ArrayList<Integer>();
-			
-			//Find on the map
-			for( int i = 0; i < m.getMapSize(); i++ ) {
-				if( m.getCell(i).getTerrain() == Terrain.kitchen ) {
-					storedCells.add( i );
-				}
+			for( AbstractStructure as : structures ) {
+				if( ! as.providesFood() )
+					structures.remove(as);
 			}
 			
 			//Create task to eat
-			this.currentTask = new EatTask( 1, storedCells.get(0), storedCells.get(0), Civilization.getInstance().getMap(), this );
+			if( ! structures.isEmpty() )
+				this.currentTask = new EatTask( 1, structures.get(0).getLocation() - 1, structures.get(0).getLocation() - 1, Civilization.getInstance().getMap(), this );
 		}
 		else if(this.needsToSleep())
 		{
@@ -201,8 +201,12 @@ public abstract class Unit {
 		else if(this.currentlyWorking)
 		{
 			if( this.currentTask.getUnit() == null ) this.currentTask.setUnit( this );
-			if(currentTask.decrement(1))
+			currentTask.decrement(1);
+			if(currentTask.isDone())
+			{	
 				currentlyWorking = false;
+				currentTask = null;
+			}
 		}	
 		else
 		{
@@ -223,6 +227,14 @@ public abstract class Unit {
 	 * Updates the unit's hunger and energy levels. Called every tick.
 	 */
 	protected abstract void updateUnitCounters();
+	
+	public void die() {
+		Civilization civ = Civilization.getInstance();
+		if( this.currentTask != null )
+			civ.addTaskToQueue(this.currentTask);
+		civ.removeUnit(this);
+		civ.getMap().getCell(this.location).setUnit(false);
+	}
 
 	/**
 	 * @return the name

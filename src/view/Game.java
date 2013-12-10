@@ -1,5 +1,7 @@
 package view;
 
+import static model.GameImageLoader.getImage;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -55,27 +57,34 @@ public class Game extends JFrame {
 	// Map scroll pane -- not yet used
 	private JScrollPane scrollPane;
 
-	// BufferedImage set
-	private static BufferedImage menuImg;
-	private static BufferedImage grassImg;
-	private static BufferedImage waterImg;
-	private static BufferedImage snowImg;
-	private static BufferedImage desertImg;
-	private static BufferedImage cloudImg;
-	private static BufferedImage snowTreeImg;
-	private static BufferedImage treeImg;
-	private static BufferedImage bareTreeImg;
-	private static BufferedImage stoneImg;
-	private static BufferedImage snowStoneImg;
-	private static BufferedImage earthStoneImg;
-	private static BufferedImage waterDude;
+	//Resource locations
+	private static String fileSep = File.separator;
+	private static String baseDirectory = System.getProperty("user.dir");
+	private static String imagesFolder = baseDirectory + fileSep + "images" + fileSep;
 
+	// BufferedImage set
+	private static BufferedImage grassImg 		= getImage( imagesFolder + "grass.png" );
+	private static BufferedImage waterImg 		= getImage( imagesFolder + "water.png" );
+	private static BufferedImage snowImg 		= getImage( imagesFolder + "snow.png" );
+	private static BufferedImage desertImg 		= getImage( imagesFolder + "desert.png" );
+	private static BufferedImage cloudImg 		= getImage( imagesFolder + "clouds.png" );
+	private static BufferedImage snowTreeImg 	= getImage( imagesFolder + "coldTrees.png" );
+	private static BufferedImage treeImg 		= getImage( imagesFolder + "trees.png" );
+	private static BufferedImage bareTreeImg 	= getImage( imagesFolder + "bareTrees.png" );
+	private static BufferedImage stoneImg 		= getImage( imagesFolder + "stones.png" );
+	private static BufferedImage snowStoneImg 	= getImage( imagesFolder + "snowStones.png" );
+	private static BufferedImage earthStoneImg 	= getImage( imagesFolder + "earthStones.png" );
+	private static BufferedImage menuImg 		= getImage( imagesFolder + "bkg.png" );
+	private static BufferedImage waterDudeImg 	= getImage( imagesFolder + "waterDude.png" );
+	
 	// Play type booleans
 	private boolean playWater;
 	private boolean playFire;
 	private boolean playEarth;
 	private boolean playAir;
 	private boolean playing;
+
+	
 
 	public static void main(String[] args) {
 		JFrame window = new Game();
@@ -217,43 +226,9 @@ public class Game extends JFrame {
 		
 	}
 
-	static {
-		String fileSep = File.separator;
-		String baseDir = System.getProperty("user.dir");
-		String imagesFolder = baseDir + fileSep + "images" + fileSep;
-		try {
-			grassImg = ImageIO.read( new File( imagesFolder + "grass.png" ) );
-			waterImg = ImageIO.read( new File( imagesFolder + "water.png" ) );
-			snowImg = ImageIO.read( new File( imagesFolder + "snow.png" ) );
-			desertImg = ImageIO.read( new File( imagesFolder + "desert.png" ) );
-			cloudImg = ImageIO.read( new File( imagesFolder + "clouds.png" ) );
-			treeImg = ImageIO.read( new File( imagesFolder + "trees.png" ) );
-			snowTreeImg = ImageIO.read( new File( imagesFolder + "coldTrees.png" ) );
-			bareTreeImg = ImageIO.read( new File( imagesFolder + "bareTrees.png" ) );
-			stoneImg = ImageIO.read( new File( imagesFolder + "stones.png" ) );
-			earthStoneImg = ImageIO.read( new File( imagesFolder + "earthStones.png" ) );
-			snowStoneImg = ImageIO.read( new File( imagesFolder + "snowStones.png" ) );
-			waterDude = ImageIO.read(new File(imagesFolder + "waterDude.png"));
-		}
-		catch( IOException ioe ) {
-			System.out.println( "Could not locate image file!" );
-			ioe.printStackTrace();
-		}
-	}
-
 
 	// Special Menu Panel for drawing Four Nation Map background
 	public class MenuPanel extends JPanel {
-
-		public MenuPanel() {
-
-			try {
-				menuImg = ImageIO.read(new File("images" + File.separator
-						+ "bkg.png"));
-			} catch (IOException e) {
-				System.out.println("Could not find 'bkg.png'");
-			}
-		}
 
 		@Override
 		protected void paintComponent(Graphics g) {
@@ -371,7 +346,7 @@ public class Game extends JFrame {
 	public class MiniMapPanel extends JPanel implements MouseListener {
 
 		private BufferedImage mapImg;
-		
+
 		public MiniMapPanel() {
 
 			mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
@@ -393,31 +368,31 @@ public class Game extends JFrame {
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			
+
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
@@ -439,7 +414,7 @@ public class Game extends JFrame {
 				else if (civ.getMap().getCell(i,j).getTerrain().equals(
 						Terrain.water)) {
 					if (playFire || playEarth || playWater) { // for non-air,
-																// draw water
+										// draw water
 						g2.drawImage(waterImg, j * 16, i * 16, null);
 					} else { // for air, draw clouds
 						g2.drawImage(cloudImg, j * 16, i * 16, null);
@@ -477,7 +452,7 @@ public class Game extends JFrame {
 					int row = location/50;
 					int col = location%50;
 					if (playWater) {
-						g2.drawImage(waterDude, col * 16, row * 16, null);
+						g2.drawImage(waterDudeImg, col * 16, row * 16, null);
 					}
 				}
 			}

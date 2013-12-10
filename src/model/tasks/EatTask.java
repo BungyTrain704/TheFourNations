@@ -17,6 +17,7 @@ public class EatTask extends Task {
 		
 		int amountRetrieved = Civilization.getInstance().pollResource(ResourceType.food, maxHungerLevel - currentHungerLevel );
 		unit.setHungerLevel( unit.getHungerLevel() + amountRetrieved );
+		this.isDone = true;
 	}
 
 }

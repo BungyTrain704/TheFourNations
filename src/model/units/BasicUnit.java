@@ -1,5 +1,7 @@
 package model.units;
 
+import model.Civilization;
+
 public class BasicUnit extends Unit{
 
 	public BasicUnit(String name, int maxEnergyLevel, int maxHungerLevel,
@@ -13,6 +15,8 @@ public class BasicUnit extends Unit{
 	 */
 	@Override protected void updateUnitCounters() {
 		this.hungerLevel -= 1;
+		
+		if( this.hungerLevel <= 0 ) Civilization.getInstance().sentenceToDeath( this );
 	}
 
 }

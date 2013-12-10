@@ -19,6 +19,7 @@ public class StoreResourceTask extends Task {
 	@Override
 	public void performAction() {
 		Civilization.getInstance().storeResource( this.resource );
+		this.isDone = true;
 	}
 
 }

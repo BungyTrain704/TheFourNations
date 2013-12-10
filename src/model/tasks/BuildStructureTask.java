@@ -36,5 +36,6 @@ public class BuildStructureTask extends Task {
 		super.map.getCell(super.locationOfTask).addStructure(this.structureToBuild);
 		Civilization.getInstance().addStructure( this.structureToBuild );
 		Civilization.getInstance().useResource( this.structureToBuild.getResourceUsed() );
+		this.isDone = true;
 	}
 }
