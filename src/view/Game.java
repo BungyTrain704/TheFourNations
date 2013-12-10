@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -17,15 +19,21 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 
+import model.Civilization;
 import model.map.Map;
 import model.map.Resource;
+import model.map.ResourceType;
 import model.map.Terrain;
+import model.tasks.CollectResourceTask;
+import model.units.Unit;
 
 public class Game extends JFrame {
 
 	private Map map;
+	private Civilization civ;
 
 	// Main JPanel
 	private JPanel mainPanel;
@@ -67,6 +75,7 @@ public class Game extends JFrame {
 	private static BufferedImage snowStoneImg 	= getImage( imagesFolder + "snowStones.png" );
 	private static BufferedImage earthStoneImg 	= getImage( imagesFolder + "earthStones.png" );
 	private static BufferedImage menuImg 		= getImage( imagesFolder + "bkg.png" );
+	private static BufferedImage waterDudeImg 	= getImage( imagesFolder + "waterDude.png" );
 	
 	// Play type booleans
 	private boolean playWater;
@@ -85,6 +94,9 @@ public class Game extends JFrame {
 	public Game() {
 
 		map = new Map();
+		civ = Civilization.getInstance();
+		civ.setMap(map);
+
 		playing = false;
 
 		setupWindow();
@@ -210,8 +222,10 @@ public class Game extends JFrame {
 		infoPanel.setBackground(Color.DARK_GRAY);
 		infoPanel.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		gamePanel.add(infoPanel);
-
+		
+		
 	}
+
 
 	// Special Menu Panel for drawing Four Nation Map background
 	public class MenuPanel extends JPanel {
@@ -252,6 +266,8 @@ public class Game extends JFrame {
 			initializeGameView();
 			menuView.setVisible(!playing);
 			gamePanel.setVisible(playing);
+			
+			
 		}
 
 		@Override
@@ -276,8 +292,25 @@ public class Game extends JFrame {
 	// Special panel for drawing the main map
 	public class MainMapPanel extends JPanel implements MouseListener {
 
+		Timer timer;
+		
 		public MainMapPanel() {
-
+			ActionListener timeListener = new ActionListener(){
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					civ.update();
+					repaint();
+				}
+			};
+			
+			civ.getMap().getCell(975).setResource(Resource.tree);
+			civ.getMap().getCell(1420).setTerrain(Terrain.stockpile);
+			civ.addTaskToQueue(new CollectResourceTask(5, 975, 975, civ.getMap()));
+			
+			//Start timer
+			timer = new Timer(300, timeListener);
+			timer.start();
 		}
 
 		@Override
@@ -367,50 +400,59 @@ public class Game extends JFrame {
 		for (int i = 0; i < map.getRows(); i++) {
 			for (int j = 0; j < map.getCols(); j++) {
 				// Draw plains of the map
-				if (map.getMapArray()[i][j].getTerrain().equals(Terrain.plains)) {
+				if (civ.getMap().getCell(i,j).getTerrain().equals(Terrain.plains)) {
 					if (playFire || playAir) { // for fire and air, draw grass
-						// plains
-						g2.drawImage(grassImg, i * 16, j * 16, null);
+												// plains
+						g2.drawImage(grassImg, j * 16, i * 16, null);
 					} else if (playWater) { // for water, draw snow plains
-						g2.drawImage(snowImg, i * 16, j * 16, null);
+						g2.drawImage(snowImg, j * 16, i * 16, null);
 					} else { // for earth, draw sand/desert plains
-						g2.drawImage(desertImg, i * 16, j * 16, null);
+						g2.drawImage(desertImg, j * 16, i * 16, null);
 					}
 				}
 				// Draw water
-				else if (map.getMapArray()[i][j].getTerrain().equals(
+				else if (civ.getMap().getCell(i,j).getTerrain().equals(
 						Terrain.water)) {
 					if (playFire || playEarth || playWater) { // for non-air,
-						// draw water
-						g2.drawImage(waterImg, i * 16, j * 16, null);
+										// draw water
+						g2.drawImage(waterImg, j * 16, i * 16, null);
 					} else { // for air, draw clouds
-						g2.drawImage(cloudImg, i * 16, j * 16, null);
+						g2.drawImage(cloudImg, j * 16, i * 16, null);
 					}
 				}
 				// Overlay resources
-				if (map.getMapArray()[i][j].hasResource()) {
+				if (civ.getMap().getCell(i,j).hasResource()) {
 					// Draw trees
-					if (map.getMapArray()[i][j].getResource().equals(
+					if (civ.getMap().getCell(i,j).getResource().equals(
 							Resource.tree)) {
 						if (playWater) { // for water, draw snow-covered trees
-							g2.drawImage(snowTreeImg, i * 16, j * 16, null);
+							g2.drawImage(snowTreeImg, j * 16, i * 16, null);
 						} else if (playEarth) { // for earth, draw less bushy
-							// trees
-							g2.drawImage(bareTreeImg, i * 16, j * 16, null);
+												// trees
+							g2.drawImage(bareTreeImg, j * 16, i * 16, null);
 						} else { // for fire and air, draw bushy trees
-							g2.drawImage(treeImg, i * 16, j * 16, null);
+							g2.drawImage(treeImg, j * 16, i * 16, null);
 						}
 					}
 					// Draw stones
-					else if (map.getMapArray()[i][j].getResource().equals(
+					else if (civ.getMap().getCell(i,j).getResource().equals(
 							Resource.stone)) {
 						if (playWater) { // for water, draw snow-covered stones
-							g2.drawImage(snowStoneImg, i * 16, j * 16, null);
+							g2.drawImage(snowStoneImg, j * 16, i * 16, null);
 						} else if (playEarth) { // for earth, draw darker stones
-							g2.drawImage(earthStoneImg, i * 16, j * 16, null);
+							g2.drawImage(earthStoneImg, j * 16, i * 16, null);
 						} else { // for fire and air, draw lighter stones
-							g2.drawImage(stoneImg, i * 16, j * 16, null);
+							g2.drawImage(stoneImg, j * 16, i * 16, null);
 						}
+					}
+				}
+				
+				for (int k = 0; k < civ.getUnits().size(); k++) {
+					int location = civ.getUnits().get(k).getLocation();
+					int row = location/50;
+					int col = location%50;
+					if (playWater) {
+						g2.drawImage(waterDudeImg, col * 16, row * 16, null);
 					}
 				}
 			}

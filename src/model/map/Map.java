@@ -1,5 +1,9 @@
 package model.map;
 
+import java.util.ArrayList;
+
+import model.Civilization;
+
 public class Map {
 
 	//TODO: Remove - used for testing purposes
@@ -10,8 +14,8 @@ public class Map {
 	}
 
 	//TODO: Modularize
-	private int rows = 30;
-	private int cols = 70;
+	private int rows = 50;
+	private int cols = 50;
 	private int waterBorder = rows / 10;
 
 	private Cell[][] map;
@@ -91,8 +95,8 @@ public class Map {
 		return map[location/cols][location%cols];
 	}
 	
-	public Cell[][] getMapArray() {
-		return map;
+	public Cell getCell(int row, int col) {
+		return map[row][col];
 	}
 	
 	/**
@@ -128,51 +132,98 @@ public class Map {
 	 * @param roomType The terrain to fill the given area with
 	 * 
 	 */
+//    public void buildRoom(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY, Terrain roomType) {
+//    	
+//    	int startRow, startCol, endRow, endCol;
+//    	
+//    	//Check bounds
+//    	if (topLeftX <= bottomRightX && topLeftY <= bottomRightY) {
+//    		startRow = topLeftX;
+//    		startCol = topLeftY;
+//    		endRow = bottomRightX;
+//    		endCol = bottomRightY;
+//    	} else {
+//    		startRow = bottomRightX;
+//    		startCol = bottomRightY;
+//    		endRow = topLeftX;
+//    		endCol = topLeftY;
+//    	}
+//    	
+//    	//TODO: Check for water and resources within the given area
+//    	ArrayList<Cell> resourceTiles = new ArrayList<Cell>();
+//
+//    			//TODO: Remove singleton references
+////    			if (Civilization.getInstance().getMap().getMapArray()[i][j].getTerrain().equals(Terrain.water)) {
+////    				System.out.println("You cannot build a room here on water.");
+////    				return;
+////    			}
+//    			//Check for resources on the location
+//
+//    			
+//    			//TODO: Remove singleton references
+//			for(int i = startRow; i <= endRow; i++) {
+//				for (int j = startCol; j <= endCol; j++) {
+//					if( this.map[i][j].hasResource() )
+//						Civilization.getInstance().addTaskToQueue(task);
+//	}
+//}
+//
+//
+//
+//			for(int i = startRow; i <= endRow; i++) {
+//        		for (int j = startCol; j <= endCol; j++) {
+//        			//TODO: Remove singleton reference
+////        			Civilization.getInstance().getMap().getMapArray()[i][j].setTerrain(roomType);
+//        			this.map[i][j].setTerrain(roomType);
+//        		}
+//    	}	
+//    }
+    
     public void buildRoom(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY, Terrain roomType) {
-    	
-    	int startRow, startCol, endRow, endCol;
-    	
-    	//Check bounds
-    	if (topLeftX <= bottomRightX && topLeftY <= bottomRightY) {
-    		startRow = topLeftX;
-    		startCol = topLeftY;
-    		endRow = bottomRightX;
-    		endCol = bottomRightY;
-    	} else {
-    		startRow = bottomRightX;
-    		startCol = bottomRightY;
-    		endRow = topLeftX;
-    		endCol = topLeftY;
-    	}
-    	
-    	//TODO: Check for water and resources within the given area
-    	
-    	//Change the tiles in the given area to the specified terrain type
-    	for(int i = startRow; i <= endRow; i++) {
-    		for (int j = startCol; j <= endCol; j++) {
-    			//TODO: Remove singleton references
-//    			if (Civilization.getInstance().getMap().getMapArray()[i][j].getTerrain().equals(Terrain.water)) {
-//    				System.out.println("You cannot build a room here on water.");
-//    				return;
-//    			}
-    			//Check for resources on the location
-    			if( this.map[i][j].hasResource() ) this.map[i][j].removeResource();
-    			
-    			//TODO: Remove singleton references
-//    			if (Civilization.getInstance().getMap().getMapArray()[i][j].hasResource()) {
-//    				Civilization.getInstance().getMap().getMapArray()[i][j].removeResource();
-//    			}
-    		}
-    	}
-    		
-    	for(int i = startRow; i <= endRow; i++) {
-        		for (int j = startCol; j <= endCol; j++) {
-        			//TODO: Remove singleton reference
-//        			Civilization.getInstance().getMap().getMapArray()[i][j].setTerrain(roomType);
-        			this.map[i][j].setTerrain(roomType);
-        		}
-    	}	
-    }
+        
+        int startRow, startCol, endRow, endCol;
+        
+        //Check bounds
+        if (topLeftX <= bottomRightX && topLeftY <= bottomRightY) {
+                startRow = topLeftX;
+                startCol = topLeftY;
+                endRow = bottomRightX;
+                endCol = bottomRightY;
+        } else {
+                startRow = bottomRightX;
+                startCol = bottomRightY;
+                endRow = topLeftX;
+                endCol = topLeftY;
+        }
+        
+        //TODO: Check for water and resources within the given area
+        
+        //Change the tiles in the given area to the specified terrain type
+        for(int i = startRow; i <= endRow; i++) {
+                for (int j = startCol; j <= endCol; j++) {
+                        //TODO: Remove singleton references
+//                        if (Civilization.getInstance().getMap().getMapArray()[i][j].getTerrain().equals(Terrain.water)) {
+//                                System.out.println("You cannot build a room here on water.");
+//                                return;
+//                        }
+                        //Check for resources on the location
+                        if( this.map[i][j].hasResource() ) this.map[i][j].removeResource();
+                        
+                        //TODO: Remove singleton references
+//                        if (Civilization.getInstance().getMap().getMapArray()[i][j].hasResource()) {
+//                                Civilization.getInstance().getMap().getMapArray()[i][j].removeResource();
+//                        }
+                }
+        }
+                
+        for(int i = startRow; i <= endRow; i++) {
+                    for (int j = startCol; j <= endCol; j++) {
+                            //TODO: Remove singleton reference
+//                            Civilization.getInstance().getMap().getMapArray()[i][j].setTerrain(roomType);
+                            this.map[i][j].setTerrain(roomType);
+                    }
+        }        
+}
 
 
 

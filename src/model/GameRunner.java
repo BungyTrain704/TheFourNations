@@ -27,9 +27,9 @@ public class GameRunner
 		civ.setResourceAmount(ResourceType.food, 0 );
 		civ.getMap().getCell(950).setResource(Resource.tree);
 		civ.getMap().getCell(1420).setTerrain(Terrain.stockpile);
-		civ.addTaskToQueue(new CollectResourceTask(5, 951, 950, board));
-		civ.addTaskToQueue( new BuildStructureTask( 10, 941, 940, board, new BasicStructure( 941, "S", Resource.tree ) ) );
-		civ.getMap().buildRoom(12, 27, 14, 30, Terrain.kitchen);
+		civ.addTaskToQueue(new CollectResourceTask(5, 975, 975, board));
+//		civ.addTaskToQueue( new BuildStructureTask( 10, 941, 940, board, new BasicStructure( 941, "S", Resource.tree ) ) );
+//		civ.getMap().buildRoom(12, 27, 14, 30, Terrain.kitchen);
 		
 		int delay = 20;
 		/**
