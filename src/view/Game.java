@@ -357,7 +357,8 @@ public class Game extends JFrame {
 			mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
 					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = mapImg.createGraphics();
-			g2d.scale(.175, .175);
+//			g2d.scale(.175, .175);
+			g2d.scale(.35, .35);
 			drawMap(g2d);
 			g2d.dispose();
 		}
