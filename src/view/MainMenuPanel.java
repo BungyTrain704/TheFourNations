@@ -12,6 +12,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import view.dialogs.HowToPlayDialog;
+import view.dialogs.LoadGameDialog;
+
 import model.GameImageLoader;
 
 public class MainMenuPanel extends JPanel implements ClickHandler {
@@ -99,6 +102,7 @@ public class MainMenuPanel extends JPanel implements ClickHandler {
 		
 		else if( component == this.loadGame ) {
 			System.out.println( "Load game" );
+			new LoadGameDialog( this.parent );
 		}
 		
 		else if( component == this.howToPlay ) {

@@ -1,10 +1,12 @@
-package view;
+package view.dialogs;
 
 import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+
+import view.ClickHandler;
 
 /**
  * A modal dialog that displays gameplay instructions relative to some parent frame
@@ -26,11 +28,6 @@ public class HowToPlayDialog extends JDialog implements ClickHandler {
 		super.setLocationRelativeTo( parent );
 		
 		super.setContentPane( this.hpp );
-	}
-
-	//TODO: For testing purposes
-	public static void main( String[] args ) {
-		new HowToPlayDialog( null );
 	}
 
 	@Override public void handleClick(Component component) {
