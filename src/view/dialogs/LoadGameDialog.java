@@ -30,7 +30,7 @@ public class LoadGameDialog extends JDialog implements ClickHandler {
 		System.out.println( component.getName() );
 		if( component.getName() == LoadGamePanel.GO_BACK)
 			dispose();
-		else if( component.getName() == LoadGamePanel.LOAD )
+		else if( component.getName() == LoadGamePanel.LOAD ) //TODO: Add loading
 			System.out.println( "Load Game" );
 	}
 }
