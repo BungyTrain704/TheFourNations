@@ -40,7 +40,7 @@ public class SaveLoadManager {
 			}
 
 			//Initialize stream
-			oos = new ObjectOutputStream( new FileOutputStream( saveFile, true ) );
+			oos = new ObjectOutputStream( new FileOutputStream( saveFile, false ) );
 
 			//Write objects and flush stream
 			oos.writeObject( civState );
