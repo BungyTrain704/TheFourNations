@@ -32,6 +32,8 @@ public class MainMenuPanel extends JPanel implements ClickHandler {
 	//Components
 	private final int BUTTON_WIDTH = 237;
 	private final int BUTTON_HEIGHT = 75;
+	private final static int WIDTH = 1027;
+	private final static int HEIGHT = 712;
 	private InvisibleButton newGame, loadGame, howToPlay, quit;
 	
 	private JFrame parent;
@@ -46,9 +48,13 @@ public class MainMenuPanel extends JPanel implements ClickHandler {
 		jf.setBackground( new Color( 0, 0, 0, 0 ) ); //Makes the frame background transparent
 		jf.setVisible( true );
 		jf.setContentPane( new MainMenuPanel( jf ) ); //Set our main menu panel as the frame's content pane
-		jf.setSize( new Dimension( background.getWidth() + 10, background.getHeight() + 20 ) );
+		jf.setSize( new Dimension( WIDTH, HEIGHT ) );
 		jf.setLocationRelativeTo( null );
 		jf.add( new MainMenuPanel( jf ) );
+	}
+	
+	@Override public Dimension getSize() {
+		return new Dimension( WIDTH, HEIGHT );
 	}
 	
 	public MainMenuPanel( JFrame parent ) {
@@ -98,6 +104,7 @@ public class MainMenuPanel extends JPanel implements ClickHandler {
 	@Override public void handleClick( Component component ) {
 		if( component == this.newGame ) {
 			System.out.println( "New game " );
+			((FourNationsFrame) this.parent).showPanel( FourNationsFrame.newGame );
 		}
 		
 		else if( component == this.loadGame ) {
