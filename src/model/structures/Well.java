@@ -11,7 +11,7 @@ public class Well extends AbstractStructure {
 		super(location, name, resourceUsed, Terrain.plains);
 	}
 	
-	@Override public boolean providesWater() {
+	@Override public boolean providesDrink() {
 		return true;
 	}
 

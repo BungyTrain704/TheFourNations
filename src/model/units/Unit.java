@@ -8,7 +8,9 @@ import java.util.Queue;
 
 import model.Civilization;
 import model.structures.AbstractStructure;
+import model.tasks.DrinkTask;
 import model.tasks.EatTask;
+import model.tasks.SleepTask;
 import model.tasks.Task;
 
 
@@ -26,13 +28,13 @@ public abstract class Unit implements Serializable {
 	private static final long serialVersionUID = 5975310412672383975L;
 	private String name;
 	private HashMap<UnitSkill, Integer> skills;
-	protected int energyLevel, hungerLevel;
-	private final int MAX_HUNGER_LEVEL, MAX_ENERGY_LEVEL;
+	protected int energyLevel, hungerLevel, thirstLevel;
+	private final int MAX_HUNGER_LEVEL, MAX_ENERGY_LEVEL, MAX_THIRST_LEVEL;
 	private Task currentTask;
 	private Queue<Integer> movementQueue;
 	private boolean currentlyWorking = false;
 	private int location;
-	private final int COLS; //TODO: figure out how to initialize
+	private int cols;
 	
 	/**
 	 * Creates a unit that has a specific set of skills
@@ -47,12 +49,14 @@ public abstract class Unit implements Serializable {
 		this.name = name;
 		this.energyLevel = (int)(maxEnergyLevel * 0.75);
 		this.hungerLevel = (int)(maxHungerLevel * 0.75);
+		this.thirstLevel = (int)(maxHungerLevel * 0.75);
 		this.MAX_ENERGY_LEVEL = maxEnergyLevel;
 		this.MAX_HUNGER_LEVEL = maxHungerLevel;
+		this.MAX_THIRST_LEVEL = maxHungerLevel; //TODO: Determine assignment
 		this.skills = skills;
 		this.movementQueue = new LinkedList<Integer>();
 		this.location = location;
-		this.COLS = cols;
+		this.cols = cols;
 	}
 	
 	/**
@@ -67,9 +71,11 @@ public abstract class Unit implements Serializable {
 		this.name = name;
 		this.energyLevel = (int)(maxEnergyLevel * 0.75);
 		this.hungerLevel = (int)(maxHungerLevel * 0.75);
+		this.thirstLevel = (int)(maxHungerLevel * 0.75);
 		this.MAX_ENERGY_LEVEL = maxEnergyLevel;
 		this.MAX_HUNGER_LEVEL = maxHungerLevel;
-		this.COLS = cols;
+		this.MAX_THIRST_LEVEL = maxHungerLevel; //TODO:
+		this.cols = cols;
 		this.movementQueue = new LinkedList<Integer>();
 
 		//Initialize all skills at one
@@ -120,6 +126,10 @@ public abstract class Unit implements Serializable {
 		return this.energyLevel <= (int) Math.floor( this.MAX_ENERGY_LEVEL * 0.15 );
 	}
 	
+	public boolean needsToDrink () {
+		return this.thirstLevel <= (int) Math.floor( this.MAX_THIRST_LEVEL * 0.15 );
+	}
+	
 	/**
 	 * Generates a queue of movements for the unit to take to move to a desired location
 	 * @param destination The location on the map that the unit will move to
@@ -130,19 +140,19 @@ public abstract class Unit implements Serializable {
 		int tempLocation = location;
 		while(tempLocation != destination)
 		{
-			if(tempLocation % COLS < destination % COLS)
+			if(tempLocation % cols < destination % cols)
 				movementQueue.add(++tempLocation);
-			else if(tempLocation % COLS > destination % COLS)
+			else if(tempLocation % cols > destination % cols)
 				movementQueue.add(--tempLocation);
 			
-			if(tempLocation/COLS < destination/COLS)
+			if(tempLocation/cols < destination/cols)
 			{
-				tempLocation += COLS;
+				tempLocation += cols;
 				movementQueue.add(tempLocation);
 			}
-			else if(tempLocation/COLS > destination/COLS)
+			else if(tempLocation/cols > destination/cols)
 			{
-				tempLocation -= COLS;
+				tempLocation -= cols;
 				movementQueue.add(tempLocation);
 			}	
 		}	
@@ -191,8 +201,44 @@ public abstract class Unit implements Serializable {
 		}
 		else if(this.needsToSleep())
 		{
-			//put current task back, go sleep
+			//Place task back on queue
+			if( this.currentTask != null ) {
+				civ.addTaskToQueue( this.currentTask );
+				this.currentTask.setUnit(null);
+				this.currentTask = null;
+			}
+			
+			ArrayList<AbstractStructure> structures = civ.getStructures();
+			
+			for( AbstractStructure as : structures ) {
+				if( ! as.providesBed() )
+					structures.remove(as);
+			}
+			
+			//Create task to sleep
+			if( ! structures.isEmpty() )
+				this.currentTask = new SleepTask( 1, structures.get(0).getLocation() - 1, structures.get(0).getLocation() - 1, Civilization.getInstance().getMap(), this );
 		}
+		else if(this.needsToDrink())
+		{
+			//Place task back on queue
+			if( this.currentTask != null ) {
+				civ.addTaskToQueue( this.currentTask );
+				this.currentTask.setUnit(null);
+				this.currentTask = null;
+			}
+			
+			ArrayList<AbstractStructure> structures = civ.getStructures();
+			
+			for( AbstractStructure as : structures ) {
+				if( ! as.providesDrink() )
+					structures.remove(as);
+			}
+			
+			//Create task to drink
+			if( ! structures.isEmpty() )
+				this.currentTask = new DrinkTask( 1, structures.get(0).getLocation() - 1, structures.get(0).getLocation() - 1, Civilization.getInstance().getMap(), this );
+		}	
 		if(!movementQueue.isEmpty())
 		{
 			move();
@@ -333,5 +379,14 @@ public abstract class Unit implements Serializable {
 	 */
 	public int getMAX_ENERGY_LEVEL() {
 		return MAX_ENERGY_LEVEL;
+	}
+	
+	public int getMAX_THIRST_LEVEL() {
+		return MAX_THIRST_LEVEL;
+	}
+	
+	public void setCols(int cols2) {
+		this.cols = cols2;
+		
 	}
 }

@@ -50,7 +50,7 @@ public abstract class AbstractStructure implements Serializable {
 		return false;
 	}
 	
-	public boolean providesWater() {
+	public boolean providesDrink() {
 		return false;
 	}
 	

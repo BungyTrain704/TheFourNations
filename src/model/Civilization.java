@@ -8,6 +8,7 @@ import model.map.Cell;
 import model.map.Map;
 import model.map.Resource;
 import model.map.ResourceType;
+import model.map.Terrain;
 import model.structures.AbstractStructure;
 import model.tasks.Task;
 import model.units.BasicUnit;
@@ -28,6 +29,7 @@ public class Civilization {
 	private HashMap<ResourceType, Integer> globalResourcePool;
 	private static Civilization instance = new Civilization( 1 );
 	private Map map;
+	private int cols = 70; //70 by default
 
 	/**
 	 * Creates a civilization with a specified number of starting units
@@ -50,7 +52,7 @@ public class Civilization {
 			this.globalResourcePool.put(rt, 0 );
 		}
 	}
-	
+
 	public void parseCivilizationState( CivilizationState state ) {
 		this.globalResourcePool = state.getGlobalResourcePool();
 		this.taskQueue = state.getTaskQueue();
@@ -63,12 +65,28 @@ public class Civilization {
 	public void setMap(Map m)
 	{
 		this.map = m;
+		this.cols = map.getCols();
+		int mapSize = map.getMapSize();
+		int rows = mapSize/cols;
 		for(Unit u: units)
 		{
-			u.setLocation(1085);
+			u.setCols(cols);
+			boolean placed = false;
+			while(!placed)
+			{
+				int randRow = (int)(Math.random()*(rows/3))+rows/3;
+				int randCol = (int)(Math.random()*(cols/3))+cols/3;
+				int randLoc = randRow*cols+randCol;
+				Cell randCell = map.getCell(randLoc);
+				if(!(randCell.hasResource()||randCell.hasUnit()||randCell.getTerrain().equals(Terrain.water)))
+				{
+					placed = true;
+
+					u.setLocation(randLoc);
+					map.getCell(randLoc).setUnit(true);
+				}
+			}
 		}
-		map.getCell(1085).removeResource();
-		map.getCell(1085).setUnit(true);
 	}
 
 	/**
@@ -144,7 +162,7 @@ public class Civilization {
 	 */
 	public int pollResource( ResourceType resourceType, int desiredResourceAmount ) {
 		int currentResourceCount = this.globalResourcePool.get( resourceType );
-		
+
 		if( currentResourceCount >= desiredResourceAmount ) {
 			this.globalResourcePool.put( resourceType, currentResourceCount - desiredResourceAmount );
 			return desiredResourceAmount;
@@ -155,11 +173,11 @@ public class Civilization {
 			return amountTaken;
 		}
 	}
-	
+
 	public int getResourceAmount( ResourceType rt ) {
 		return this.globalResourcePool.get(rt);
 	}
-	
+
 	public void setResourceAmount( ResourceType resourceType, int amount ) {
 		this.globalResourcePool.put( resourceType, amount );
 	}
@@ -173,11 +191,11 @@ public class Civilization {
 			currentCell.setUnit(false);
 			map.getCell(person.getLocation()).setUnit(true);
 		}
-		
+
 		for( Unit unit : unitsToKill ) {
 			unit.die();
 		}
-		
+
 		unitsToKill.clear();
 	}
 
@@ -193,20 +211,20 @@ public class Civilization {
 		this.globalResourcePool.put(resource.getResourceType(), 
 				this.globalResourcePool.get(resource.getResourceType() ) + resource.getResourceValue() );
 	}
-	
+
 	public void useResource(Resource resource) {
 		this.globalResourcePool.put(resource.getResourceType(), 
 				this.globalResourcePool.get(resource.getResourceType() ) - resource.getResourceValue() );
 	}
-	
+
 	public Queue<Task> getTaskQueue() {
 		return this.taskQueue;
 	}
-	
+
 	public ArrayList<Unit> getUnitsToKill() {
 		return this.unitsToKill;
 	}
-	
+
 	public HashMap<ResourceType, Integer> getGlobalResourcePool() {
 		return this.globalResourcePool;
 	}
@@ -217,7 +235,7 @@ public class Civilization {
 	public ArrayList<Unit> getUnits() {
 		return units;
 	}
-	
+
 	public ArrayList<AbstractStructure> getStructures() {
 		return structures;
 	}
