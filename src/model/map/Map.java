@@ -6,14 +6,14 @@ public class Map implements Serializable {
 
 	private static final long serialVersionUID = -6973886976003208870L;
 
-	//TODO: Remove - used for testing purposes
+	// TODO: Remove - used for testing purposes
 	public static void main(String[] args) {
 		Map board = new Map();
 		board.buildRoom(12, 27, 14, 30, Terrain.kitchen);
 		System.out.print(board.toString());
 	}
 
-	//TODO: Modularize
+	// TODO: Modularize
 	private int rows = 50;
 	private int cols = 50;
 	private int waterBorder = rows / 10;
@@ -21,7 +21,7 @@ public class Map implements Serializable {
 	private Cell[][] map;
 
 	public Map() {
-		this.map = MapGenerator.generateMap(rows, cols, waterBorder );
+		this.map = MapGenerator.generateMap(rows, cols, waterBorder);
 	}
 
 	/**
@@ -33,22 +33,22 @@ public class Map implements Serializable {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				Cell c = map[i][j];
-				
-				if ( c.hasUnit() )
+
+				if (c.hasUnit())
 					toString.append("U");
-				else if( c.hasStructure() )
+				else if (c.hasStructure())
 					toString.append("S");
-				else if ( c.hasResource() ) {
-					toString.append( c.getResource() );
+				else if (c.hasResource()) {
+					toString.append(c.getResource());
 				} else {
-					toString.append( c.getTerrain() );
+					toString.append(c.getTerrain());
 				}
 			}
-			toString.append( lineSeparator );
+			toString.append(lineSeparator);
 		}
 		return toString.toString();
 	}
-	
+
 	/**
 	 * Returns the number of rows in the map array
 	 */
@@ -69,7 +69,7 @@ public class Map implements Serializable {
 	public int getMapSize() {
 		return this.cols * this.rows;
 	}
-	
+
 	/**
 	 * Returns the cell at the specified location. The are numbered as such:
 	 * 
@@ -82,28 +82,33 @@ public class Map implements Serializable {
 	 * |. . . . . . . .|4<br>
 	 * |. . . . . . . .|5<br>
 	 *  +- - - - - - - -+<br></tt></p>
-	 *  
-	 *  <p>And the location of a specific cell is given by the product of it's row and column.
-	 *  Moving backwards from a specified cell, a row is given by the <code>location / columns</code>
-	 *  and the column is given by <code>location % columns</code>.
 	 * 
-	 * @param location The cell's location within the map
+	 * <p>
+	 * And the location of a specific cell is given by the product of it's row
+	 * and column. Moving backwards from a specified cell, a row is given by the
+	 * <code>location / columns</code> and the column is given by
+	 * <code>location % columns</code>.
+	 * 
+	 * @param location
+	 *            The cell's location within the map
 	 * @return The cell at the given location
 	 */
-	public Cell getCell(int location)
-	{
-		return map[location/cols][location%cols];
+	public Cell getCell(int location) {
+		return map[location / cols][location % cols];
 	}
-	
+
 	public Cell getCell(int row, int col) {
 		return map[row][col];
 	}
-	
+
 	/**
 	 * Fills the tiles between specified points with room tiles.
 	 * 
-	 * <p>Example: If it where called as such <code>buildRoom( 2, 2, 4, 4, Terrain.KITCHEN)</code>
-	 * on the map below where the period character (".") represents valid tiles:</p>
+	 * <p>
+	 * Example: If it where called as such
+	 * <code>buildRoom( 2, 2, 4, 4, Terrain.KITCHEN)</code> on the map below
+	 * where the period character (".") represents valid tiles:
+	 * </p>
 	 * <tt>
 	 * +---------------------+<br>
 	 * |.....................|<br>
@@ -114,7 +119,9 @@ public class Map implements Serializable {
 	 * |.....................|<br>
 	 * +---------------------+<br></tt>
 	 * 
-	 * <p>Would become:</p>
+	 * <p>
+	 * Would become:
+	 * </p>
 	 * <tt>
 	 * +---------------------+<br>
 	 * |.....................|<br>
@@ -125,106 +132,71 @@ public class Map implements Serializable {
 	 * |.....................|<br>
 	 * +---------------------+<br></tt>
 	 * 
-	 * @param topLeftX The x-coordinate of the top left point of the room
-	 * @param topLeftY The y-coordinate of the top left point of the room
-	 * @param bottomRightX The x-coordinate of the bottom right point of the room
-	 * @param bottomRightY The y-coordinate of the bottom right point of the room
-	 * @param roomType The terrain to fill the given area with
+	 * @param topLeftX
+	 *            The x-coordinate of the top left point of the room
+	 * @param topLeftY
+	 *            The y-coordinate of the top left point of the room
+	 * @param bottomRightX
+	 *            The x-coordinate of the bottom right point of the room
+	 * @param bottomRightY
+	 *            The y-coordinate of the bottom right point of the room
+	 * @param roomType
+	 *            The terrain to fill the given area with
 	 * 
 	 */
-//    public void buildRoom(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY, Terrain roomType) {
-//    	
-//    	int startRow, startCol, endRow, endCol;
-//    	
-//    	//Check bounds
-//    	if (topLeftX <= bottomRightX && topLeftY <= bottomRightY) {
-//    		startRow = topLeftX;
-//    		startCol = topLeftY;
-//    		endRow = bottomRightX;
-//    		endCol = bottomRightY;
-//    	} else {
-//    		startRow = bottomRightX;
-//    		startCol = bottomRightY;
-//    		endRow = topLeftX;
-//    		endCol = topLeftY;
-//    	}
-//    	
-//    	//TODO: Check for water and resources within the given area
-//    	ArrayList<Cell> resourceTiles = new ArrayList<Cell>();
-//
-//    			//TODO: Remove singleton references
-////    			if (Civilization.getInstance().getMap().getMapArray()[i][j].getTerrain().equals(Terrain.water)) {
-////    				System.out.println("You cannot build a room here on water.");
-////    				return;
-////    			}
-//    			//Check for resources on the location
-//
-//    			
-//    			//TODO: Remove singleton references
-//			for(int i = startRow; i <= endRow; i++) {
-//				for (int j = startCol; j <= endCol; j++) {
-//					if( this.map[i][j].hasResource() )
-//						Civilization.getInstance().addTaskToQueue(task);
-//	}
-//}
-//
-//
-//
-//			for(int i = startRow; i <= endRow; i++) {
-//        		for (int j = startCol; j <= endCol; j++) {
-//        			//TODO: Remove singleton reference
-////        			Civilization.getInstance().getMap().getMapArray()[i][j].setTerrain(roomType);
-//        			this.map[i][j].setTerrain(roomType);
-//        		}
-//    	}	
-//    }
-    
-    public void buildRoom(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY, Terrain roomType) {
-        
-        int startRow, startCol, endRow, endCol;
-        
-        //Check bounds
-        if (topLeftX <= bottomRightX && topLeftY <= bottomRightY) {
-                startRow = topLeftX;
-                startCol = topLeftY;
-                endRow = bottomRightX;
-                endCol = bottomRightY;
-        } else {
-                startRow = bottomRightX;
-                startCol = bottomRightY;
-                endRow = topLeftX;
-                endCol = topLeftY;
-        }
-        
-        //TODO: Check for water and resources within the given area
-        
-        //Change the tiles in the given area to the specified terrain type
-        for(int i = startRow; i <= endRow; i++) {
-                for (int j = startCol; j <= endCol; j++) {
-                        //TODO: Remove singleton references
-//                        if (Civilization.getInstance().getMap().getMapArray()[i][j].getTerrain().equals(Terrain.water)) {
-//                                System.out.println("You cannot build a room here on water.");
-//                                return;
-//                        }
-                        //Check for resources on the location
-                        if( this.map[i][j].hasResource() ) this.map[i][j].removeResource();
-                        
-                        //TODO: Remove singleton references
-//                        if (Civilization.getInstance().getMap().getMapArray()[i][j].hasResource()) {
-//                                Civilization.getInstance().getMap().getMapArray()[i][j].removeResource();
-//                        }
-                }
-        }
-                
-        for(int i = startRow; i <= endRow; i++) {
-                    for (int j = startCol; j <= endCol; j++) {
-                            //TODO: Remove singleton reference
-//                            Civilization.getInstance().getMap().getMapArray()[i][j].setTerrain(roomType);
-                            this.map[i][j].setTerrain(roomType);
-                    }
-        }        
-}
 
+	public boolean buildRoom(int firstClickX, int firstClickY,
+			int secondClickX, int secondClickY, Terrain roomType) {
 
+		int startRow, startCol, endRow, endCol;
+
+		// Check bounds
+		if (firstClickX <= secondClickX && firstClickY <= secondClickY) {
+			startRow = firstClickX;
+			startCol = firstClickY;
+			endRow = secondClickX;
+			endCol = secondClickY;
+		} else {
+			startRow = secondClickX;
+			startCol = secondClickY;
+			endRow = firstClickX;
+			endCol = firstClickY;
+		}
+
+		// Check for water and resources within the given area
+		for (int i = startRow; i <= endRow; i++) {
+			for (int j = startCol; j <= endCol; j++) {
+				if (this.map[i][j].hasResource()
+						|| this.map[i][j].getTerrain().equals(Terrain.water)
+						|| this.map[i][j].hasStructure()) {
+					return false;
+				}
+			}
+		}
+
+		// Change the tiles in the given area to the specified terrain type
+		for (int i = startRow; i <= endRow; i++) {
+			for (int j = startCol; j <= endCol; j++) {
+				this.map[i][j].setTerrain(roomType);
+			}
+		}
+		return true;
+	}
+
+	// creates a 2D array of 0's and 1's. 1 = units can access 0 = units cannot
+	// access
+	public int[][] accessible() {
+		int[][] accessible = new int[rows][cols];
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				if (map[i][j].hasResource() || map[i][j].hasStructure()
+						|| map[i][j].getTerrain().equals(Terrain.water))
+					accessible[i][j] = 0;
+				else
+					accessible[i][j] = 1;
+			}
+		}
+		return accessible;
+	}
 
 }
