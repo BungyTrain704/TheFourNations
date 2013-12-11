@@ -132,14 +132,14 @@ public class Map implements Serializable {
 	 * |.....................|<br>
 	 * +---------------------+<br></tt>
 	 * 
-	 * @param topLeftX
-	 *            The x-coordinate of the top left point of the room
-	 * @param topLeftY
-	 *            The y-coordinate of the top left point of the room
-	 * @param bottomRightX
-	 *            The x-coordinate of the bottom right point of the room
-	 * @param bottomRightY
-	 *            The y-coordinate of the bottom right point of the room
+	 * @param firstClickX
+	 *            The x-coordinate of the first location user clicks
+	 * @param firstClickY
+	 *            The y-coordinate of the first location user clicks
+	 * @param secondClickX
+	 *            The x-coordinate of the second location user clicks
+	 * @param secondClickY
+	 *            The y-coordinate of the second location user clicks
 	 * @param roomType
 	 *            The terrain to fill the given area with
 	 * 
