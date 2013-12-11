@@ -130,9 +130,6 @@ public class MapGenerator {
 					map[i][j].removeResource();
 				}
 		}
-		
-	
-		
 		return map;
 	}
 	
@@ -150,7 +147,6 @@ public class MapGenerator {
 				}
 			}
 		}
-		
 		return map;
 	}
 }

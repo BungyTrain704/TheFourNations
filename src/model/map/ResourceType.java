@@ -2,6 +2,6 @@ package model.map;
 
 public enum ResourceType {
 
-	wood, stone, food;
+	wood, stone, food, gold;
 	
 }
