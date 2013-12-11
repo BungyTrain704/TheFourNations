@@ -9,7 +9,7 @@ public class Map implements Serializable {
 	// TODO: Remove - used for testing purposes
 	public static void main(String[] args) {
 		Map board = new Map();
-		board.buildRoom(12, 27, 14, 30, Terrain.kitchen);
+		board.buildRoom(27, 27, 25, 25, Terrain.kitchen);
 		System.out.print(board.toString());
 	}
 

@@ -29,7 +29,7 @@ public class MapGenerator {
 		//Generate terrain and water
 		map = setTerrain( map, rows, cols );
 		map = generateWater( map, rows, cols, waterBorder );
-
+		map = addCoast( map, rows, cols );
 		return map;
 	}
 
@@ -129,6 +129,26 @@ public class MapGenerator {
 					map[i][j].setTerrain(Terrain.water);
 					map[i][j].removeResource();
 				}
+		}
+		
+	
+		
+		return map;
+	}
+	
+	// sets terrain to coast if tile is next to water
+	private static Cell[][] addCoast( Cell[][] map, int rows, int cols) {
+		for (int i = 1; i < rows - 1; i++) {
+			for (int j = 1; j < cols - 1; j++) {
+				if (!map[i][j].getTerrain().equals(Terrain.water)) {
+					if (map[i + 1][j].getTerrain().equals(Terrain.water)
+						|| map[i - 1][j].getTerrain().equals(Terrain.water)
+						|| map[i][j + 1].getTerrain().equals(Terrain.water)
+						|| map[i][j - 1].getTerrain().equals(Terrain.water)) {
+						map[i][j].setTerrain(Terrain.coast);
+					}
+				}
+			}
 		}
 		
 		return map;

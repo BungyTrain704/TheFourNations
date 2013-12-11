@@ -8,7 +8,7 @@ package model.map;
 public enum Terrain {
 
 	//Enumeration declarations
-	plains(true, "."), water(false, "~"), stockpile( true, "C"), kitchen(true, "K"), barracks( true, "B");
+	plains(true, " "), water(false, "~"), stockpile( true, "C"), kitchen(true, "K"), barracks( true, "B"), coast(true, ".");
 
 	//Instance variables
 	private boolean accessible;
