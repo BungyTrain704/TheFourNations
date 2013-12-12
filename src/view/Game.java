@@ -83,8 +83,12 @@ public class Game extends JFrame {
 	private static BufferedImage earthStoneImg = getImage(imagesFolder
 			+ "earthStones.png");
 	private static BufferedImage menuImg = getImage(imagesFolder + "bkg.png");
-	private static BufferedImage waterDudeImg = getImage(imagesFolder
-			+ "waterDude.png");
+	private static BufferedImage waterDude1 = getImage(imagesFolder
+			+ "waterDude1.png");
+	private static BufferedImage fireDude1 = getImage(imagesFolder
+			+ "fireDude1.png");
+	private static BufferedImage earthDude1 = getImage(imagesFolder
+			+ "earthDude1.png");
 
 	// Play type booleans
 	private boolean playWater;
@@ -411,11 +415,11 @@ public class Game extends JFrame {
 						.equals(Terrain.plains)) {
 					if (playFire || playAir) { // for fire and air, draw grass
 												// plains
-						g2.drawImage(grassImg, i * 16, j * 16, null);
+						g2.drawImage(grassImg, j * 16, i * 16, null);
 					} else if (playWater) { // for water, draw snow plains
-						g2.drawImage(snowImg, i * 16, j * 16, null);
+						g2.drawImage(snowImg, j * 16, i * 16, null);
 					} else { // for earth, draw sand/desert plains
-						g2.drawImage(desertImg, i * 16, j * 16, null);
+						g2.drawImage(desertImg, j * 16, i * 16, null);
 					}
 				}
 				// Draw water
@@ -423,9 +427,9 @@ public class Game extends JFrame {
 						.equals(Terrain.water)) {
 					if (playFire || playEarth || playWater) { // for non-air,
 																// draw water
-						g2.drawImage(waterImg, i * 16, j * 16, null);
+						g2.drawImage(waterImg, j * 16, i * 16, null);
 					} else { // for air, draw clouds
-						g2.drawImage(cloudImg, i * 16, j * 16, null);
+						g2.drawImage(cloudImg, j * 16, i * 16, null);
 					}
 				}
 				// Overlay resources
@@ -436,26 +440,26 @@ public class Game extends JFrame {
 						if (playWater) { // for water, draw snow-covered trees
 							g2.drawImage(
 									snowTreeImg.getSubimage(0, 16, 16, 16),
-									i * 16, j * 16, null);
+									j * 16, i * 16, null);
 						} else if (playEarth) { // for earth, draw less bushy
 												// trees
 							g2.drawImage(
 									bareTreeImg.getSubimage(0, 16, 16, 16),
-									i * 16, j * 16, null);
+									j * 16, i * 16, null);
 						} else { // for fire and air, draw bushy trees
 							g2.drawImage(treeImg.getSubimage(0, 16, 16, 16),
-									i * 16, j * 16, null);
+									j * 16, i * 16, null);
 						}
 					}
 					// Draw stones
 					else if (civ.getMap().getCell(i, j).getResource()
 							.equals(Resource.stone)) {
 						if (playWater) { // for water, draw snow-covered stones
-							g2.drawImage(snowStoneImg, i * 16, j * 16, null);
+							g2.drawImage(snowStoneImg, j * 16, i * 16, null);
 						} else if (playEarth) { // for earth, draw darker stones
-							g2.drawImage(earthStoneImg, i * 16, j * 16, null);
+							g2.drawImage(earthStoneImg, j * 16, i * 16, null);
 						} else { // for fire and air, draw lighter stones
-							g2.drawImage(stoneImg, i * 16, j * 16, null);
+							g2.drawImage(stoneImg, j * 16, i * 16, null);
 						}
 					}
 				}
@@ -466,14 +470,14 @@ public class Game extends JFrame {
 							.equals(Resource.tree)) {
 						if (playWater) { // for water, draw snow-covered trees
 							g2.drawImage(snowTreeImg.getSubimage(0, 0, 16, 16),
-									i * 16, j * 16, null);
+									j * 16, i * 16, null);
 						} else if (playEarth) { // for earth, draw less bushy
 												// trees
 							g2.drawImage(bareTreeImg.getSubimage(0, 0, 16, 16),
-									i * 16, j * 16, null);
+									j * 16, i * 16, null);
 						} else { // for fire and air, draw bushy trees
 							g2.drawImage(treeImg.getSubimage(0, 0, 16, 16),
-									i * 16, j * 16, null);
+									j * 16, i * 16, null);
 						}
 					}
 				}
@@ -482,7 +486,12 @@ public class Game extends JFrame {
 					int row = location/50;
 					int col = location%50;
 					if (playWater) {
-						g2.drawImage(waterDudeImg, col * 16, row * 16, null);
+						g2.drawImage(waterDude1, col * 16, row * 16, null);
+					} else if (playFire) {
+						g2.drawImage(fireDude1, col * 16, row * 16, null);		
+					} else if (playEarth) {
+						g2.drawImage(earthDude1, col * 16, row * 16, null);
+					} else {
 					}
 				}
 			}
