@@ -5,21 +5,22 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import model.GameImageLoader;
 import view.ClickHandler;
 import view.InvisibleButton;
-
-import model.GameImageLoader;
 
 /**
  * A panel containing instructions on how to play the game
  * @author Christopher
  *
  */
-public class HowToPlayPanel extends JPanel{
+public class HowToPlayPanel extends JPanel {
 
 	private static final long serialVersionUID = -6401990241674052192L;
 	
@@ -28,6 +29,7 @@ public class HowToPlayPanel extends JPanel{
 	
 	//Components
 	private InvisibleButton exitButtonHandler;
+	private SlideshowPanel slideshow;
 
 	public HowToPlayPanel( ClickHandler handler) {
 		//Panel settings
@@ -40,8 +42,15 @@ public class HowToPlayPanel extends JPanel{
 		this.exitButtonHandler.setSize( 105, 45 );
 		this.exitButtonHandler.setLocation( 240, 630 );
 		
+		//Slideshow
+		this.slideshow = new SlideshowPanel( this );
+		this.slideshow.setSize( 435, 220 );
+		this.slideshow.setBackground( new Color( 0, 0, 0, 0 ) );
+		this.slideshow.setLocation( 80, 280);
+		
 		//Add button
-		super.add( exitButtonHandler );
+		super.add( this.exitButtonHandler );
+		super.add( this.slideshow );
 	}
 	
 	@Override public void paintComponent( Graphics g ) {

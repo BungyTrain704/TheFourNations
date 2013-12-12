@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.Color;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -14,7 +16,7 @@ import javax.swing.border.Border;
  * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
  *
  */
-public class InvisibleButton extends JPanel implements MouseListener {
+public class InvisibleButton extends JPanel implements MouseListener  {
 	private static final long serialVersionUID = -6894259703329191579L;
 	private Border border = BorderFactory.createLineBorder(Color.WHITE, 5);
 	private ClickHandler handler;
@@ -64,5 +66,7 @@ public class InvisibleButton extends JPanel implements MouseListener {
 	/* Unused inherited methods */
 	@Override public void mousePressed(MouseEvent e) { }
 	@Override public void mouseReleased(MouseEvent e) { }
+
+	
 
 }
