@@ -92,7 +92,7 @@ public abstract class Unit implements Serializable {
 	public void setCurrentTask( Task task ) {
 		this.currentTask = task;
 
-		generatePath(this.currentTask.getWorkerLocation() );
+		generatePath(this.currentTask.getTaskLocation() );
 	}
 
 	/**
@@ -197,7 +197,7 @@ public abstract class Unit implements Serializable {
 
 			//Create task to eat
 			if( ! structures.isEmpty() )
-				this.currentTask = new EatTask( 1, structures.get(0).getLocation() - 1, structures.get(0).getLocation() - 1, Civilization.getInstance().getMap(), this );
+				this.currentTask = new EatTask( 1, structures.get(0).getLocation() - 1, civ.getMap(), this );
 		}
 		else if(this.needsToSleep())
 		{
@@ -217,7 +217,7 @@ public abstract class Unit implements Serializable {
 
 			//Create task to sleep
 			if( ! structures.isEmpty() )
-				this.currentTask = new SleepTask( 1, structures.get(0).getLocation() - 1, structures.get(0).getLocation() - 1, Civilization.getInstance().getMap(), this );
+				this.currentTask = new SleepTask( 1, structures.get(0).getLocation() - 1, civ.getMap(), this );
 		}
 		else if(this.needsToDrink())
 		{
@@ -237,7 +237,7 @@ public abstract class Unit implements Serializable {
 
 			//Create task to drink
 			if( ! structures.isEmpty() )
-				this.currentTask = new DrinkTask( 1, structures.get(0).getLocation() - 1, structures.get(0).getLocation() - 1, Civilization.getInstance().getMap(), this );
+				this.currentTask = new DrinkTask( 1, structures.get(0).getLocation() - 1, civ.getMap(), this );
 		}	
 		if(!movementQueue.isEmpty())
 		{
@@ -256,9 +256,9 @@ public abstract class Unit implements Serializable {
 		}	
 		else
 		{
-			if(Civilization.getInstance().isAvailableTask())
+			if(civ.isAvailableTask())
 			{	
-				currentTask = Civilization.getInstance().getNextTask();
+				currentTask = civ.getNextTask();
 				generatePath(currentTask.getTaskLocation());
 				System.out.println("generating");
 			}

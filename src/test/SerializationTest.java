@@ -41,7 +41,7 @@ public class SerializationTest {
 		civ.setResourceAmount( ResourceType.wood, 5000 );
 		civ.setMap( new Map() );
 		civ.getMap().getCell(300).setTerrain(Terrain.plains); //Prevent DisallowedTaskException
-		civ.addTaskToQueue( new BuildStructureTask(5, 299, 300, civ.getMap(), new Well( 300, "WELL", ResourceType.stone ) ) );
+		civ.addTaskToQueue( new BuildStructureTask(5, civ.getMap(), new Well( 300, "WELL", ResourceType.stone ) ) );
 
 		//Assertions
 		assertEquals( 5000, civ.getResourceAmount( ResourceType.wood ) );

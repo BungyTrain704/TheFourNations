@@ -14,7 +14,7 @@ public abstract class Task implements Serializable
 {
 	private static final long serialVersionUID = -8217627590340674929L;
 	private int remainingWorkRequirement; //amount of work required for this task
-	private int locationOfWorker; //location where unit needs to be to work on this task
+//	private int locationOfWorker; //location where unit needs to be to work on this task
 	protected int locationOfTask; //location where work is being done (i.e. where something is being built)
 	protected Map map;
 	protected Unit unit;
@@ -28,10 +28,10 @@ public abstract class Task implements Serializable
 	 * @param locTask The location that will be changed when the task is completed.
 	 * @param map The map that this task is taking place on
 	 */
-	public Task(int work, int locWorker, int locTask, Map map )
+	public Task(int work, int locTask, Map map )
 	{
 		remainingWorkRequirement = work;
-		locationOfWorker = locWorker;
+//		locationOfWorker = locWorker;
 		locationOfTask = locTask;
 		this.map = map;
 		this.unit = null;
@@ -57,11 +57,6 @@ public abstract class Task implements Serializable
 	 * Performs the action for the call
 	 */
 	public abstract void performAction();
-	
-	public int getWorkerLocation()
-	{
-		return locationOfWorker;
-	}
 	
 	public int getTaskLocation()
 	{

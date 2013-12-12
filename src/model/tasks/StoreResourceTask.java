@@ -12,8 +12,8 @@ public class StoreResourceTask extends Task {
 	private static final long serialVersionUID = -142993928361461443L;
 	private Resource resource;
 	
-	public StoreResourceTask(int work, int locWorker, int locTask, Map map, Resource resource) {
-		super(work, locWorker, locTask, map);
+	public StoreResourceTask(int work, int locTask, Map map, Resource resource) {
+		super(work, locTask, map);
 		this.resource = resource;
 	}
 

@@ -18,8 +18,8 @@ public class CollectResourceTask extends Task{
 	
 	private static final long serialVersionUID = -5974294099911726904L;
 
-	public CollectResourceTask(int work, int locWorker, int locTask, Map map) {
-		super(work, locWorker, locTask, map);
+	public CollectResourceTask(int work, int locTask, Map map) {
+		super(work, locTask, map);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class CollectResourceTask extends Task{
 		
 		// TODO: Implement smarter pathing - i.e: Unit moves to closest stockpile, not just the first one found
 		int loc = storedCells.get(0);
-		StoreResourceTask srt = new StoreResourceTask(1, loc, loc, m, res );
+		StoreResourceTask srt = new StoreResourceTask(1, loc, m, res );
 		this.unit.setCurrentTask(srt);
 	}
 	

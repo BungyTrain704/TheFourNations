@@ -12,8 +12,8 @@ public class DrinkTask extends Task {
 
 	private static final long serialVersionUID = -3242173019984231381L;
 
-	public DrinkTask(int work, int locWorker, int locTask, Map map, Unit unit) {
-		super(work, locWorker, locTask, map);
+	public DrinkTask(int work, int locTask, Map map, Unit unit) {
+		super(work, locTask, map);
 	}
 
 	/**

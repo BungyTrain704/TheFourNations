@@ -13,9 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,10 +25,8 @@ import javax.swing.border.Border;
 import model.Civilization;
 import model.map.Map;
 import model.map.Resource;
-import model.map.ResourceType;
 import model.map.Terrain;
 import model.tasks.CollectResourceTask;
-import model.units.Unit;
 
 public class Game extends JFrame {
 
@@ -332,7 +328,7 @@ public class Game extends JFrame {
 
 			civ.getMap().getCell(1730).setResource(Resource.tree);
 			civ.getMap().getCell(1910).setTerrain(Terrain.stockpile);
-			civ.addTaskToQueue(new CollectResourceTask(5, 1730, 1730, civ
+			civ.addTaskToQueue(new CollectResourceTask(5, 1730, civ
 					.getMap()));
 
 			// Start timer

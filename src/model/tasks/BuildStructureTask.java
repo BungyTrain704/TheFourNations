@@ -26,8 +26,8 @@ public class BuildStructureTask extends Task {
 	 * @param map The map that this task takes place on
 	 * @param structure The structure being built during this task
 	 */
-	public BuildStructureTask(int work, int locWorker, int locTask, Map map, AbstractStructure structure ) {
-		super(work, locWorker, locTask, map);
+	public BuildStructureTask(int work, Map map, AbstractStructure structure ) {
+		super(work, structure.getLocation(), map);
 		this.structureToBuild = structure;
 		
 		if( ! isValidStructureLocation() ) {
