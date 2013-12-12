@@ -13,21 +13,41 @@ import model.tasks.Task;
 import model.units.Unit;
 
 //TODO: Create and Serialize game runner
+/**
+ * A persistant state for the Civilization singleton object. This allows
+ * for the game state to be saved to a file and reovered at a later date
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class CivilizationState implements Serializable {
 
 	private static final long serialVersionUID = 50960125111940890L;
-	private Queue<Task> taskQueue;
-	private ArrayList<Unit> units, unitsToKill;
-	private ArrayList<AbstractStructure> structures;
-	private HashMap<ResourceType, Integer> globalResourcePool;
-	private Map map;
-	private Tribe tribe;
+	private final Queue<Task> taskQueue;
+	private final ArrayList<Unit> units, unitsToKill;
+	private final ArrayList<AbstractStructure> structures;
+	private final HashMap<ResourceType, Integer> globalResourcePool;
+	private final Map map;
+	private final Tribe tribe;
 
+	/**
+	 * Generates the civilization state based upon the provided civilization
+	 */
 	public CivilizationState( Civilization civ ) {
-		this( civ.getTaskQueue(), civ.getUnits(), civ.getUnitsToKill(), civ.getStructures(), civ.getGlobalResourcePool(), civ.getMap(), civ.getTribe() );
+		this( civ.getTaskQueue(), civ.getUnits(), civ.getUnitsToKill(), civ.getStructures(), 
+				civ.getGlobalResourcePool(), civ.getMap(), civ.getTribe() );
 	}
 
 	@SuppressWarnings("unchecked")
+	/**
+	 * Generates the civilization state based upon the data that will be saved
+	 * @param taskQueue The tasks currently waiting to be performed
+	 * @param units The units currently located on the map
+	 * @param unitsToKill The units that are supposed to die next tick
+	 * @param structures The structures that exist on the map
+	 * @param globalResourcePool The collection of resources in the game
+	 * @param map The map that the game is being played on
+	 * @param tribe The tribe that the user is playing as
+	 */
 	public CivilizationState( Queue<Task> taskQueue, ArrayList<Unit> units, ArrayList<Unit> unitsToKill, 
 			ArrayList<AbstractStructure> structures, HashMap<ResourceType, Integer> globalResourcePool, Map map,
 			Tribe tribe ) {
@@ -40,97 +60,31 @@ public class CivilizationState implements Serializable {
 		this.tribe = tribe;
 	}
 
-	/**
-	 * @return the taskQueue
-	 */
 	public Queue<Task> getTaskQueue() {
 		return taskQueue;
 	}
 
-	/**
-	 * @return the units
-	 */
 	public ArrayList<Unit> getUnits() {
 		return units;
 	}
 
-	/**
-	 * @return the unitsToKill
-	 */
 	public ArrayList<Unit> getUnitsToKill() {
 		return unitsToKill;
 	}
 
-	/**
-	 * @return the structures
-	 */
 	public ArrayList<AbstractStructure> getStructures() {
 		return structures;
 	}
 
-	/**
-	 * @return the globalResourcePool
-	 */
 	public HashMap<ResourceType, Integer> getGlobalResourcePool() {
 		return globalResourcePool;
 	}
 
-	/**
-	 * @return the map
-	 */
 	public Map getMap() {
 		return map;
-	}
-
-	/**
-	 * @param taskQueue the taskQueue to set
-	 */
-	public void setTaskQueue(Queue<Task> taskQueue) {
-		this.taskQueue = taskQueue;
-	}
-
-	/**
-	 * @param units the units to set
-	 */
-	public void setUnits(ArrayList<Unit> units) {
-		this.units = units;
-	}
-
-	/**
-	 * @param unitsToKill the unitsToKill to set
-	 */
-	public void setUnitsToKill(ArrayList<Unit> unitsToKill) {
-		this.unitsToKill = unitsToKill;
-	}
-
-	/**
-	 * @param structures the structures to set
-	 */
-	public void setStructures(ArrayList<AbstractStructure> structures) {
-		this.structures = structures;
-	}
-
-	/**
-	 * @param globalResourcePool the globalResourcePool to set
-	 */
-	public void setGlobalResourcePool(
-			HashMap<ResourceType, Integer> globalResourcePool) {
-		this.globalResourcePool = globalResourcePool;
-	}
-
-	/**
-	 * @param map the map to set
-	 */
-	public void setMap(Map map) {
-		this.map = map;
 	}
 
 	public Tribe getTribe() {
 		return tribe;
 	}
-
-	public void setTribe(Tribe tribe) {
-		this.tribe = tribe;
-	}
-
 }

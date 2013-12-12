@@ -13,6 +13,11 @@ import javax.swing.JPanel;
 
 import model.GameImageLoader;
 
+/**
+ * The panel that is shown when a user attempts to start a new game
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class NewGamePanel extends JPanel implements ClickHandler {
 
 	private static final long serialVersionUID = 7759171050606885943L;

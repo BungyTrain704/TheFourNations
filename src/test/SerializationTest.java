@@ -18,8 +18,16 @@ import model.tasks.BuildStructureTask;
 
 import org.junit.Test;
 
+/**
+ * Tests the Serialization of the Civilization State
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class SerializationTest {
 
+	/**
+	 * Tests the differentiability of states
+	 */
 	@Test public void testSerialization() {
 		//Get civ
 		Civilization civ = Civilization.getInstance();
@@ -50,6 +58,9 @@ public class SerializationTest {
 		
 	}
 	
+	/**
+	 * Tests saving the states to files and then recovering the state from those files
+	 */
 	@Test public void saveSomeStates() {
 		//Get civilization and save it
 		Civilization civ = Civilization.getInstance();

@@ -2,6 +2,11 @@ package model.units;
 
 import java.util.ArrayList;
 
+/**
+ * An implementation of Dijkstra's shortest path algorithm
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class PathGenerator {
 
 	private static final int BARRIER = 1;
@@ -12,6 +17,7 @@ public class PathGenerator {
 	private Graph graph;
 	private ArrayList<Integer> moves;
 	
+	//TODO: Example usage
 	public static void main(String[] args)
 	{
 		int[][] GRID = { 

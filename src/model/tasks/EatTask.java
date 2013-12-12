@@ -5,6 +5,11 @@ import model.map.Map;
 import model.map.ResourceType;
 import model.units.Unit;
 
+/**
+ * Performed when the unit must eat
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class EatTask extends Task {
 
 	private static final long serialVersionUID = -1116613252893400073L;
@@ -13,6 +18,9 @@ public class EatTask extends Task {
 		super(work, locWorker, locTask, map);
 	}
 
+	/**
+	 * Gives the unit as much food as possible (up to their max)
+	 */
 	@Override public void performAction() {
 		int currentHungerLevel = unit.getHungerLevel();
 		int maxHungerLevel = unit.getMAX_HUNGER_LEVEL();

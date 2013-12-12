@@ -1,7 +1,5 @@
 package model.tasks;
 
-
-
 import java.util.ArrayList;
 
 import model.Civilization;
@@ -10,7 +8,12 @@ import model.map.Resource;
 import model.map.Terrain;
 
 
-
+/**
+ * The task that a unit performs when they are collecting some resource
+ * located on the map
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class CollectResourceTask extends Task{
 	
 	private static final long serialVersionUID = -5974294099911726904L;
@@ -19,8 +22,10 @@ public class CollectResourceTask extends Task{
 		super(work, locWorker, locTask, map);
 	}
 
-	@Override
-	public void performAction() {
+	/**
+	 * Stores the resource in a stockpile on the map
+	 */
+	@Override public void performAction() {
 		Map m = Civilization.getInstance().getMap();
 		Resource res = m.getCell(locationOfTask).getResource();
 		m.getCell(locationOfTask).removeResource();

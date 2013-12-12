@@ -38,6 +38,10 @@ public abstract class Task implements Serializable
 		this.isDone = false;
 	}
 	
+	/**
+	 * Decreases the amount of work necessary to complete this task by the specified amount
+	 * @return True if the action has completed, false otherwise
+	 */
 	public final boolean decrement(int workDone)
 	{
 		remainingWorkRequirement -= workDone;
@@ -48,6 +52,11 @@ public abstract class Task implements Serializable
 		}
 		return false;
 	}
+	
+	/**
+	 * Performs the action for the call
+	 */
+	public abstract void performAction();
 	
 	public int getWorkerLocation()
 	{
@@ -71,11 +80,6 @@ public abstract class Task implements Serializable
 		this.unit = unit;
 	}
 	
-	/**
-	 * Performs the action for the call
-	 */
-	public abstract void performAction();
-
 	public boolean isDone() {
 		return isDone;
 	}

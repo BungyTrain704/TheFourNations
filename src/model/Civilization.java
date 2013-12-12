@@ -54,6 +54,10 @@ public class Civilization {
 		}
 	}
 
+	/**
+	 * Loads the given civilization state as the current game state. 
+	 * @param state The persistant CivilizationState to load from
+	 */
 	public void parseCivilizationState( CivilizationState state ) {
 		this.globalResourcePool = state.getGlobalResourcePool();
 		this.taskQueue = state.getTaskQueue();
@@ -64,6 +68,30 @@ public class Civilization {
 		this.tribe = state.getTribe();
 	}
 
+	/**
+	 * Updates all ingame entities and handles unit death
+	 */
+	public void update()
+	{
+		for(Unit person: units)
+		{
+			Cell currentCell = map.getCell(person.getLocation());
+			person.update();
+			currentCell.setUnit(false);
+			map.getCell(person.getLocation()).setUnit(true);
+		}
+
+		for( Unit unit : unitsToKill ) {
+			unit.die();
+		}
+
+		unitsToKill.clear();
+	}
+
+	/**
+	 * Sets the map and places units on the map
+	 * @param m
+	 */
 	public void setMap(Map m)
 	{
 		this.map = m;
@@ -89,6 +117,47 @@ public class Civilization {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Attempts to remove a certain amount of a resource from the global store. If
+	 * there is enough, the desired amount will be returned. Otherwise, the
+	 * amount currently in the stores will be returned and the global store will
+	 * be set to 0.
+	 * @param desiredResourceAmount The amount of a resource you would like to remove from
+	 * 								the global store.
+	 * @param resourceType The resource you would like to retrieve from the global store
+	 * @return The desired amount if it is available, or all available resource if the desired
+	 * 			amount could not be met.
+	 */
+	public int pollResource( ResourceType resourceType, int desiredResourceAmount ) {
+		int currentResourceCount = this.globalResourcePool.get( resourceType );
+
+		if( currentResourceCount >= desiredResourceAmount ) {
+			this.globalResourcePool.put( resourceType, currentResourceCount - desiredResourceAmount );
+			return desiredResourceAmount;
+		}
+		else {
+			int amountTaken = currentResourceCount;
+			this.globalResourcePool.put(resourceType, 0);
+			return amountTaken;
+		}
+	}
+	
+	/**
+	 * Stores the given resource in the resource stores
+	 */
+	public void storeResource(Resource resource) {
+		this.globalResourcePool.put(resource.getResourceType(), 
+				this.globalResourcePool.get(resource.getResourceType() ) + resource.getResourceValue() );
+	}
+	
+	/**
+	 * Places the specified unit on the list of units to kill during the next tick
+	 */
+	public void sentenceToDeath( Unit unit ) {
+		this.unitsToKill.add( unit );
+		System.out.println( unit.getName() + " has died :\'(" );
 	}
 
 	/**
@@ -151,30 +220,7 @@ public class Civilization {
 		this.structures.add( structure );
 	}
 
-	/**
-	 * Attempts to remove a certain amount of a resource from the global store. If
-	 * there is enough, the desired amount will be returned. Otherwise, the
-	 * amount currently in the stores will be returned and the global store will
-	 * be set to 0.
-	 * @param desiredResourceAmount The amount of a resource you would like to remove from
-	 * 								the global store.
-	 * @param resourceType The resource you would like to retrieve from the global store
-	 * @return The desired amount if it is available, or all available resource if the desired
-	 * 			amount could not be met.
-	 */
-	public int pollResource( ResourceType resourceType, int desiredResourceAmount ) {
-		int currentResourceCount = this.globalResourcePool.get( resourceType );
 
-		if( currentResourceCount >= desiredResourceAmount ) {
-			this.globalResourcePool.put( resourceType, currentResourceCount - desiredResourceAmount );
-			return desiredResourceAmount;
-		}
-		else {
-			int amountTaken = currentResourceCount;
-			this.globalResourcePool.put(resourceType, 0);
-			return amountTaken;
-		}
-	}
 
 	public int getResourceAmount( ResourceType rt ) {
 		return this.globalResourcePool.get(rt);
@@ -182,23 +228,6 @@ public class Civilization {
 
 	public void setResourceAmount( ResourceType resourceType, int amount ) {
 		this.globalResourcePool.put( resourceType, amount );
-	}
-
-	public void update()
-	{
-		for(Unit person: units)
-		{
-			Cell currentCell = map.getCell(person.getLocation());
-			person.update();
-			currentCell.setUnit(false);
-			map.getCell(person.getLocation()).setUnit(true);
-		}
-
-		for( Unit unit : unitsToKill ) {
-			unit.die();
-		}
-
-		unitsToKill.clear();
 	}
 
 	/**
@@ -209,10 +238,6 @@ public class Civilization {
 		return this.map;
 	}
 
-	public void storeResource(Resource resource) {
-		this.globalResourcePool.put(resource.getResourceType(), 
-				this.globalResourcePool.get(resource.getResourceType() ) + resource.getResourceValue() );
-	}
 
 	public Queue<Task> getTaskQueue() {
 		return this.taskQueue;
@@ -237,11 +262,6 @@ public class Civilization {
 		return structures;
 	}
 
-	public void sentenceToDeath( Unit unit ) {
-		this.unitsToKill.add( unit );
-		System.out.println( unit.getName() + " has died :\'(" );
-	}
-	
 	public Tribe getTribe() {
 		return this.tribe;
 	}

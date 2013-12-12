@@ -4,6 +4,11 @@ import java.util.Random;
 
 import model.structures.AbstractStructure;
 
+/**
+ * An individual location on the game map
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class Cell implements Serializable {
 
 	private static final long serialVersionUID = -6950090612251717629L;
@@ -16,6 +21,11 @@ public class Cell implements Serializable {
 	private Random rand = new Random();
 	private AbstractStructure item;
 	
+	/**
+	 * Creates a cell that has no resources, a random average,
+	 * no units, is not visible, and has terrain as it's default
+	 * terrain.
+	 */
 	public Cell() {
 		terrain= Terrain.plains;
 		hasResource = false;

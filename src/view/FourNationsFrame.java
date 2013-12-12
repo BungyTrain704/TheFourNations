@@ -9,6 +9,12 @@ import javax.swing.JPanel;
 
 import view.Game.MainMapPanel;
 
+/**
+ * The primary frame for The Four Nations game. Handles panel switching
+ * and window decoration.
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class FourNationsFrame extends JFrame {
 
 	private static final long serialVersionUID = 3775114448785000079L;
@@ -58,11 +64,19 @@ public class FourNationsFrame extends JFrame {
 		showPanel( mainMenu );
 	}
 	
+	/**
+	 * Creates an instance of FourNationsFrame 
+	 */
 	public static void main( String[] args ) {
 		new FourNationsFrame();
 	}
 	
+	/**
+	 * Displays the panel that is mapped to the given String in the
+	 * panel Map
+	 */
 	public void showPanel( String panelName ) {
-		super.setContentPane( this.panels.get( panelName ) );
+		if( this.panels.containsKey(panelName) )
+			super.setContentPane( this.panels.get( panelName ) );
 	}
 }
