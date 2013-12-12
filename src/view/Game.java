@@ -89,6 +89,8 @@ public class Game extends JFrame {
 			+ "fireDude1.png");
 	private static BufferedImage earthDude1 = getImage(imagesFolder
 			+ "earthDude1.png");
+	private static BufferedImage airDude1 = getImage(imagesFolder
+			+ "airDude1.png");
 
 	// Play type booleans
 	private boolean playWater;
@@ -361,8 +363,8 @@ public class Game extends JFrame {
 			mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
 					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = mapImg.createGraphics();
-//			g2d.scale(.175, .175);
-			g2d.scale(.35, .35);
+			g2d.scale(.175, .175);
+//			g2d.scale(.35, .35);
 			drawMap(g2d);
 			g2d.dispose();
 		}
@@ -464,9 +466,9 @@ public class Game extends JFrame {
 					}
 				}
 				// Draw tops of trees
-				if (j + 1 < map.getRows()
-						&& civ.getMap().getCell(i, j + 1).hasResource()) {
-					if (civ.getMap().getCell(i, j + 1).getResource()
+				if (i + 1 < map.getRows()
+						&& civ.getMap().getCell(i+1, j).hasResource()) {
+					if (civ.getMap().getCell(i+1, j).getResource()
 							.equals(Resource.tree)) {
 						if (playWater) { // for water, draw snow-covered trees
 							g2.drawImage(snowTreeImg.getSubimage(0, 0, 16, 16),
@@ -483,8 +485,8 @@ public class Game extends JFrame {
 				}
 				for (int k = 0; k < civ.getUnits().size(); k++) {
 					int location = civ.getUnits().get(k).getLocation();
-					int row = location/50;
-					int col = location%50;
+					int row = location/map.getCols();
+					int col = location%map.getCols();
 					if (playWater) {
 						g2.drawImage(waterDude1, col * 16, row * 16, null);
 					} else if (playFire) {
@@ -492,6 +494,7 @@ public class Game extends JFrame {
 					} else if (playEarth) {
 						g2.drawImage(earthDude1, col * 16, row * 16, null);
 					} else {
+						g2.drawImage(airDude1, col * 16, row * 16, null);
 					}
 				}
 			}
