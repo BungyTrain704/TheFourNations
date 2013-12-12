@@ -109,4 +109,12 @@ public class LoadGamePanel extends JPanel{
 		
 		return model;
 	}
+	
+	public boolean saveIsSelected() {
+		return ! this.savedGames.isSelectionEmpty();
+	}
+	
+	public String getSelectedSave() {
+		return this.savedGames.getSelectedValue();
+	}
 }

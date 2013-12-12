@@ -10,7 +10,6 @@ import model.Civilization;
 import model.CivilizationState;
 import model.SaveLoadManager;
 import model.map.Map;
-import model.map.Resource;
 import model.map.ResourceType;
 import model.map.Terrain;
 import model.structures.Bed;
@@ -29,12 +28,12 @@ public class SerializationTest {
 		CivilizationState civStateInit = new CivilizationState( civ );
 
 		//Add some stuff to the civilization
-		Bed b = new Bed( 0, "BED", Resource.tree );
+		Bed b = new Bed( 0, "BED", ResourceType.wood );
 		civ.addStructure( b );
 		civ.setResourceAmount( ResourceType.wood, 5000 );
 		civ.setMap( new Map() );
 		civ.getMap().getCell(300).setTerrain(Terrain.plains); //Prevent DisallowedTaskException
-		civ.addTaskToQueue( new BuildStructureTask(5, 299, 300, civ.getMap(), new Well( 300, "WELL", Resource.stone ) ) );
+		civ.addTaskToQueue( new BuildStructureTask(5, 299, 300, civ.getMap(), new Well( 300, "WELL", ResourceType.stone ) ) );
 
 		//Assertions
 		assertEquals( 5000, civ.getResourceAmount( ResourceType.wood ) );

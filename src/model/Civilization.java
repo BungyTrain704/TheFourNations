@@ -30,6 +30,7 @@ public class Civilization {
 	private static Civilization instance = new Civilization( 1 );
 	private Map map;
 	private int cols = 70; //70 by default
+	private Tribe tribe;
 
 	/**
 	 * Creates a civilization with a specified number of starting units
@@ -60,6 +61,7 @@ public class Civilization {
 		this.units = state.getUnits();
 		this.unitsToKill = state.getUnitsToKill();
 		this.map = state.getMap();
+		this.tribe = state.getTribe();
 	}
 
 	public void setMap(Map m)
@@ -212,11 +214,6 @@ public class Civilization {
 				this.globalResourcePool.get(resource.getResourceType() ) + resource.getResourceValue() );
 	}
 
-	public void useResource(Resource resource) {
-		this.globalResourcePool.put(resource.getResourceType(), 
-				this.globalResourcePool.get(resource.getResourceType() ) - resource.getResourceValue() );
-	}
-
 	public Queue<Task> getTaskQueue() {
 		return this.taskQueue;
 	}
@@ -243,6 +240,10 @@ public class Civilization {
 	public void sentenceToDeath( Unit unit ) {
 		this.unitsToKill.add( unit );
 		System.out.println( unit.getName() + " has died :\'(" );
+	}
+	
+	public Tribe getTribe() {
+		return this.tribe;
 	}
 
 }

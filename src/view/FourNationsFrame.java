@@ -7,10 +7,12 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import view.Game.MainMapPanel;
+
 public class FourNationsFrame extends JFrame {
 
 	private static final long serialVersionUID = 3775114448785000079L;
-	
+
 	//Panels
 	private Map<String, JPanel> panels;
 	private MainMenuPanel mainMenuPanel;
@@ -19,6 +21,7 @@ public class FourNationsFrame extends JFrame {
 	//Panel labels
 	public final static String mainMenu = "MAIN_MENU";
 	public final static String newGame = "NEW_GAME";
+	public final static String gamePanel = "GAME_PANEL";
 	
 	public FourNationsFrame() {
 		initComponents();

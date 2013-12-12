@@ -1,7 +1,11 @@
 package model.tasks;
+import java.util.Set;
+
 import model.Civilization;
 import model.exceptions.DisallowedTaskException;
 import model.map.Map;
+import model.map.ResourceType;
+import model.map.Terrain;
 import model.structures.AbstractStructure;
 
 /**
@@ -27,7 +31,11 @@ public class BuildStructureTask extends Task {
 		this.structureToBuild = structure;
 		
 		if( ! isValidStructureLocation() ) {
-			throw new DisallowedTaskException( this );
+			int location = structure.getLocation();
+			Set<Terrain> types = structure.getValidTerrainTypes();
+			String message = "The location " + location + " is not valid. " + structure.getName() + " requires " +
+							 types.toString() + " but the cell is " + civ.getMap().getCell(location).getTerrain();
+			throw new DisallowedTaskException( this, message );
 		}
 	}
 	
@@ -40,9 +48,23 @@ public class BuildStructureTask extends Task {
 	 * <p>Adds the structure to the map and to the civilization</p>
 	 */
 	@Override public void performAction() {
-		super.map.getCell(super.locationOfTask).addStructure(this.structureToBuild);
-		Civilization.getInstance().addStructure( this.structureToBuild );
-		Civilization.getInstance().useResource( this.structureToBuild.getResourceUsed() );
-		this.isDone = true;
+		Civilization civ = Civilization.getInstance();
+		int resourceAmount = structureToBuild.getAmountOfResourceUsed();
+		ResourceType typeUsed = structureToBuild.getResourceTypeUsed();
+		
+		//Check that the user has enough resources to build the structure
+		if( civ.getResourceAmount( typeUsed ) >= resourceAmount) {
+			map.getCell(super.locationOfTask).addStructure(this.structureToBuild);
+			civ.addStructure( this.structureToBuild );
+			civ.pollResource( typeUsed, resourceAmount );
+			this.isDone = true;
+		}
+		
+		//Throw an exception if not
+		else {
+			String message = "This building requires " + resourceAmount + " " + typeUsed + " but you only have " +
+					civ.getResourceAmount(typeUsed) + ".";
+			throw new DisallowedTaskException( this, message );
+		}
 	}
 }

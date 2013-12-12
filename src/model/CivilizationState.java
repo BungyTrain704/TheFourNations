@@ -21,20 +21,23 @@ public class CivilizationState implements Serializable {
 	private ArrayList<AbstractStructure> structures;
 	private HashMap<ResourceType, Integer> globalResourcePool;
 	private Map map;
+	private Tribe tribe;
 
 	public CivilizationState( Civilization civ ) {
-		this( civ.getTaskQueue(), civ.getUnits(), civ.getUnitsToKill(), civ.getStructures(), civ.getGlobalResourcePool(), civ.getMap() );
+		this( civ.getTaskQueue(), civ.getUnits(), civ.getUnitsToKill(), civ.getStructures(), civ.getGlobalResourcePool(), civ.getMap(), civ.getTribe() );
 	}
 
 	@SuppressWarnings("unchecked")
 	public CivilizationState( Queue<Task> taskQueue, ArrayList<Unit> units, ArrayList<Unit> unitsToKill, 
-			ArrayList<AbstractStructure> structures, HashMap<ResourceType, Integer> globalResourcePool, Map map ) {
+			ArrayList<AbstractStructure> structures, HashMap<ResourceType, Integer> globalResourcePool, Map map,
+			Tribe tribe ) {
 		this.taskQueue = new LinkedList<>( taskQueue );
 		this.units = (ArrayList<Unit>) units.clone();
 		this.unitsToKill = (ArrayList<Unit>) unitsToKill.clone();
 		this.structures = (ArrayList<AbstractStructure>) structures.clone();
 		this.globalResourcePool = (HashMap<ResourceType, Integer>) globalResourcePool.clone();
 		this.map = map;
+		this.tribe = tribe;
 	}
 
 	/**
@@ -120,6 +123,14 @@ public class CivilizationState implements Serializable {
 	 */
 	public void setMap(Map map) {
 		this.map = map;
+	}
+
+	public Tribe getTribe() {
+		return tribe;
+	}
+
+	public void setTribe(Tribe tribe) {
+		this.tribe = tribe;
 	}
 
 }

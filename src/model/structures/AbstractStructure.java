@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import model.map.Resource;
+import model.map.ResourceType;
 import model.map.Terrain;
 
 /**
@@ -18,8 +19,8 @@ import model.map.Terrain;
 public abstract class AbstractStructure implements Serializable {
 
 	private static final long serialVersionUID = -2955392819275955126L;
-	private int location;
-	private Resource resourceUsed;
+	private int location, amountOfResourceUsed;
+	private ResourceType resourceUsed;
 	private Set<Terrain> validTerrainTypes;
 	private String name;
 	
@@ -28,8 +29,9 @@ public abstract class AbstractStructure implements Serializable {
 	 * @param location
 	 * @param name
 	 */
-	public AbstractStructure(int location, String name, Resource resourceUsed, Terrain... validTerrainTypes) {
+	public AbstractStructure(int location, int amountOfResourceUsed, String name, ResourceType resourceUsed, Terrain... validTerrainTypes) {
 		this.location = location;
+		this.amountOfResourceUsed = amountOfResourceUsed;
 		this.name = name;
 		this.resourceUsed = resourceUsed;
 		this.validTerrainTypes = new HashSet<>( Arrays.asList( validTerrainTypes ) );
@@ -82,14 +84,18 @@ public abstract class AbstractStructure implements Serializable {
 	/**
 	 * @return the resourceUsed
 	 */
-	public Resource getResourceUsed() {
+	public ResourceType getResourceTypeUsed() {
 		return resourceUsed;
+	}
+	
+	public int getAmountOfResourceUsed() {
+		return this.amountOfResourceUsed;
 	}
 
 	/**
 	 * @param resourceUsed the resourceUsed to set
 	 */
-	public void setResourceUsed(Resource resourceUsed) {
+	public void setResourceTypeUsed(ResourceType resourceUsed) {
 		this.resourceUsed = resourceUsed;
 	}
 	
