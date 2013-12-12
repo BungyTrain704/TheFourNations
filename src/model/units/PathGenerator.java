@@ -39,11 +39,6 @@ public class PathGenerator {
 		
 		this.graph=new Graph(map.length*map[0].length , cols);
 		
-		if(graph.isInGraph(this.start) && graph.isInGraph(this.end))
-		{	
-			printMap();
-		}	
-		
 		for(int i = 0; i < map.length*map[0].length; i++)
 		{
 			int[] neighbors = {i+1, i-1, i+cols, i-cols};
@@ -69,10 +64,10 @@ public class PathGenerator {
 			System.out.print("IMPOSSIBLE!!!");
 			return;
 		}
-		for(int m: moves)
-		{
-			System.out.print(m+" ");
-		}
+//		for(int m: moves)
+//		{
+//			System.out.print(m+" ");
+//		}
 	}
 	
 	public ArrayList<Integer> getMoves()

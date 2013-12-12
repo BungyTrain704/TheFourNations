@@ -85,6 +85,10 @@ public class Cell implements Serializable {
 		hasResource = false;
 	}
 	
+	public boolean isAccessible() {
+		return !( this.hasResource || this.terrain == Terrain.water || this.hasStructure() );
+	}
+	
 	public boolean hasStructure() {
 		return item != null;
 	}
