@@ -17,6 +17,11 @@ import view.dialogs.LoadGameDialog;
 
 import model.GameImageLoader;
 
+/**
+ * The panel shown as the main menu for the game
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class MainMenuPanel extends JPanel implements ClickHandler {
 
 	private static final long serialVersionUID = 3507196282474890639L;

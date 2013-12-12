@@ -17,8 +17,10 @@ public class StoreResourceTask extends Task {
 		this.resource = resource;
 	}
 
-	@Override
-	public void performAction() {
+	/**
+	 * Stores the resource in the Civilizations reserves
+	 */
+	@Override public void performAction() {
 		Civilization.getInstance().storeResource( this.resource );
 		this.isDone = true;
 	}

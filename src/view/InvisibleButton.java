@@ -11,7 +11,7 @@ import javax.swing.border.Border;
 /**
  * A transparent JPanel that gains a white border when moused over. When clicked, it will
  * send a message to it's handler.
- * @author Christopher
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
  *
  */
 public class InvisibleButton extends JPanel implements MouseListener {
@@ -40,15 +40,23 @@ public class InvisibleButton extends JPanel implements MouseListener {
 		this.border = BorderFactory.createLineBorder( borderColor, borderThickness );
 	}
 
+	/**
+	 * When the component is moused over, draw the border
+	 */
 	@Override public void mouseEntered(MouseEvent e) {
 		this.setBorder( border );
 	}
 
-
+	/**
+	 * When the mouse exists the component, remove the border
+	 */
 	@Override public void mouseExited(MouseEvent e) {
 		this.setBorder( null );
 	}
 
+	/**
+	 * Send a message to the click handler when the mouse clicks inside the component.
+	 */
 	@Override public void mouseClicked(MouseEvent e) { 
 		if( this.handler != null ) this.handler.handleClick(this);
 	}

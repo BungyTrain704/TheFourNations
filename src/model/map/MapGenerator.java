@@ -3,7 +3,7 @@ package model.map;
 /**
  * Generates a map based upon a 2D heightmap. The algorithm used for generation
  * is explained in detail <a href="http://dxprog.com/files/randmaps.html">here</a>.
- * @author Christopher
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung.
  *
  */
 public class MapGenerator {

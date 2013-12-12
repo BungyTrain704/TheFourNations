@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 /**
  * Flyweight implmentation to handle game loading
- * @author Christopher
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
  *
  */
 public class GameImageLoader {
@@ -34,6 +34,11 @@ public class GameImageLoader {
 		else return loadImageAt( locationOnDisk );
 	}
 
+	/**
+	 * Loads the image at the specified location and stores it as a BufferedImage
+	 * @param locationOnDisk The file location that you would like the image to be read from
+	 * @return The BufferedImage that was loaded or null if it could not be loaded
+	 */
 	private static BufferedImage loadImageAt( String locationOnDisk ) {
 		BufferedImage image = null;
 

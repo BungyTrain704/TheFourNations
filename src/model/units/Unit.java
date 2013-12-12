@@ -35,7 +35,7 @@ public abstract class Unit implements Serializable {
 	private boolean currentlyWorking = false;
 	private int location;
 	private int cols;
-	
+
 	/**
 	 * Creates a unit that has a specific set of skills
 	 * @param name The name of the unit
@@ -58,7 +58,7 @@ public abstract class Unit implements Serializable {
 		this.location = location;
 		this.cols = cols;
 	}
-	
+
 	/**
 	 * Starts with the default skillset
 	 * @param name The name of the unit
@@ -83,18 +83,18 @@ public abstract class Unit implements Serializable {
 		for( UnitSkill us : UnitSkill.values() )
 			this.skills.put(us, 1);
 	}
-	
-	
+
+
 	/**
 	 * Gives the unit a new task to work on
 	 * @param task
 	 */
 	public void setCurrentTask( Task task ) {
 		this.currentTask = task;
-		
+
 		generatePath(this.currentTask.getWorkerLocation() );
 	}
-	
+
 	/**
 	 * @return True if the current task that the unit is working on is finished or not
 	 */
@@ -109,7 +109,7 @@ public abstract class Unit implements Serializable {
 	public boolean needsNewTask() {
 		return !needsToEat() && !needsToSleep() && this.currentTask == null;
 	}
-	
+
 	/**
 	 * If this unit's hunger level is below a certain point, then they need to eat
 	 * @return True if the unit needs to sleep, false otherwise.
@@ -117,7 +117,7 @@ public abstract class Unit implements Serializable {
 	public boolean needsToEat() {
 		return this.hungerLevel <= (int) Math.floor( this.MAX_HUNGER_LEVEL * 0.15 );
 	}
-	
+
 	/**
 	 * If this unit's energy level is below a certain point, then they need to sleep
 	 * @return True if the unit needs to sleep, false otherwise
@@ -125,18 +125,18 @@ public abstract class Unit implements Serializable {
 	public boolean needsToSleep() {
 		return this.energyLevel <= (int) Math.floor( this.MAX_ENERGY_LEVEL * 0.15 );
 	}
-	
+
 	public boolean needsToDrink () {
 		return this.thirstLevel <= (int) Math.floor( this.MAX_THIRST_LEVEL * 0.15 );
 	}
-	
+
 	/**
 	 * Generates a queue of movements for the unit to take to move to a desired location
 	 * @param destination The location on the map that the unit will move to
 	 */
 	public void generatePath( int destination ) {
 		this.movementQueue.clear();
-		
+
 		int tempLocation = location;
 		while(tempLocation != destination)
 		{
@@ -144,7 +144,7 @@ public abstract class Unit implements Serializable {
 				movementQueue.add(++tempLocation);
 			else if(tempLocation % cols > destination % cols)
 				movementQueue.add(--tempLocation);
-			
+
 			if(tempLocation/cols < destination/cols)
 			{
 				tempLocation += cols;
@@ -158,7 +158,7 @@ public abstract class Unit implements Serializable {
 		}	
 		//TODO: WRITE ADVANCED PATHING 
 	}
-	
+
 	/**
 	 * Moves the unit to the given location.
 	 */
@@ -171,7 +171,7 @@ public abstract class Unit implements Serializable {
 		}
 		location = movementQueue.remove();
 	}
-	
+
 	/**
 	 * The method that is called every tick by Civilization
 	 */
@@ -187,14 +187,14 @@ public abstract class Unit implements Serializable {
 				this.currentTask.setUnit(null);
 				this.currentTask = null;
 			}
-			
+
 			ArrayList<AbstractStructure> structures = civ.getStructures();
-			
+
 			for( AbstractStructure as : structures ) {
 				if( ! as.providesFood() )
 					structures.remove(as);
 			}
-			
+
 			//Create task to eat
 			if( ! structures.isEmpty() )
 				this.currentTask = new EatTask( 1, structures.get(0).getLocation() - 1, structures.get(0).getLocation() - 1, Civilization.getInstance().getMap(), this );
@@ -207,14 +207,14 @@ public abstract class Unit implements Serializable {
 				this.currentTask.setUnit(null);
 				this.currentTask = null;
 			}
-			
+
 			ArrayList<AbstractStructure> structures = civ.getStructures();
-			
+
 			for( AbstractStructure as : structures ) {
 				if( ! as.providesBed() )
 					structures.remove(as);
 			}
-			
+
 			//Create task to sleep
 			if( ! structures.isEmpty() )
 				this.currentTask = new SleepTask( 1, structures.get(0).getLocation() - 1, structures.get(0).getLocation() - 1, Civilization.getInstance().getMap(), this );
@@ -227,14 +227,14 @@ public abstract class Unit implements Serializable {
 				this.currentTask.setUnit(null);
 				this.currentTask = null;
 			}
-			
+
 			ArrayList<AbstractStructure> structures = civ.getStructures();
-			
+
 			for( AbstractStructure as : structures ) {
 				if( ! as.providesDrink() )
 					structures.remove(as);
 			}
-			
+
 			//Create task to drink
 			if( ! structures.isEmpty() )
 				this.currentTask = new DrinkTask( 1, structures.get(0).getLocation() - 1, structures.get(0).getLocation() - 1, Civilization.getInstance().getMap(), this );
@@ -266,14 +266,14 @@ public abstract class Unit implements Serializable {
 				System.out.println("idle");
 		}	
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Updates the unit's hunger and energy levels. Called every tick.
 	 */
 	protected abstract void updateUnitCounters();
-	
+
 	public void die() {
 		Civilization civ = Civilization.getInstance();
 		if( this.currentTask != null )
@@ -316,11 +316,11 @@ public abstract class Unit implements Serializable {
 	public Task getCurrentTask() {
 		return currentTask;
 	}
-	
+
 	public int getLocation() {
 		return location;
 	}
-	
+
 	public void setLocation(int loc) {
 		location = loc;
 	}
@@ -380,13 +380,13 @@ public abstract class Unit implements Serializable {
 	public int getMAX_ENERGY_LEVEL() {
 		return MAX_ENERGY_LEVEL;
 	}
-	
+
 	public int getMAX_THIRST_LEVEL() {
 		return MAX_THIRST_LEVEL;
 	}
-	
+
 	public void setCols(int cols2) {
 		this.cols = cols2;
-		
+
 	}
 }

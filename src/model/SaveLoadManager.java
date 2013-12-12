@@ -10,11 +10,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 /**
  * Manages saving and loading of games
- * @author Christopher
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
  *
  */
 public class SaveLoadManager {
@@ -103,8 +101,10 @@ public class SaveLoadManager {
 		return cs;
 	}
 	
+	/**
+	 * Returns a list of all saved games in the game folder
+	 */
 	public static ArrayList<String> getSavedGames() {
-		//TODO: Crawl folder for files ending in ".fnsf"
 		ArrayList<String> savedGames = new ArrayList<>();
 		File saveFileLocation = new File( saveLocation );
 		

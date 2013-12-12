@@ -14,6 +14,12 @@ import model.SaveLoadManager;
 import view.ClickHandler;
 import view.FourNationsFrame;
 
+/**
+ * This dialog displays available games to load and allows the user to load
+ * previously saved game states.
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class LoadGameDialog extends JDialog implements ClickHandler {
 
 	private static final long serialVersionUID = 4351947229344581937L;
@@ -34,6 +40,9 @@ public class LoadGameDialog extends JDialog implements ClickHandler {
 		super.setContentPane( this.lgp );
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override public void handleClick(Component component) {
 		System.out.println( component.getName() );
 		if( component.getName() == LoadGamePanel.GO_BACK)

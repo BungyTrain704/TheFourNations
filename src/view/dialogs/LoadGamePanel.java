@@ -22,6 +22,11 @@ import view.InvisibleButton;
 import model.GameImageLoader;
 import model.SaveLoadManager;
 
+/**
+ * The panel that displays available game saves and allows the user to load them
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class LoadGamePanel extends JPanel{
 
 	private static final long serialVersionUID = 4151226823918499102L;
@@ -110,10 +115,16 @@ public class LoadGamePanel extends JPanel{
 		return model;
 	}
 	
+	/**
+	 * Returns if an item on the JList is currently selected
+	 */
 	public boolean saveIsSelected() {
 		return ! this.savedGames.isSelectionEmpty();
 	}
 	
+	/**
+	 * Returns the item currently selected in the JList
+	 */
 	public String getSelectedSave() {
 		return this.savedGames.getSelectedValue();
 	}
