@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -19,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
@@ -47,7 +49,7 @@ public class Game extends JFrame {
 
 	// Game JPanels
 	private JPanel gamePanel;
-	private JPanel gameView;
+	private JViewport gameView;
 	private JPanel mapView;
 	private JPanel miniMapView;
 	private JPanel statsPanel;
@@ -178,15 +180,7 @@ public class Game extends JFrame {
 		gamePanel.setSize(1030, 735);
 		gamePanel.setVisible(false);
 		mainPanel.add(gamePanel);
-
-		// Set up the game view containing the main map
-		gameView = new JPanel();
-		gameView.setLayout(null);
-		gameView.setLocation(0, 60);
-		gameView.setSize(775, 550);
-		gameView.setVisible(true);
-		gamePanel.add(gameView);
-
+		
 		// Set up map view
 		mapView = new MainMapPanel();
 		mapView.setLayout(null);
@@ -194,7 +188,29 @@ public class Game extends JFrame {
 		mapView.setSize(map.getCols() * 16, map.getRows() * 16);
 		mapView.setVisible(true);
 		mapView.setBackground(Color.BLACK);
-		gameView.add(mapView);
+//		gameView.add(mapView);
+
+//		// Set up the game view containing the main map
+//		gameView = new JPanel();
+//		gameView.setLayout(null);
+//		gameView.setLocation(0, 60);
+//		gameView.setSize(775, 550);
+//		gameView.setVisible(true);
+//		gamePanel.add(gameView);
+		
+		gameView = new JViewport();
+		gameView.setSize(775, 550);
+		gameView.setLocation(0, 60);
+		gameView.setView(mapView);
+		gameView.setViewPosition(new Point(0,0));
+		gameView.setAutoscrolls(true);
+		gamePanel.add(gameView);
+		
+//        scrollPane = new JScrollPane();
+////        scrollpane.setSize(775, 550);
+////        scrollpane.setLocation(0, 60);
+//        scrollPane.setViewportView(mapView);
+//        gamePanel.add(scrollPane);
 
 		// Set up mini map
 		miniMapView = new MiniMapPanel();
@@ -314,9 +330,9 @@ public class Game extends JFrame {
 				}
 			};
 
-			civ.getMap().getCell(975).setResource(Resource.tree);
-			civ.getMap().getCell(1420).setTerrain(Terrain.stockpile);
-			civ.addTaskToQueue(new CollectResourceTask(5, 975, 975, civ
+			civ.getMap().getCell(1730).setResource(Resource.tree);
+			civ.getMap().getCell(1910).setTerrain(Terrain.stockpile);
+			civ.addTaskToQueue(new CollectResourceTask(5, 1730, 1730, civ
 					.getMap()));
 
 			// Start timer
