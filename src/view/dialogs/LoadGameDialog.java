@@ -51,10 +51,12 @@ public class LoadGameDialog extends JDialog implements ClickHandler {
 			System.out.println( "Load Game" );
 			if( lgp.saveIsSelected() ) {
 				//TODO: Add primary game frame so that this isn't pointless
-//				CivilizationState cs = SaveLoadManager.loadGame( lgp.getSelectedSave() );
-//				Civilization.getInstance().parseCivilizationState( cs );
-//				((FourNationsFrame) this.parent).showPanel( FourNationsFrame.gamePanel );
+				CivilizationState cs = SaveLoadManager.loadGame( lgp.getSelectedSave() );
+				Civilization.getInstance().parseCivilizationState( cs );
+				((FourNationsFrame) this.parent).showPanel( FourNationsFrame.gamePanel );
 				System.out.println( "Loading " + lgp.getSelectedSave() );
+				((FourNationsFrame) this.parent).resume();
+				dispose();
 			}
 			else {
 				JOptionPane.showMessageDialog( this, "You must select a save!" );

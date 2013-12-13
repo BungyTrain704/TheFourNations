@@ -232,7 +232,6 @@ public class GameDisplayPanel extends JPanel {
 
 	public void drawMap(Graphics2D g2) {
 		Tribe t = civ.getTribe();
-		
 		for (int i = 0; i < map.getRows(); i++) {
 			for (int j = 0; j < map.getCols(); j++) {
 				// Draw plains of the map

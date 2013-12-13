@@ -126,6 +126,7 @@ public class NewGamePanel extends JPanel implements ClickHandler {
 		
 		if( component == this.goBack ) {
 			((FourNationsFrame) this.parent).showPanel( FourNationsFrame.mainMenu );
+			return;
 		}
 		else if( component == this.water )  civ.setTribe( Tribe.WATER ); 
 		else if( component == this.earth ) 	civ.setTribe( Tribe.EARTH );
