@@ -4,7 +4,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import model.map.Cell;
 import model.map.Map;
 import model.map.Resource;
 import model.map.ResourceType;
@@ -25,16 +24,22 @@ public class GameRunner
 		System.out.println(board.toString());
 		Civilization civ = Civilization.getInstance();
 		civ.setMap(board);
-		civ.setResourceAmount(ResourceType.food, 0 );
 		civ.getMap().getCell(950).setResource(Resource.tree);
 		civ.getMap().getCell(1420).setTerrain(Terrain.stockpile);
 		civ.addTaskToQueue( new CollectResourceTask(5, 950, board) );
+		for(int r = 12; r <= 14; r++) {
+			for(int c = 27; c<=30; c++)
+			{	
+				board.getCell(r,c).removeResource();
+				board.getCell(r,c).setTerrain(Terrain.plains);
+			}
+		}
 		civ.getMap().buildRoom(12, 27, 14, 30, Terrain.kitchen);
 		int loc = 13 * board.getCols() + 28;
 		civ.addTaskToQueue( new BuildStructureTask( 10, board, new Table( loc, "S", ResourceType.wood ) ) );
 
 		
-		int delay = 20;
+		int delay = 200;
 		/**
 		 * Handles the game events
 		 */

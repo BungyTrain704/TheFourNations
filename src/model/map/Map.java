@@ -19,8 +19,11 @@ public class Map implements Serializable {
 	}
 
 	// TODO: Modularize
-	private int rows = 90;
-	private int cols = 90;
+//	private int rows = 90;
+//	private int cols = 90;
+//	private int waterBorder = rows / 10;
+	private int rows = 50;
+	private int cols = 50;
 	private int waterBorder = rows / 10;
 
 	private Cell[][] map;
@@ -115,17 +118,16 @@ public class Map implements Serializable {
 	 * of the map tiles. This is used in the implementation of Dijkstra's
 	 * shortest-path algorithm that handles unit movement.
 	 * 
-	 * 1 indicates that the terrain is accessible, 0 indicates that it is not.
+	 * 0 indicates that the terrain is accessible, 1 indicates that it is not.
 	 */
-	public int[][] accessible() {
+	public int[][] getAccessibilityArray() {
 		int[][] accessible = new int[rows][cols];
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				if (map[i][j].hasResource() || map[i][j].hasStructure()
-						|| map[i][j].getTerrain().equals(Terrain.water))
-					accessible[i][j] = 0;
-				else
+				if ( ! map[i][j].isAccessible() )
 					accessible[i][j] = 1;
+				else
+					accessible[i][j] = 0;
 			}
 		}
 		return accessible;

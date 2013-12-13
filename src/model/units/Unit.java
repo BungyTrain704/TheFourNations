@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import model.Civilization;
+import model.map.ResourceType;
 import model.structures.AbstractStructure;
 import model.tasks.DrinkTask;
 import model.tasks.EatTask;
@@ -95,6 +96,10 @@ public abstract class Unit implements Serializable {
 		generatePath(this.currentTask.getTaskLocation() );
 	}
 
+	public boolean workingOnNeed() {
+		return this.currentTask instanceof EatTask || this.currentTask instanceof SleepTask || this.currentTask instanceof DrinkTask;
+	}
+
 	/**
 	 * @return True if the current task that the unit is working on is finished or not
 	 */
@@ -134,29 +139,18 @@ public abstract class Unit implements Serializable {
 	 * Generates a queue of movements for the unit to take to move to a desired location
 	 * @param destination The location on the map that the unit will move to
 	 */
-	public void generatePath( int destination ) {
+	public boolean generatePath( int destination ) {
 		this.movementQueue.clear();
 
-		int tempLocation = location;
-		while(tempLocation != destination)
-		{
-			if(tempLocation % cols < destination % cols)
-				movementQueue.add(++tempLocation);
-			else if(tempLocation % cols > destination % cols)
-				movementQueue.add(--tempLocation);
-
-			if(tempLocation/cols < destination/cols)
-			{
-				tempLocation += cols;
-				movementQueue.add(tempLocation);
-			}
-			else if(tempLocation/cols > destination/cols)
-			{
-				tempLocation -= cols;
-				movementQueue.add(tempLocation);
-			}	
-		}	
-		//TODO: WRITE ADVANCED PATHING 
+		int[][] accessibilityMatrix = Civilization.getInstance().getMap().getAccessibilityArray();
+		accessibilityMatrix[destination/cols][destination%cols] = 0;
+		PathGenerator pathGen = new PathGenerator(accessibilityMatrix, location, destination);
+		ArrayList<Integer> moves = pathGen.getMoves();
+		if(moves == null)
+			return false;
+		for(int move: moves)
+			movementQueue.add(move);
+		return true;
 	}
 
 	/**
@@ -172,6 +166,19 @@ public abstract class Unit implements Serializable {
 		location = movementQueue.remove();
 	}
 
+	private void idle() {
+		if( Math.random() < 0.5 ) {
+			int loc = this.getLocation();
+			//Left or right
+			if( Math.random() < 0.5 )
+				loc = Math.random() < 0.5 ? loc + 1 : loc - 1;
+			else
+				loc = Math.random() < 0.5 ? loc + cols : loc - cols;
+
+			if( Civilization.getInstance().getMap().getCell(loc).isAccessible() ) this.location = loc;
+		}
+	}
+
 	/**
 	 * The method that is called every tick by Civilization
 	 */
@@ -179,66 +186,89 @@ public abstract class Unit implements Serializable {
 	{
 		Civilization civ = Civilization.getInstance();
 		updateUnitCounters();
-		if(this.needsToEat())
-		{
-			//Place task back on queue
-			if( this.currentTask != null ) {
-				civ.addTaskToQueue( this.currentTask );
-				this.currentTask.setUnit(null);
-				this.currentTask = null;
-			}
 
-			ArrayList<AbstractStructure> structures = civ.getStructures();
-
-			for( AbstractStructure as : structures ) {
-				if( ! as.providesFood() )
-					structures.remove(as);
-			}
-
-			//Create task to eat
-			if( ! structures.isEmpty() )
-				this.currentTask = new EatTask( 1, structures.get(0).getLocation() - 1, civ.getMap(), this );
-		}
-		else if(this.needsToSleep())
-		{
-			//Place task back on queue
-			if( this.currentTask != null ) {
-				civ.addTaskToQueue( this.currentTask );
-				this.currentTask.setUnit(null);
-				this.currentTask = null;
-			}
-
-			ArrayList<AbstractStructure> structures = civ.getStructures();
-
-			for( AbstractStructure as : structures ) {
-				if( ! as.providesBed() )
-					structures.remove(as);
-			}
-
-			//Create task to sleep
-			if( ! structures.isEmpty() )
-				this.currentTask = new SleepTask( 1, structures.get(0).getLocation() - 1, civ.getMap(), this );
-		}
-		else if(this.needsToDrink())
-		{
-			//Place task back on queue
-			if( this.currentTask != null ) {
-				civ.addTaskToQueue( this.currentTask );
-				this.currentTask.setUnit(null);
-				this.currentTask = null;
-			}
-
-			ArrayList<AbstractStructure> structures = civ.getStructures();
-
-			for( AbstractStructure as : structures ) {
-				if( ! as.providesDrink() )
-					structures.remove(as);
-			}
-
-			//Create task to drink
-			if( ! structures.isEmpty() )
-				this.currentTask = new DrinkTask( 1, structures.get(0).getLocation() - 1, civ.getMap(), this );
+		//make babies
+		if(Math.random() < .0005)
+		{	
+			this.giveBirth();
+			System.out.println("A new birth!");
 		}	
+
+		if(!workingOnNeed())
+		{
+			if(this.needsToEat() && civ.getResourceAmount(ResourceType.food) > 0)
+			{
+				//Place task back on queue
+				if( this.currentTask != null ) {
+					civ.addTaskToQueue( this.currentTask );
+					this.currentTask.setUnit(null);
+					this.currentTask = null;
+				}
+
+				ArrayList<AbstractStructure> structures = civ.getStructures();
+
+				for( AbstractStructure as : structures ) {
+					if( ! as.providesFood() )
+						structures.remove(as);
+				}
+
+				//Create task to eat
+				if( ! structures.isEmpty() )
+				{	
+					this.currentTask = new EatTask( 1, structures.get(0).getLocation(), civ.getMap(), this );
+					if(!generatePath(currentTask.getTaskLocation()))
+						currentTask = null;
+				}
+			}
+			else if(this.needsToSleep())
+			{
+				//Place task back on queue
+				if( this.currentTask != null ) {
+					civ.addTaskToQueue( this.currentTask );
+					this.currentTask.setUnit(null);
+					this.currentTask = null;
+				}
+
+				ArrayList<AbstractStructure> structures = civ.getStructures();
+
+				for( AbstractStructure as : structures ) {
+					if( ! as.providesBed() )
+						structures.remove(as);
+				}
+
+				//Create task to sleep
+				if( ! structures.isEmpty() )
+				{	
+					this.currentTask = new SleepTask( 1, structures.get(0).getLocation(), civ.getMap(), this );
+					if(!generatePath(currentTask.getTaskLocation()))
+						currentTask = null;
+				}	
+			}
+			else if(this.needsToDrink())
+			{
+				//Place task back on queue
+				if( this.currentTask != null ) {
+					civ.addTaskToQueue( this.currentTask );
+					this.currentTask.setUnit(null);
+					this.currentTask = null;
+				}	
+
+				ArrayList<AbstractStructure> structures = civ.getStructures();
+
+				for( AbstractStructure as : structures ) {
+					if( ! as.providesDrink() )
+						structures.remove(as);
+				}
+
+				//Create task to drink
+				if( ! structures.isEmpty() )
+				{	
+					this.currentTask = new DrinkTask( 1, structures.get(0).getLocation(), civ.getMap(), this );
+					if(!generatePath(currentTask.getTaskLocation()))
+						currentTask = null;
+				}	
+			}
+		}
 		if(!movementQueue.isEmpty())
 		{
 			move();
@@ -246,6 +276,7 @@ public abstract class Unit implements Serializable {
 		}
 		else if(this.currentlyWorking)
 		{
+			System.out.println("working");
 			if( this.currentTask.getUnit() == null ) this.currentTask.setUnit( this );
 			currentTask.decrement(1);
 			if(currentTask.isDone())
@@ -259,11 +290,21 @@ public abstract class Unit implements Serializable {
 			if(civ.isAvailableTask())
 			{	
 				currentTask = civ.getNextTask();
-				generatePath(currentTask.getTaskLocation());
-				System.out.println("generating");
+				System.out.println("generating: " + currentTask.getClass());
+				if(!generatePath(currentTask.getTaskLocation()))
+				{	
+					currentTask.setUnit(null);
+					currentTask = null;
+					System.out.println("No available path");
+
+				}	
+
 			}
 			else
+			{	
+				this.idle();
 				System.out.println("idle");
+			}	
 		}	
 	}
 
@@ -273,6 +314,11 @@ public abstract class Unit implements Serializable {
 	 * Updates the unit's hunger and energy levels. Called every tick.
 	 */
 	protected abstract void updateUnitCounters();
+	
+	/**
+	 * Generates another unit nearby
+	 */
+	protected abstract void giveBirth();
 
 	public void die() {
 		Civilization civ = Civilization.getInstance();

@@ -24,10 +24,10 @@ import model.units.Unit;
 public class Civilization {
 
 	private Queue<Task> taskQueue;
-	private ArrayList<Unit> units, unitsToKill;
+	private ArrayList<Unit> units, unitsToKill, unitsToBeBorn;
 	private ArrayList<AbstractStructure> structures;
 	private HashMap<ResourceType, Integer> globalResourcePool;
-	private static Civilization instance = new Civilization( 1 );
+	private static Civilization instance = new Civilization( 2 );
 	private Map map;
 	private int cols = 70; //70 by default
 	private Tribe tribe;
@@ -43,6 +43,7 @@ public class Civilization {
 		this.taskQueue = new LinkedList<Task>();
 		this.units = new ArrayList<Unit>();
 		this.unitsToKill = new ArrayList<>();
+		this.unitsToBeBorn = new ArrayList<>();
 		for(int i = 0; i < numberOfStartingUnits; i++)
 		{
 			units.add(new BasicUnit("U", 100, 500, 70));
@@ -52,6 +53,9 @@ public class Civilization {
 		for( ResourceType rt : ResourceType.values() ) {
 			this.globalResourcePool.put(rt, 0 );
 		}
+		
+		this.globalResourcePool.put( ResourceType.wood, 3 );
+		this.globalResourcePool.put( ResourceType.food, 500 );
 	}
 
 	/**
@@ -64,6 +68,7 @@ public class Civilization {
 		this.structures = state.getStructures();
 		this.units = state.getUnits();
 		this.unitsToKill = state.getUnitsToKill();
+		this.unitsToBeBorn = new ArrayList<Unit>();
 		this.map = state.getMap();
 		this.tribe = state.getTribe();
 	}
@@ -73,6 +78,14 @@ public class Civilization {
 	 */
 	public void update()
 	{
+		if(units.size() == 0){
+			System.out.println("YOU HAVE BEEN DEFEATED!"); 
+			System.exit(0);
+		}	
+		if(units.size() >= 10){
+			System.out.println("YOUR CIVILIZATION HAS REACHED THE GOAL POPULATION!"); 
+		}
+		
 		for(Unit person: units)
 		{
 			Cell currentCell = map.getCell(person.getLocation());
@@ -84,7 +97,12 @@ public class Civilization {
 		for( Unit unit : unitsToKill ) {
 			unit.die();
 		}
+		
+		for( Unit unit : unitsToBeBorn ) {
+			units.add(unit);
+		}
 
+		unitsToBeBorn.clear();
 		unitsToKill.clear();
 	}
 
@@ -200,7 +218,7 @@ public class Civilization {
 	 * @param unit The unit to add to the list
 	 */
 	public void addUnit( Unit unit ) {
-		this.units.add( unit );
+		this.unitsToBeBorn.add( unit );
 	}
 
 	/**

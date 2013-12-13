@@ -1,6 +1,7 @@
 package model.units;
 
 import model.Civilization;
+import model.map.Map;
 
 /**
  * A standard unit with no special abilities or advancements. Concrete implementation
@@ -25,6 +26,30 @@ public class BasicUnit extends Unit {
 		this.hungerLevel -= 1;
 		
 		if( this.hungerLevel <= 0 ) Civilization.getInstance().sentenceToDeath( this );
+	}
+
+	
+	@Override protected void giveBirth() {
+		Civilization civ = Civilization.getInstance();
+		Map m = civ.getMap();
+		int location = super.getLocation();
+		int cols = m.getCols();
+		int[] locs = {location + cols, location - cols, location + 1, location - 1};
+		for(int loc: locs)
+		{
+			if(loc < m.getMapSize() && loc > 0)
+			{
+				if(m.getCell(loc).isAccessible())
+				{
+					Unit baby = new BasicUnit("U", 100, 500, cols);
+					baby.setLocation(loc);
+					baby.setHungerLevel( baby.getHungerLevel() / 2 );
+					m.getCell(loc).setUnit(true);
+					civ.addUnit(baby);
+					return;
+				}
+			}	
+		}	
 	}
 
 }
