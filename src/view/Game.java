@@ -180,7 +180,7 @@ public class Game extends JFrame {
 		// Set up map view
 		mapView = new MainMapPanel();
 		mapView.setLayout(null);
-		mapView.setLocation(0, 0);
+//		mapView.setLocation(0, 0);
 		mapView.setSize(map.getCols() * 16, map.getRows() * 16);
 		mapView.setVisible(true);
 		mapView.setBackground(Color.BLACK);
@@ -198,8 +198,7 @@ public class Game extends JFrame {
 		gameView.setSize(775, 550);
 		gameView.setLocation(0, 60);
 		gameView.setView(mapView);
-		gameView.setViewPosition(new Point(0,0));
-		gameView.setAutoscrolls(true);
+		gameView.setViewPosition(new Point(500,500));
 		gamePanel.add(gameView);
 		
 //        scrollPane = new JScrollPane();
@@ -318,7 +317,6 @@ public class Game extends JFrame {
 
 		public MainMapPanel() {
 			ActionListener timeListener = new ActionListener() {
-
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					civ.update();
@@ -330,7 +328,6 @@ public class Game extends JFrame {
 			civ.getMap().getCell(1910).setTerrain(Terrain.stockpile);
 			civ.addTaskToQueue(new CollectResourceTask(5, 1730, civ
 					.getMap()));
-
 			// Start timer
 			timer = new Timer(300, timeListener);
 			timer.start();

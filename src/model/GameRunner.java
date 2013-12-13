@@ -32,6 +32,7 @@ public class GameRunner
 		civ.getMap().buildRoom(12, 27, 14, 30, Terrain.kitchen);
 		int loc = 13 * board.getCols() + 28;
 		civ.addTaskToQueue( new BuildStructureTask( 10, board, new Table( loc, "S", ResourceType.wood ) ) );
+
 		
 		int delay = 20;
 		/**

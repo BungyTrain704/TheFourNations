@@ -60,7 +60,7 @@ public class MapGenerator {
 		for (int i = 1; i < rows - 1; i++) {
 			for (int j = 1; j < cols - 1; j++) {
 				int a = map[i][j].getAverage();
-				if (a < 10) {
+				if (a < 40) {
 					map[i][j].setResource(Resource.tree);
 				} else if (290 < a) {
 					map[i][j].setResource(Resource.stone);
