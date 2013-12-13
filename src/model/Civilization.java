@@ -72,6 +72,12 @@ public class Civilization {
 		this.map = state.getMap();
 		this.tribe = state.getTribe();
 	}
+	
+	public void reinitCivilization( Map map, Tribe tribe ) {
+		instance = new Civilization(2);
+		instance.setMap( map );
+		instance.setTribe( tribe );
+	}
 
 	/**
 	 * Updates all ingame entities and handles unit death

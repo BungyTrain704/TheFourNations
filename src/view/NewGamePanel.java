@@ -123,15 +123,18 @@ public class NewGamePanel extends JPanel implements ClickHandler {
 
 	@Override public void handleClick(Component component) {
 		Civilization civ = Civilization.getInstance();
+		Tribe t = null;
 		
 		if( component == this.goBack ) {
 			((FourNationsFrame) this.parent).showPanel( FourNationsFrame.mainMenu );
 			return;
 		}
-		else if( component == this.water )  civ.setTribe( Tribe.WATER ); 
-		else if( component == this.earth ) 	civ.setTribe( Tribe.EARTH );
-		else if( component == this.fire ) 	civ.setTribe( Tribe.FIRE );
-		else if( component == this.air ) 	civ.setTribe( Tribe.AIR );
+		
+		else if( component == this.water )  t = Tribe.WATER; 
+		else if( component == this.earth ) 	t = Tribe.EARTH;
+		else if( component == this.fire ) 	t = Tribe.FIRE;
+		else if( component == this.air ) 	t = Tribe.AIR;
+		civ.reinitCivilization( new Map(), t );
 		((FourNationsFrame) this.parent).resume();
 		((FourNationsFrame) this.parent).showPanel( FourNationsFrame.gamePanel );
 	}
