@@ -44,15 +44,17 @@ public class SlideshowPanel extends JPanel implements ClickHandler{
 		List<BufferedImage> images = new ArrayList<>();
 		images.add( GameImageLoader.getImage( GameImageLoader.imagesFolder + "PanningAroundMap.png" ) );
 		images.add( GameImageLoader.getImage( GameImageLoader.imagesFolder + "AboutUnits.png" ) );
+		images.add( GameImageLoader.getImage( GameImageLoader.imagesFolder + "ClickingMiniMap.png" ) );
+		images.add( GameImageLoader.getImage( GameImageLoader.imagesFolder + "WhatAreResources.png" ) );
 		return images;
 	}
 	
 	private void nextImage() {
-		this.currentImage = Math.abs( ( this.currentImage + 1 ) % this.imagesInSlideshow.size() );
+		if( ++this.currentImage >= this.imagesInSlideshow.size() ) this.currentImage = 0;
 	}
 	
 	private void previousImage() {
-		this.currentImage = Math.abs( ( this.currentImage - 1 ) % this.imagesInSlideshow.size() );
+		if( --this.currentImage < 0 ) this.currentImage = this.imagesInSlideshow.size() - 1;
 	}
 	
 	@Override public void paintComponent( Graphics g ) {

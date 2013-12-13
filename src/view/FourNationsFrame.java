@@ -1,13 +1,17 @@
 package view;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-import view.Game.MainMapPanel;
+import model.Civilization;
+import model.Tribe;
 
 /**
  * The primary frame for The Four Nations game. Handles panel switching
@@ -23,6 +27,8 @@ public class FourNationsFrame extends JFrame {
 	private Map<String, JPanel> panels;
 	private MainMenuPanel mainMenuPanel;
 	private NewGamePanel newGamePanel;
+	private GameDisplayPanel gameDisplayPanel;
+	private Timer timer;
 	
 	//Panel labels
 	public final static String mainMenu = "MAIN_MENU";
@@ -30,6 +36,15 @@ public class FourNationsFrame extends JFrame {
 	public final static String gamePanel = "GAME_PANEL";
 	
 	public FourNationsFrame() {
+		final Civilization civ = Civilization.getInstance();
+		if( civ.getMap() == null ) civ.setMap( new model.map.Map() );
+		civ.setTribe( Tribe.values()[ (int) (Math.random() * Tribe.values().length) ] );
+		this.timer = new Timer( 300, new ActionListener() {
+			@Override public void actionPerformed(ActionEvent arg0) {
+				civ.update();
+				repaint();
+			}
+		});
 		initComponents();
 		initFrame();
 	}
@@ -55,13 +70,25 @@ public class FourNationsFrame extends JFrame {
 		this.newGamePanel.setLocation( 0, 0 );
 		this.newGamePanel.setSize( this.mainMenuPanel.getSize() );
 		
+		//Game display panel
+		this.gameDisplayPanel = new GameDisplayPanel();
+		
 		//Cards
 		this.panels = new HashMap<String, JPanel>();
 		this.panels.put( mainMenu, mainMenuPanel );
 		this.panels.put( newGame, newGamePanel );
+		this.panels.put( gamePanel, gameDisplayPanel );
 		
 		//Show main menu at startup
 		showPanel( mainMenu );
+	}
+	
+	public void pause() {
+		this.timer.stop();
+	}
+	
+	public void resume() {
+		this.timer.start();
 	}
 	
 	/**

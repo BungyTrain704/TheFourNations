@@ -284,4 +284,8 @@ public class Civilization {
 		return this.tribe;
 	}
 
+	public void setTribe( Tribe tribe ) {
+		this.tribe = tribe;
+	}
+
 }

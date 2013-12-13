@@ -11,7 +11,10 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import model.Civilization;
 import model.GameImageLoader;
+import model.Tribe;
+import model.map.Map;
 
 /**
  * The panel that is shown when a user attempts to start a new game
@@ -32,7 +35,7 @@ public class NewGamePanel extends JPanel implements ClickHandler {
 		this.parent = parent;
 
 		//Buttons
-		this.water = new InvisibleButton( null );
+		this.water = new InvisibleButton( this );
 		this.water.setToolTipText( "Water Tribe" );
 		this.water.setSize(138, 138);
 		this.water.setLocation( 110, 98 );
@@ -119,9 +122,17 @@ public class NewGamePanel extends JPanel implements ClickHandler {
 
 
 	@Override public void handleClick(Component component) {
+		Civilization civ = Civilization.getInstance();
+		
 		if( component == this.goBack ) {
 			((FourNationsFrame) this.parent).showPanel( FourNationsFrame.mainMenu );
 		}
+		else if( component == this.water )  civ.setTribe( Tribe.WATER ); 
+		else if( component == this.earth ) 	civ.setTribe( Tribe.EARTH );
+		else if( component == this.fire ) 	civ.setTribe( Tribe.FIRE );
+		else if( component == this.air ) 	civ.setTribe( Tribe.AIR );
+		((FourNationsFrame) this.parent).resume();
+		((FourNationsFrame) this.parent).showPanel( FourNationsFrame.gamePanel );
 	}
 
 }

@@ -372,8 +372,15 @@ public class Game extends JFrame {
 			mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
 					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = mapImg.createGraphics();
-			g2d.scale(.175, .175);
-//			g2d.scale(.35, .35);
+			/*
+			 * Why are these two scale values being commented in and out lol?
+			 * I keep changing it to .35x.35 because the .175x.175 scale values
+			 * make the minimap on my screen only take up a 4th of the panel. 
+			 * 
+			 * What gives :P
+			 */
+//			g2d.scale(.175, .175);
+			g2d.scale(.35, .35); 
 			drawMap(g2d);
 			g2d.dispose();
 		}
