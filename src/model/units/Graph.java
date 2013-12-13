@@ -129,6 +129,9 @@ public class Graph
 	public void addEdge(int source, int destination)
 	{
 		adjacencyMatrix[source][destination] = 1;
+		adjacencyMatrix[source][source] = 0;
+		adjacencyMatrix[destination][destination] = 0;
+		adjacencyMatrix[destination][source] = 1;
 	}
 	
 	
@@ -269,6 +272,9 @@ public class Graph
 	
 	public ArrayList<Integer> hashingDijkstras(int source, int destination)
 	{
+		boolean hasPath = false;
+		int locOfEndOfPath = 0;
+		
 		//set d(source, source) = 0 and d(source, x) = + infinity, for all other x
 		int[] d = new int[numVertices];
 		for(int i = 0; i<numVertices; i++)
@@ -292,7 +298,7 @@ public class Graph
 		
 		
 		//so long as fringe is not empty
-		while(!fringe.isEmpty() && !known.containsKey(destination))
+		while(!fringe.isEmpty() && !hasPath)
 		{
 			//find the fringe vertex f that has the smallest d(source,f)
 			for(int vertex: fringe.keySet())
@@ -307,7 +313,8 @@ public class Graph
 			int f = (int) fringe.keySet().toArray()[0];
 			for(int vertex: fringe.keySet())
 			{
-				if(distanceAsBirdFlies(vertex, destination) < distanceAsBirdFlies(f, destination) || d[vertex] < d[f])
+				if(distanceAsBirdFlies(vertex, destination) < distanceAsBirdFlies(f, destination) 
+						|| (distanceAsBirdFlies(vertex, destination) == distanceAsBirdFlies(f, destination) && d[vertex] < d[f]))
 					f = vertex;
 			}
 			
@@ -315,6 +322,11 @@ public class Graph
 			int fromVertex = fringe.get(f);
 			fringe.remove(new Integer(f));
 			known.put(new Integer(f), new Integer(fromVertex));
+			if(distanceAsBirdFlies(f,destination) <= 1)
+			{	
+				hasPath = true;
+				locOfEndOfPath = f;
+			}
 			
 			//add unknown, unfringe vertices that are adjacent to f to the fringe
 			for(int vertex: this.getAdjacent(f))
@@ -326,11 +338,11 @@ public class Graph
 				}	
 			}	
 		}
-		if(known.containsKey(destination))
+		if(hasPath)
 		{
 			ArrayList<Integer> moves = new ArrayList<Integer>();
-			moves.add(destination);
-			int currVertex = destination;
+			moves.add(locOfEndOfPath);
+			int currVertex = locOfEndOfPath;
 			while(currVertex != source)
 			{
 				currVertex = known.get(currVertex);

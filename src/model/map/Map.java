@@ -1,6 +1,9 @@
 package model.map;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import model.units.Graph;
 
 /**
  * The game map that maintains game location
@@ -22,14 +25,37 @@ public class Map implements Serializable {
 //	private int rows = 90;
 //	private int cols = 90;
 //	private int waterBorder = rows / 10;
-	private int rows = 50;
+	private int rows = 30;
 	private int cols = 50;
 	private int waterBorder = rows / 10;
 
 	private Cell[][] map;
+	private Graph graph;
 
 	public Map() {
 		this.map = MapGenerator.generateMap(rows, cols, waterBorder);
+		
+		//init graph
+		int[][] acc = this.getAccessibilityArray();
+		this.graph=new Graph(rows*cols , cols);
+		
+		for(int i = 0; i < rows*cols; i++)
+		{
+			int[] neighbors = {i+1, i-1, i+cols, i-cols};
+			for(int neighbor: neighbors)
+			{
+				if(graph.isInGraph(neighbor) && (neighbor/cols == i/cols || neighbor%cols == i%cols))
+				{
+					graph.addEdge(i, neighbor);
+				}	
+			}
+		}	
+		for(int i = 0; i < map.length*map[0].length; i++)
+		{
+			if(acc[i/cols][i%cols] == 1)
+				graph.removeVertex(i);
+		}	
+		
 	}
 
 	/**
@@ -158,6 +184,28 @@ public class Map implements Serializable {
 	 */
 	public Cell getCell(int location) {
 		return map[location / cols][location % cols];
+	}
+	
+	public ArrayList<Integer> getMoves(int start, int end)
+	{
+		return this.graph.hashingDijkstras(start, end);
+	}
+	
+	public void makeAccessible(int location)
+	{
+		int[] neighbors = {location+1, location-1, location+cols, location-cols};
+		for(int neighbor: neighbors)
+		{
+			if(graph.isInGraph(neighbor) && (neighbor/cols == location/cols || neighbor%cols == location%cols))
+			{
+				graph.addEdge(location, neighbor);
+			}	
+		}
+	}
+	
+	public void makeInaccesible(int location)
+	{
+		graph.removeVertex(location);
 	}
 
 	/**

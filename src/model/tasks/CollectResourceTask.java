@@ -29,6 +29,7 @@ public class CollectResourceTask extends Task{
 		Map m = Civilization.getInstance().getMap();
 		Resource res = m.getCell(locationOfTask).getResource();
 		m.getCell(locationOfTask).removeResource();
+		m.makeAccessible(locationOfTask);
 		
 		ArrayList<Integer> storedCells = new ArrayList<Integer>();
 		

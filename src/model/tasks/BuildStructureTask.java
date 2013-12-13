@@ -55,6 +55,7 @@ public class BuildStructureTask extends Task {
 		//Check that the user has enough resources to build the structure
 		if( civ.getResourceAmount( typeUsed ) >= resourceAmount) {
 			map.getCell(super.locationOfTask).addStructure(this.structureToBuild);
+			map.makeInaccesible(super.locationOfTask);
 			civ.addStructure( this.structureToBuild );
 			civ.pollResource( typeUsed, resourceAmount );
 			this.isDone = true;

@@ -141,11 +141,7 @@ public abstract class Unit implements Serializable {
 	 */
 	public boolean generatePath( int destination ) {
 		this.movementQueue.clear();
-
-		int[][] accessibilityMatrix = Civilization.getInstance().getMap().getAccessibilityArray();
-		accessibilityMatrix[destination/cols][destination%cols] = 0;
-		PathGenerator pathGen = new PathGenerator(accessibilityMatrix, location, destination);
-		ArrayList<Integer> moves = pathGen.getMoves();
+		ArrayList<Integer> moves = Civilization.getInstance().getMap().getMoves(location, destination);
 		if(moves == null)
 			return false;
 		for(int move: moves)
@@ -158,12 +154,11 @@ public abstract class Unit implements Serializable {
 	 */
 	public void move()
 	{
-		if(movementQueue.size()<=1) {
-			movementQueue.clear();
+		location = movementQueue.remove();
+		if(movementQueue.size()==0) {
 			this.setCurrentlyWorking(true);
 			return;
 		}
-		location = movementQueue.remove();
 	}
 
 	private void idle() {
@@ -314,7 +309,7 @@ public abstract class Unit implements Serializable {
 	 * Updates the unit's hunger and energy levels. Called every tick.
 	 */
 	protected abstract void updateUnitCounters();
-	
+
 	/**
 	 * Generates another unit nearby
 	 */
