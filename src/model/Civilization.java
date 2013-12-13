@@ -46,7 +46,7 @@ public class Civilization {
 		this.unitsToBeBorn = new ArrayList<>();
 		for(int i = 0; i < numberOfStartingUnits; i++)
 		{
-			units.add(new BasicUnit("U", 100, 500, 70));
+			units.add(new BasicUnit("U", 100, 500, cols));
 		}	
 		this.structures = new ArrayList<AbstractStructure>();
 		this.globalResourcePool = new HashMap<ResourceType, Integer>();

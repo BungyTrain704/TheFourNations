@@ -53,13 +53,6 @@ public class GameDisplayPanel extends JPanel {
 	private JPanel commandPanel;
 	private JPanel infoPanel;
 
-	// Play type booleans
-	private boolean playWater;
-	private boolean playFire;
-	private boolean playEarth;
-	private boolean playAir;
-	private boolean playing;
-
 	//Game components
 	private Civilization civ = Civilization.getInstance();
 	private Map map = civ.getMap();
