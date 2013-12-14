@@ -3,6 +3,7 @@ package model.map;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import model.Civilization;
 import model.units.Graph;
 
 /**
@@ -100,10 +101,12 @@ public class Map implements Serializable {
 	 * @param roomType
 	 *            The terrain to fill the given area with
 	 * 
+	 * returns 0 if room was built, 1 if user does not have enough gold, or 2 if there are resources in the way
 	 */
-	public boolean buildRoom(int firstClickX, int firstClickY,
+	public int buildRoom(int firstClickX, int firstClickY,
 			int secondClickX, int secondClickY, Terrain roomType) {
 
+		Civilization civ = Civilization.getInstance();
 		int startRow, startCol, endRow, endCol;
 
 		// Check bounds
@@ -118,6 +121,11 @@ public class Map implements Serializable {
 			endRow = firstClickX;
 			endCol = firstClickY;
 		}
+		
+		int area = (endCol - startCol + 1) * (endRow - startRow + 1);
+		if (area > civ.getResourceAmount(ResourceType.gold)) {
+			return 1;
+		}
 
 		// Check for water and resources within the given area
 		for (int i = startRow; i <= endRow; i++) {
@@ -125,18 +133,20 @@ public class Map implements Serializable {
 				if (this.map[i][j].hasResource()
 						|| this.map[i][j].getTerrain().equals(Terrain.water)
 						|| this.map[i][j].hasStructure()) {
-					return false;
+					return 2;
 				}
 			}
 		}
 
 		// Change the tiles in the given area to the specified terrain type
+		
 		for (int i = startRow; i <= endRow; i++) {
 			for (int j = startCol; j <= endCol; j++) {
 				this.map[i][j].setTerrain(roomType);
 			}
 		}
-		return true;
+		civ.pollResource(ResourceType.gold, area);
+		return 0;
 	}
 
 	/**
