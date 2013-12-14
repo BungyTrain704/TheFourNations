@@ -64,7 +64,7 @@ public class MapGenerator {
 					map[i][j].setResource(Resource.tree);
 				} else if (290 < a) {
 					map[i][j].setResource(Resource.stone);
-				}
+				} else map[i][j].setResource(Resource.goldMine);
 			}
 		}
 
