@@ -28,13 +28,14 @@ public class CivilizationState implements Serializable {
 	private final HashMap<ResourceType, Integer> globalResourcePool;
 	private final Map map;
 	private final Tribe tribe;
+	private final String gameName;
 
 	/**
 	 * Generates the civilization state based upon the provided civilization
 	 */
 	public CivilizationState( Civilization civ ) {
 		this( civ.getTaskQueue(), civ.getUnits(), civ.getUnitsToKill(), civ.getStructures(), 
-				civ.getGlobalResourcePool(), civ.getMap(), civ.getTribe() );
+				civ.getGlobalResourcePool(), civ.getMap(), civ.getTribe(), civ.getGameName() );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -50,7 +51,7 @@ public class CivilizationState implements Serializable {
 	 */
 	public CivilizationState( Queue<Task> taskQueue, ArrayList<Unit> units, ArrayList<Unit> unitsToKill, 
 			ArrayList<AbstractStructure> structures, HashMap<ResourceType, Integer> globalResourcePool, Map map,
-			Tribe tribe ) {
+			Tribe tribe, String gameName ) {
 		this.taskQueue = new LinkedList<>( taskQueue );
 		this.units = (ArrayList<Unit>) units.clone();
 		this.unitsToKill = (ArrayList<Unit>) unitsToKill.clone();
@@ -58,6 +59,7 @@ public class CivilizationState implements Serializable {
 		this.globalResourcePool = (HashMap<ResourceType, Integer>) globalResourcePool.clone();
 		this.map = map;
 		this.tribe = tribe;
+		this.gameName = gameName;
 	}
 
 	public Queue<Task> getTaskQueue() {
@@ -86,5 +88,9 @@ public class CivilizationState implements Serializable {
 
 	public Tribe getTribe() {
 		return tribe;
+	}
+	
+	public String getGameName() {
+		return this.gameName;
 	}
 }

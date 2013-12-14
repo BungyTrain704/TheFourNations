@@ -3,23 +3,32 @@ package view;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 
 import model.Civilization;
+import model.CivilizationState;
 import model.GameImageLoader;
+import model.SaveLoadManager;
 import model.Tribe;
 import model.map.Map;
 import model.map.Resource;
@@ -59,8 +68,12 @@ public class GameDisplayPanel extends JPanel {
 
 	//Game components
 	private Map map = Civilization.getInstance().getMap();
+	
+	//Four nation frame
+	private JFrame parent;
 
-	public GameDisplayPanel() {
+	public GameDisplayPanel( JFrame parent ) {
+		this.parent = parent;
 		initializeGameView();
 	}
 
@@ -118,8 +131,7 @@ public class GameDisplayPanel extends JPanel {
 		super.add(commandPanel);
 
 		// Set up stats panel
-		statsPanel = new JPanel();
-		statsPanel.setLayout(null);
+		statsPanel = new GameControlPanel();
 		statsPanel.setLocation(0, 0);
 		statsPanel.setSize(775, 60);
 		statsPanel.setVisible(true);
@@ -151,12 +163,22 @@ public class GameDisplayPanel extends JPanel {
 	    }
 
 	    public void mouseDragged(final MouseEvent e) {
-	        JViewport viewport = (JViewport)e.getSource();
-	        Point endPoint = e.getPoint();
-	        Point viewPosition = viewport.getViewPosition();
-	        viewPosition.translate(pointClicked.x-endPoint.x, pointClicked.y-endPoint.y);
-	        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
-	        pointClicked.setLocation(endPoint);
+	    	//TODO: Is moving around the map going to be with just right MB or with both MBs?
+	    	
+	    	if( SwingUtilities.isRightMouseButton(e) ) {
+		        JViewport viewport = (JViewport)e.getSource();
+		        Point endPoint = e.getPoint();
+		        Point viewPosition = viewport.getViewPosition();
+		        viewPosition.translate(pointClicked.x-endPoint.x, pointClicked.y-endPoint.y);
+		        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
+		        pointClicked.setLocation(endPoint);
+	    	}
+//	        JViewport viewport = (JViewport)e.getSource();
+//	        Point endPoint = e.getPoint();
+//	        Point viewPosition = viewport.getViewPosition();
+//	        viewPosition.translate(pointClicked.x-endPoint.x, pointClicked.y-endPoint.y);
+//	        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
+//	        pointClicked.setLocation(endPoint);
 	    }
 
 	    public void mousePressed(MouseEvent e) {
@@ -168,6 +190,60 @@ public class GameDisplayPanel extends JPanel {
 	        panel.setCursor(defaultCursor);
 	        panel.repaint();
 	    }
+	}
+	
+	private class GameControlPanel extends JPanel implements ActionListener {
+		private static final long serialVersionUID = -8816383781883960549L;
+		private JButton pauseResumeButton, exit;
+		private final String PAUSE_GAME_TEXT = "Pause Game";
+		private final String RESUME_GAME_TEXT = "Resume Game";
+		
+		public GameControlPanel() {
+			super.setLayout( new FlowLayout() );
+			
+			this.pauseResumeButton = new JButton( PAUSE_GAME_TEXT );
+			this.pauseResumeButton.addActionListener( this );
+			
+			this.exit = new JButton( "Exit" );
+			this.exit.addActionListener( this );
+			
+			super.add( this.pauseResumeButton );
+			super.add( this.exit );
+		}
+		
+		@Override public void actionPerformed(ActionEvent ae) {
+			if( ae.getSource() == this.pauseResumeButton ) {
+				switch( this.pauseResumeButton.getText() ) {
+				case PAUSE_GAME_TEXT:
+					this.pauseResumeButton.setText( RESUME_GAME_TEXT );
+					((FourNationsFrame)parent).pause();
+					break;
+				case RESUME_GAME_TEXT:
+					this.pauseResumeButton.setText( PAUSE_GAME_TEXT );
+					((FourNationsFrame)parent).resume();
+					break;
+				default:
+					System.out.println( "In GameControlPanel.actionPerformed, unexpected button text" );
+					break;
+				}
+			}
+			
+			else if ( ae.getSource() == this.exit ) {
+				int saveGame = JOptionPane.showConfirmDialog( this, "Would you like to save your game?",
+						"Save game?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE );
+				switch( saveGame ) {
+				case JOptionPane.CANCEL_OPTION: break;
+				case JOptionPane.YES_OPTION:
+					CivilizationState cs = new CivilizationState(Civilization.getInstance() );
+					SaveLoadManager.saveGame( cs.getGameName(), cs );
+					System.exit(0);
+					break;
+				case JOptionPane.NO_OPTION:
+					System.exit(0);
+					break;
+				}
+			}
+		}
 	}
 
 	// Special panel for drawing the main map

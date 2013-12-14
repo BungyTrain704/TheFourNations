@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import model.Civilization;
@@ -134,7 +135,8 @@ public class NewGamePanel extends JPanel implements ClickHandler {
 		else if( component == this.earth ) 	t = Tribe.EARTH;
 		else if( component == this.fire ) 	t = Tribe.FIRE;
 		else if( component == this.air ) 	t = Tribe.AIR;
-		civ.reinitCivilization( new Map(), t );
+		String gameName = JOptionPane.showInputDialog(this, "Please enter a name for this game." );
+		civ.reinitCivilization( new Map(), t, gameName );
 		((FourNationsFrame) this.parent).resume();
 		((FourNationsFrame) this.parent).showPanel( FourNationsFrame.gamePanel );
 	}

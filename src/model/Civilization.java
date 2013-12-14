@@ -30,6 +30,7 @@ public class Civilization {
 	private static Civilization instance = new Civilization( 2 );
 	private Map map;
 	private int cols = 70; //70 by default
+	private String gameName;
 	private Tribe tribe;
 
 	/**
@@ -37,9 +38,6 @@ public class Civilization {
 	 * @param numberOfStartingUnits
 	 */
 	private Civilization( int numberOfStartingUnits ) {
-		//TODO: Generate some units
-
-
 		this.taskQueue = new LinkedList<Task>();
 		this.units = new ArrayList<Unit>();
 		this.unitsToKill = new ArrayList<>();
@@ -71,12 +69,14 @@ public class Civilization {
 		this.unitsToBeBorn = new ArrayList<Unit>();
 		this.map = state.getMap();
 		this.tribe = state.getTribe();
+		this.gameName = state.getGameName();
 	}
 	
-	public void reinitCivilization( Map map, Tribe tribe ) {
+	public void reinitCivilization( Map map, Tribe tribe, String name ) {
 		instance = new Civilization(2);
 		instance.setMap( map );
 		instance.setTribe( tribe );
+		instance.setGameName( name );
 	}
 
 	/**
@@ -292,6 +292,14 @@ public class Civilization {
 
 	public void setTribe( Tribe tribe ) {
 		this.tribe = tribe;
+	}
+	
+	public String getGameName() {
+		return this.gameName;
+	}
+	
+	public void setGameName( String gameName ) {
+		this.gameName = gameName;
 	}
 
 }
