@@ -95,6 +95,7 @@ public class GameDisplayPanel extends JPanel {
 		gameView.getViewport().addMouseListener(cdl);
 		gameView.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		gameView.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		gameView.setBackground(Color.GRAY);
         gameView.setSize(775, 550);
         gamePanel.add(gameView);
 		
@@ -274,6 +275,19 @@ public class GameDisplayPanel extends JPanel {
 					
 					}
 				}
+				
+				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
+					int location = Civilization.getInstance().getUnits().get(k).getLocation();
+					int row = location/map.getCols();
+					int col = location%map.getCols();
+					switch( t ) {
+					case WATER: g2.drawImage(waterDude1, col * 16 - 8, row * 15 + 4, null); break;
+					case FIRE: g2.drawImage(fireDude1, col * 16 - 8, row * 15 + 4, null); break;
+					case EARTH: g2.drawImage(earthDude1, col * 16 - 8, row * 15 + 4, null); break;
+					case AIR: g2.drawImage(airDude1, col * 16 - 8, row * 15 + 4, null); break;
+					}
+				}
+				
 				// Overlay resources
 				if (Civilization.getInstance().getMap().getCell(i, j).hasResource()) {
 					// Draw trees
@@ -329,17 +343,7 @@ public class GameDisplayPanel extends JPanel {
 //					}
 				}
 				
-				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
-					int location = Civilization.getInstance().getUnits().get(k).getLocation();
-					int row = location/map.getCols();
-					int col = location%map.getCols();
-					switch( t ) {
-					case WATER: g2.drawImage(waterDude1, col * 16, row * 16, null); break;
-					case FIRE: g2.drawImage(fireDude1, col * 16, row * 16, null); break;
-					case EARTH: g2.drawImage(earthDude1, col * 16, row * 16, null); break;
-					case AIR: g2.drawImage(airDude1, col * 16, row * 16, null); break;
-					}
-				}
+
 			}
 		}
 	}
