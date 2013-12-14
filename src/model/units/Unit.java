@@ -172,7 +172,7 @@ public abstract class Unit implements Serializable {
 
 			if( Civilization.getInstance().getMap().getCell(loc).isAccessible() ) {
 				this.location = loc;
-				System.out.println( "Idle movement" );
+//				System.out.println( "Idle movement" );
 			}
 		}
 	}
@@ -270,11 +270,11 @@ public abstract class Unit implements Serializable {
 		if(!movementQueue.isEmpty())
 		{
 			move();
-			System.out.println("moving");
+//			System.out.println("moving");
 		}
 		else if(this.currentlyWorking)
 		{
-			System.out.println("working");
+//			System.out.println("working");
 			if( this.currentTask.getUnit() == null ) this.currentTask.setUnit( this );
 			currentTask.decrement(1);
 			if(currentTask.isDone())
@@ -288,12 +288,12 @@ public abstract class Unit implements Serializable {
 			if(civ.isAvailableTask())
 			{	
 				currentTask = civ.getNextTask();
-				System.out.println("generating: " + currentTask.getClass());
+//				System.out.println("generating: " + currentTask.getClass());
 				if(!generatePath(currentTask.getTaskLocation()))
 				{	
 					currentTask.setUnit(null);
 					currentTask = null;
-					System.out.println("No available path");
+//					System.out.println("No available path");
 
 				}	
 
@@ -301,7 +301,7 @@ public abstract class Unit implements Serializable {
 			else
 			{	
 				this.idle();
-				System.out.println("idle");
+//				System.out.println("idle");
 			}	
 		}	
 	}

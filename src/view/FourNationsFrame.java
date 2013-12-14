@@ -71,7 +71,7 @@ public class FourNationsFrame extends JFrame {
 		this.newGamePanel.setSize( this.mainMenuPanel.getSize() );
 		
 		//Game display panel
-		this.gameDisplayPanel = new GameDisplayPanel();
+		this.gameDisplayPanel = new GameDisplayPanel( this );
 		
 		//Cards
 		this.panels = new HashMap<String, JPanel>();

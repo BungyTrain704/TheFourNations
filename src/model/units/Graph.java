@@ -1,5 +1,6 @@
 package model.units;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,8 +40,9 @@ import java.util.LinkedList;
  ||					 public boolean connected()
  ||
  ++-----------------------------------------------------------------------*/
-public class Graph
+public class Graph implements Serializable 
 {
+	private static final long serialVersionUID = 2502465201038032759L;
 	int[][] adjacencyMatrix; /*a matrix representation of the graph
 	 		adjacencyMatrix[r][c] == 1 means there is an edge from r to c
 	 		adjacencyMatrix[r][c] == 0 means there is no edge from r to c

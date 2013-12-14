@@ -43,6 +43,7 @@ public class SaveLoadManager {
 			//Write objects and flush stream
 			oos.writeObject( civState );
 			oos.flush();
+			oos.reset();
 		}
 		catch( IOException ioe ) {
 			System.out.println( "In SaveLoadManager.saveGame" );
@@ -116,7 +117,6 @@ public class SaveLoadManager {
 					return name.endsWith(".fnsf");
 				}
 			});
-			
 			savedGames.addAll( Arrays.asList( matchedFiles ) );
 		}
 		
