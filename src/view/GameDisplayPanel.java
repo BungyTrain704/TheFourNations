@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -30,9 +31,18 @@ import model.CivilizationState;
 import model.GameImageLoader;
 import model.SaveLoadManager;
 import model.Tribe;
+import model.exceptions.DisallowedTaskException;
+import model.map.Cell;
 import model.map.Map;
 import model.map.Resource;
+import model.map.ResourceType;
 import model.map.Terrain;
+import model.structures.Bed;
+import model.structures.Table;
+import model.structures.Well;
+import model.tasks.BuildStructureTask;
+import model.tasks.CollectResourceTask;
+import model.tasks.PlantResourceTask;
 
 public class GameDisplayPanel extends JPanel {
 
@@ -69,6 +79,9 @@ public class GameDisplayPanel extends JPanel {
 	
 	//Four nation frame
 	private JFrame parent;
+	
+	//Tile selection
+	private int currentlySelectedLocation = new Random().nextInt( Civilization.getInstance().getMap().getMapSize() ); //TODO: Uhh
 
 	public GameDisplayPanel( JFrame parent ) {
 		this.parent = parent;
@@ -119,8 +132,7 @@ public class GameDisplayPanel extends JPanel {
 		super.add(miniMapView);
 
 		// Set up command panel
-		commandPanel = new JPanel();
-		commandPanel.setLayout(null);
+		commandPanel = new CommandsPanel();
 		commandPanel.setLocation(0, 610);
 		commandPanel.setSize(1030, 125);
 		commandPanel.setVisible(true);
@@ -161,8 +173,6 @@ public class GameDisplayPanel extends JPanel {
 	    }
 
 	    public void mouseDragged(final MouseEvent e) {
-	    	//TODO: Is moving around the map going to be with just right MB or with both MBs?
-	    	
 	    	if( SwingUtilities.isRightMouseButton(e) ) {
 		        JViewport viewport = (JViewport)e.getSource();
 		        Point endPoint = e.getPoint();
@@ -171,12 +181,6 @@ public class GameDisplayPanel extends JPanel {
 		        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
 		        pointClicked.setLocation(endPoint);
 	    	}
-//	        JViewport viewport = (JViewport)e.getSource();
-//	        Point endPoint = e.getPoint();
-//	        Point viewPosition = viewport.getViewPosition();
-//	        viewPosition.translate(pointClicked.x-endPoint.x, pointClicked.y-endPoint.y);
-//	        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
-//	        pointClicked.setLocation(endPoint);
 	    }
 
 	    public void mousePressed(MouseEvent e) {
@@ -188,6 +192,110 @@ public class GameDisplayPanel extends JPanel {
 	        panel.setCursor(defaultCursor);
 	        panel.repaint();
 	    }
+	}
+	
+	private class CommandsPanel extends JPanel implements ActionListener {
+		private static final long serialVersionUID = 138601043040511594L;
+		private JButton plantFood, plantTree, collectResource, buildWell, buildTable, buildBed;
+		
+		public CommandsPanel() {
+			super.setLayout( new FlowLayout() );
+			
+			//Buttons
+			this.plantFood = new JButton( "Plant food" );
+			this.plantFood.addActionListener( this );
+			
+			this.plantTree = new JButton( "Plant tree" );
+			this.plantTree.addActionListener( this );
+			
+			this.collectResource = new JButton( "Collect resource" );
+			this.collectResource.addActionListener( this );
+			
+			this.buildBed = new JButton( "Build bed" );
+			this.buildBed.addActionListener( this );
+			
+			this.buildTable = new JButton( "Build table" );
+			this.buildTable.addActionListener( this );
+			
+			this.buildWell = new JButton( "Build well" );
+			this.buildWell.addActionListener( this );
+			
+			super.add( this.plantFood );
+			super.add( this.plantTree );
+			super.add( this.collectResource );
+			super.add( this.buildBed );
+			super.add( this.buildWell );
+			super.add( this.buildTable );
+		}
+		
+		@Override public void actionPerformed(ActionEvent e) {
+			Civilization civ = Civilization.getInstance();
+			Map m = civ.getMap();
+			Cell c = m.getCell(currentlySelectedLocation);
+			
+			
+			if( e.getSource() == this.plantFood ) {
+				try {
+					Civilization.getInstance().addTaskToQueue( new PlantResourceTask(currentlySelectedLocation, m, Resource.garden ) );
+				}
+				catch( DisallowedTaskException dte ) {
+					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
+				}
+			}
+			
+			else if( e.getSource() == this.plantTree ) {
+				try {
+					Civilization.getInstance().addTaskToQueue( new PlantResourceTask(currentlySelectedLocation, m, Resource.tree ) );
+				}
+				catch( DisallowedTaskException dte ) {
+					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
+				}
+			}
+			
+			else if( e.getSource() == this.collectResource ) {
+				if( c.hasResource() ) {
+					try {
+						Civilization.getInstance().addTaskToQueue( new CollectResourceTask( 7, currentlySelectedLocation, m ) );
+					}
+					catch( DisallowedTaskException dte ) {
+						JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog( parent, "There is no resource to collect" , "Invalid Task!", JOptionPane.ERROR_MESSAGE );
+				}
+			}
+		
+			else if( e.getSource() == this.buildBed ) {
+				try {
+					Civilization.getInstance().addTaskToQueue( new BuildStructureTask( 5, m, 
+							new Bed(currentlySelectedLocation, "Bed", ResourceType.wood ) ) );
+				}
+				catch( DisallowedTaskException dte ) {
+					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
+				}
+			}
+			
+			else if( e.getSource() == this.buildTable ) {
+				try {
+					Civilization.getInstance().addTaskToQueue( new BuildStructureTask( 10, m, 
+							new Table(currentlySelectedLocation, "Table", ResourceType.wood ) ) );
+				}
+				catch( DisallowedTaskException dte ) {
+					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
+				}
+			}
+			
+			else if( e.getSource() == this.buildWell ) {
+				try {
+					Civilization.getInstance().addTaskToQueue( new BuildStructureTask( 20, m, 
+							new Well(currentlySelectedLocation, "Well", ResourceType.stone ) ) );
+				}
+				catch( DisallowedTaskException dte ) {
+					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
+				}
+			}
+		}
 	}
 	
 	private class GameControlPanel extends JPanel implements ActionListener {

@@ -11,20 +11,17 @@ import model.map.Resource;
  *
  */
 public class PlantResourceTask extends Task {
-
-	
-	private static final long serialVersionUID = 1L; //TODO: fix this serialVersionUID
+	private static final long serialVersionUID = 1752256657303846877L;
 	private Resource resourceToPlant;
 	
 	/**
 	 * Creates a task that results in a resource being added to the map
-	 * @param work The amount of work required to complete this task (number of game ticks)
 	 * @param location the location where the resource will go
 	 * @param map The map that this task takes place on
 	 * @param resource The resource being added
 	 */
-	public PlantResourceTask(int work, int location, Map map, Resource resource) {
-		super(work, location, map);
+	public PlantResourceTask(int location, Map map, Resource resource) {
+		super(10, location, map);
 		this.resourceToPlant = resource;
 		
 		if(!map.getCell(location).isAccessible() ) {
