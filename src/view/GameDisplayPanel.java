@@ -21,7 +21,6 @@ import model.Tribe;
 import model.map.Map;
 import model.map.Resource;
 import model.map.Terrain;
-import model.tasks.CollectResourceTask;
 
 public class GameDisplayPanel extends JPanel {
 
@@ -54,8 +53,7 @@ public class GameDisplayPanel extends JPanel {
 	private JPanel infoPanel;
 
 	//Game components
-	private Civilization civ = Civilization.getInstance();
-	private Map map = civ.getMap();
+	private Map map = Civilization.getInstance().getMap();
 
 	public GameDisplayPanel() {
 		initializeGameView();
@@ -148,15 +146,16 @@ public class GameDisplayPanel extends JPanel {
 			ActionListener timeListener = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					civ.update();
+					Civilization.getInstance().update();
 					repaint();
+					miniMapView.repaint();
 				}
 			};
 
-			civ.getMap().getCell(1730).setResource(Resource.tree);
-			civ.getMap().getCell(1910).setTerrain(Terrain.stockpile);
-			civ.addTaskToQueue(new CollectResourceTask(5, 1730, civ
-					.getMap()));
+//			civ.getMap().getCell(1730).setResource(Resource.tree);
+			Civilization.getInstance().getMap().getCell(1910).setTerrain(Terrain.stockpile);
+//			civ.addTaskToQueue(new CollectResourceTask(5, 1730, civ
+//					.getMap()));
 			// Start timer
 			timer = new Timer(300, timeListener);
 //			timer.start();
@@ -167,7 +166,7 @@ public class GameDisplayPanel extends JPanel {
 
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
-			drawMap(g2);
+			drawMap(g2, true );
 		}
 
 		/* Unused inherited methods */
@@ -181,30 +180,21 @@ public class GameDisplayPanel extends JPanel {
 	// Special panel for drawing the mini map and navigating the main map
 	private class MiniMapPanel extends JPanel implements MouseListener {
 		private static final long serialVersionUID = 2911016188722752273L;
-		private BufferedImage mapImg;
-
-		public MiniMapPanel() {
-
-			mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
-					BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2d = mapImg.createGraphics();
-			/*
-			 * Why are these two scale values being commented in and out lol?
-			 * I keep changing it to .35x.35 because the .175x.175 scale values
-			 * make the minimap on my screen only take up a 4th of the panel. 
-			 * 
-			 * What gives :P
-			 */
-			//				g2d.scale(.175, .175);
-			g2d.scale(.35, .35); 
-			drawMap(g2d);
-			g2d.dispose();
-		}
+		private BufferedImage mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
+				BufferedImage.TYPE_INT_ARGB);
 
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
+			
+			mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
+					BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = mapImg.createGraphics();
+			g2d.scale(.35, .35); 
+			drawMap( g2d, false );
+			g2d.dispose();
+			
 			g2.drawImage(mapImg, 0, 0, null);
 			g2.setPaint(Color.RED);
 			g2.drawRect(3, 3, (int) (gameView.getWidth() * .175),
@@ -223,8 +213,10 @@ public class GameDisplayPanel extends JPanel {
 		@Override public void mouseReleased(MouseEvent arg0) { }
 	}
 
-	public void drawMap(Graphics2D g2) {
+	public void drawMap( Graphics2D g2, boolean drawGridlines ) {
+		Civilization civ = Civilization.getInstance();
 		Tribe t = civ.getTribe();
+
 		for (int i = 0; i < map.getRows(); i++) {
 			for (int j = 0; j < map.getCols(); j++) {
 				// Draw plains of the map
@@ -278,6 +270,27 @@ public class GameDisplayPanel extends JPanel {
 						}
 					}
 				}
+				
+				//Draw grid lines
+				if(drawGridlines) {
+					int cols = Civilization.getInstance().getMap().getCols();
+					int rows = Civilization.getInstance().getMap().getRows();
+					
+					for( int k = 0; k < cols; k++ ) {
+						Color previous = g2.getColor();
+						g2.setColor( Color.black );
+						g2.drawLine( 16 * k, 0, 16 * k, this.getHeight() );
+						g2.setColor( previous );
+					}
+					
+					for( int g = 0; g < rows; g ++ ) {
+						Color previous = g2.getColor();
+						g2.setColor( Color.black );
+						g2.drawLine( 0, 16 * g, this.getWidth(), 16 * g );
+						g2.setColor( previous );
+					}
+				}
+				
 				for (int k = 0; k < civ.getUnits().size(); k++) {
 					int location = civ.getUnits().get(k).getLocation();
 					int row = location/map.getCols();
