@@ -25,8 +25,8 @@ public class Map implements Serializable {
 //	private int rows = 90;
 //	private int cols = 90;
 //	private int waterBorder = rows / 10;
-	private int rows = 50;
-	private int cols = 50;
+	private int rows = 70;
+	private int cols = 70;
 	private int waterBorder = rows / 10;
 
 	private Cell[][] map;

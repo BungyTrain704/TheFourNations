@@ -1,18 +1,24 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JViewport;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
 
 import model.Civilization;
@@ -45,12 +51,13 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage airDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "airDude1.png");
 
 	//Sub-panels
-	private JViewport gameView;
+	private JPanel gamePanel;
 	private JPanel mapView;
 	private JPanel miniMapView;
 	private JPanel statsPanel;
 	private JPanel commandPanel;
 	private JPanel infoPanel;
+	private JScrollPane gameView;
 
 	//Game components
 	private Map map = Civilization.getInstance().getMap();
@@ -69,33 +76,28 @@ public class GameDisplayPanel extends JPanel {
 		// Set up map view
 		mapView = new MainMapPanel();
 		mapView.setLayout(null);
-//		mapView.setLocation(0, 0);
 		mapView.setSize(map.getCols() * 16, map.getRows() * 16);
 		mapView.setVisible(true);
 		mapView.setBackground(Color.BLACK);
-//		gameView.add(mapView);
 
-//		// Set up the game view containing the main map
-//		gameView = new JPanel();
-//		gameView.setLayout(null);
-//		gameView.setLocation(0, 60);
-//		gameView.setSize(775, 550);
-//		gameView.setVisible(true);
-//		gamePanel.add(gameView);
+		// Set up panel for gameView
+		gamePanel = new JPanel();
+		gamePanel.setLayout(null);
+		gamePanel.setLocation(0, 60);
+		gamePanel.setSize(775, 550);
+		gamePanel.setVisible(true);
+		super.add(gamePanel);
 		
-		gameView = new JViewport();
-		gameView.setSize(775, 550);
-		gameView.setLocation(0, 60);
-		gameView.setView(mapView);
-		gameView.setViewPosition(new Point(500,500));
-		super.add(gameView);
+		// gameView displays mapView
+		gameView = new JScrollPane(mapView);
+		ClickDragListener cdl = new ClickDragListener(mapView);
+		gameView.getViewport().addMouseMotionListener(cdl);
+		gameView.getViewport().addMouseListener(cdl);
+		gameView.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		gameView.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        gameView.setSize(775, 550);
+        gamePanel.add(gameView);
 		
-//        scrollPane = new JScrollPane();
-////        scrollpane.setSize(775, 550);
-////        scrollpane.setLocation(0, 60);
-//        scrollPane.setViewportView(mapView);
-//        gamePanel.add(scrollPane);
-
 		// Set up mini map
 		miniMapView = new MiniMapPanel();
 		miniMapView.setLayout(null);
@@ -136,6 +138,38 @@ public class GameDisplayPanel extends JPanel {
 		infoPanel.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		super.add(infoPanel);
 	}
+	
+	// moves mapView with click & drag
+	private class ClickDragListener extends MouseAdapter {
+	
+	    private final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+	    private final Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+	    private final Point pointClicked = new Point();
+	    private JPanel panel;
+
+	    public ClickDragListener(JPanel panel) {
+	        this.panel = panel;
+	    }
+
+	    public void mouseDragged(final MouseEvent e) {
+	        JViewport viewport = (JViewport)e.getSource();
+	        Point endPoint = e.getPoint();
+	        Point viewPosition = viewport.getViewPosition();
+	        viewPosition.translate(pointClicked.x-endPoint.x, pointClicked.y-endPoint.y);
+	        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
+	        pointClicked.setLocation(endPoint);
+	    }
+
+	    public void mousePressed(MouseEvent e) {
+	        panel.setCursor(handCursor);
+	        pointClicked.setLocation(e.getPoint());
+	    }
+
+	    public void mouseReleased(MouseEvent e) {
+	        panel.setCursor(defaultCursor);
+	        panel.repaint();
+	    }
+	}
 
 	// Special panel for drawing the main map
 	private class MainMapPanel extends JPanel implements MouseListener {
@@ -143,6 +177,10 @@ public class GameDisplayPanel extends JPanel {
 		Timer timer;
 
 		public MainMapPanel() {
+			
+			setPreferredSize(new Dimension(map.getCols() * 16, map.getRows() * 16)); 
+
+
 			ActionListener timeListener = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -197,8 +235,8 @@ public class GameDisplayPanel extends JPanel {
 			
 			g2.drawImage(mapImg, 0, 0, null);
 			g2.setPaint(Color.RED);
-			g2.drawRect(3, 3, (int) (gameView.getWidth() * .175),
-					(int) (gameView.getHeight() * .175));
+			g2.drawRect(3, 3, (int) (gamePanel.getWidth() * .175),
+					(int) (gamePanel.getHeight() * .175));
 		}
 
 		@Override
