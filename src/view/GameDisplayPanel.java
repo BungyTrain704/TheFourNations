@@ -79,6 +79,11 @@ public class GameDisplayPanel extends JPanel {
 	private JPanel commandPanel;
 	private JPanel infoPanel;
 	private JScrollPane gameView;
+	
+	// Viewport variables
+	private Point viewPosition;
+	private JViewport viewport;
+	private Point endPoint;
 
 	//Game components
 	private Map map = Civilization.getInstance().getMap();
