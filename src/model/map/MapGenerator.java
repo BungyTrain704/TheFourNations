@@ -62,9 +62,11 @@ public class MapGenerator {
 				int a = map[i][j].getAverage();
 				if (a < 40) {
 					map[i][j].setResource(Resource.tree);
-				} else if (290 < a) {
+				} else if (a > 290) {
 					map[i][j].setResource(Resource.stone);
-				} else map[i][j].setResource(Resource.goldMine);
+				} else if (a >= 40 && a <= 50) {
+					map[i][j].setResource(Resource.goldMine);
+				}
 			}
 		}
 
