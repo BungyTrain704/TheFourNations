@@ -147,14 +147,14 @@ public class GameDisplayPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Civilization.getInstance().update();
-					repaint();
+					mapView.repaint();
 					miniMapView.repaint();
 				}
 			};
 
-//			civ.getMap().getCell(1730).setResource(Resource.tree);
+//			Civilization.getInstance().getMap().getCell(1730).setResource(Resource.tree);
 			Civilization.getInstance().getMap().getCell(1910).setTerrain(Terrain.stockpile);
-//			civ.addTaskToQueue(new CollectResourceTask(5, 1730, civ
+//			Civilization.getInstance().addTaskToQueue(new CollectResourceTask(5, 1730, Civilization.getInstance()
 //					.getMap()));
 			// Start timer
 			timer = new Timer(300, timeListener);
@@ -214,13 +214,12 @@ public class GameDisplayPanel extends JPanel {
 	}
 
 	public void drawMap( Graphics2D g2, boolean drawGridlines ) {
-		Civilization civ = Civilization.getInstance();
-		Tribe t = civ.getTribe();
+		Tribe t = Civilization.getInstance().getTribe();
 
 		for (int i = 0; i < map.getRows(); i++) {
 			for (int j = 0; j < map.getCols(); j++) {
 				// Draw plains of the map
-				if (civ.getMap().getCell(i, j).getTerrain()
+				if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
 						.equals(Terrain.plains)) {
 					switch( t ) {
 					case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); break;
@@ -229,7 +228,7 @@ public class GameDisplayPanel extends JPanel {
 					}
 				}
 				// Draw water
-				else if (civ.getMap().getCell(i, j).getTerrain()
+				else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
 						.equals(Terrain.water)) {
 					switch( t ) {
 					case AIR: g2.drawImage(cloudImg, j * 16, i * 16, null); break;
@@ -238,9 +237,9 @@ public class GameDisplayPanel extends JPanel {
 					}
 				}
 				// Overlay resources
-				if (civ.getMap().getCell(i, j).hasResource()) {
+				if (Civilization.getInstance().getMap().getCell(i, j).hasResource()) {
 					// Draw trees
-					if (civ.getMap().getCell(i, j).getResource()
+					if (Civilization.getInstance().getMap().getCell(i, j).getResource()
 							.equals(Resource.tree)) {
 						switch( t ) {
 						case WATER: g2.drawImage( snowTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break;
@@ -249,7 +248,7 @@ public class GameDisplayPanel extends JPanel {
 						}
 					}
 					// Draw stones
-					else if (civ.getMap().getCell(i, j).getResource()
+					else if (Civilization.getInstance().getMap().getCell(i, j).getResource()
 							.equals(Resource.stone)) {
 						switch( t ) {
 						case WATER: g2.drawImage(snowStoneImg, j * 16, i * 16, null); break; //snow covered stones
@@ -260,8 +259,8 @@ public class GameDisplayPanel extends JPanel {
 				}
 				// Draw tops of trees
 				if (i + 1 < map.getRows()
-						&& civ.getMap().getCell(i+1, j).hasResource()) {
-					if (civ.getMap().getCell(i+1, j).getResource()
+						&& Civilization.getInstance().getMap().getCell(i+1, j).hasResource()) {
+					if (Civilization.getInstance().getMap().getCell(i+1, j).getResource()
 							.equals(Resource.tree)) {
 						switch( t ) {
 						case WATER: g2.drawImage(snowTreeImg.getSubimage(0, 0, 16, 16), j * 16, i * 16, null); break; //snow-covered
@@ -291,8 +290,8 @@ public class GameDisplayPanel extends JPanel {
 					}
 				}
 				
-				for (int k = 0; k < civ.getUnits().size(); k++) {
-					int location = civ.getUnits().get(k).getLocation();
+				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
+					int location = Civilization.getInstance().getUnits().get(k).getLocation();
 					int row = location/map.getCols();
 					int col = location%map.getCols();
 					switch( t ) {

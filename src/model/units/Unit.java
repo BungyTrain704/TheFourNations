@@ -170,7 +170,10 @@ public abstract class Unit implements Serializable {
 			else
 				loc = Math.random() < 0.5 ? loc + cols : loc - cols;
 
-			if( Civilization.getInstance().getMap().getCell(loc).isAccessible() ) this.location = loc;
+			if( Civilization.getInstance().getMap().getCell(loc).isAccessible() ) {
+				this.location = loc;
+				System.out.println( "Idle movement" );
+			}
 		}
 	}
 

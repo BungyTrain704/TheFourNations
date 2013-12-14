@@ -36,12 +36,12 @@ public class FourNationsFrame extends JFrame {
 	public final static String gamePanel = "GAME_PANEL";
 	
 	public FourNationsFrame() {
-		final Civilization civ = Civilization.getInstance();
+		Civilization civ = Civilization.getInstance();
 		if( civ.getMap() == null ) civ.setMap( new model.map.Map() );
 		civ.setTribe( Tribe.values()[ (int) (Math.random() * Tribe.values().length) ] );
 		this.timer = new Timer( 300, new ActionListener() {
 			@Override public void actionPerformed(ActionEvent arg0) {
-				civ.update();
+				Civilization.getInstance().update();
 				repaint();
 			}
 		});
