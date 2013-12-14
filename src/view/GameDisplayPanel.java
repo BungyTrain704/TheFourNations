@@ -7,8 +7,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -19,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.Timer;
 
 import model.Civilization;
 import model.GameImageLoader;
@@ -44,7 +41,6 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage stoneImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "stones.png");
 	private static BufferedImage snowStoneImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "snowStones.png");
 	private static BufferedImage earthStoneImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "earthStones.png");
-	private static BufferedImage menuImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "bkg.png");
 	private static BufferedImage waterDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "waterDude1.png");
 	private static BufferedImage fireDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "fireDude1.png");
 	private static BufferedImage earthDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "earthDude1.png");
@@ -175,34 +171,12 @@ public class GameDisplayPanel extends JPanel {
 	// Special panel for drawing the main map
 	private class MainMapPanel extends JPanel implements MouseListener {
 		private static final long serialVersionUID = 3447252446251327666L;
-		Timer timer;
 
 		public MainMapPanel() {
-			
 			setPreferredSize(new Dimension(map.getCols() * 16, map.getRows() * 16)); 
-
-
-			ActionListener timeListener = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Civilization.getInstance().update();
-					mapView.repaint();
-					miniMapView.repaint();
-				}
-			};
-
-//			Civilization.getInstance().getMap().getCell(1730).setResource(Resource.tree);
-			Civilization.getInstance().getMap().getCell(1910).setTerrain(Terrain.stockpile);
-//			Civilization.getInstance().addTaskToQueue(new CollectResourceTask(5, 1730, Civilization.getInstance()
-//					.getMap()));
-			// Start timer
-			timer = new Timer(300, timeListener);
-//			timer.start();
 		}
 
-
 		@Override protected void paintComponent(Graphics g) {
-
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
 			drawMap(g2, true );
@@ -261,17 +235,17 @@ public class GameDisplayPanel extends JPanel {
 				if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
 						.equals(Terrain.plains)) {
 					switch( t ) {
-					case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); break;
-					case EARTH: g2.drawImage(desertImg, j * 16, i * 16, null); break;
-					default: 	g2.drawImage(grassImg, j * 16, i * 16, null); break;
+					case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); break; //Draw snow
+					case EARTH: g2.drawImage(desertImg, j * 16, i * 16, null); break; //Draw desert 
+					default: 	g2.drawImage(grassImg, j * 16, i * 16, null); break; //Grass for everyone else
 					}
 				}
 				// Draw water
 				else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
 						.equals(Terrain.water)) {
 					switch( t ) {
-					case AIR: g2.drawImage(cloudImg, j * 16, i * 16, null); break;
-					default:  g2.drawImage(waterImg, j * 16, i * 16, null); break;
+					case AIR: g2.drawImage(cloudImg, j * 16, i * 16, null); break; //Picking air draws clouds
+					default:  g2.drawImage(waterImg, j * 16, i * 16, null); break; //Water for everyone else
 					
 					}
 				}
@@ -281,10 +255,10 @@ public class GameDisplayPanel extends JPanel {
 					int row = location/map.getCols();
 					int col = location%map.getCols();
 					switch( t ) {
-					case WATER: g2.drawImage(waterDude1, col * 16 - 8, row * 15 + 4, null); break;
-					case FIRE: g2.drawImage(fireDude1, col * 16 - 8, row * 15 + 4, null); break;
-					case EARTH: g2.drawImage(earthDude1, col * 16 - 8, row * 15 + 4, null); break;
-					case AIR: g2.drawImage(airDude1, col * 16 - 8, row * 15 + 4, null); break;
+					case WATER: g2.drawImage(waterDude1, col * 16 - 8, row * 15 + 4, null); break; //Water tribe sprite
+					case FIRE: g2.drawImage(fireDude1, col * 16 - 8, row * 15 + 4, null); break; //Fire nation sprite
+					case EARTH: g2.drawImage(earthDude1, col * 16 - 8, row * 15 + 4, null); break; //Earth kingdom sprite
+					case AIR: g2.drawImage(airDude1, col * 16 - 8, row * 15 + 4, null); break; //Air nomad sprite
 					}
 				}
 				
@@ -294,9 +268,9 @@ public class GameDisplayPanel extends JPanel {
 					if (Civilization.getInstance().getMap().getCell(i, j).getResource()
 							.equals(Resource.tree)) {
 						switch( t ) {
-						case WATER: g2.drawImage( snowTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break;
-						case EARTH:g2.drawImage( bareTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break;
-						default: g2.drawImage(treeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break;
+						case WATER: g2.drawImage( snowTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break; //Snowy tree
+						case EARTH:g2.drawImage( bareTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break; //Bare tree
+						default: g2.drawImage(treeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break; //Regular tree
 						}
 					}
 					// Draw stones
