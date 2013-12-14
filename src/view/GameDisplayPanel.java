@@ -331,10 +331,10 @@ public class GameDisplayPanel extends JPanel {
 					int row = location/map.getCols();
 					int col = location%map.getCols();
 					switch( t ) {
-					case WATER: g2.drawImage(waterDude1, col * 16 - 8, row * 15 + 4, null); break; //Water tribe sprite
-					case FIRE: g2.drawImage(fireDude1, col * 16 - 8, row * 15 + 4, null); break; //Fire nation sprite
-					case EARTH: g2.drawImage(earthDude1, col * 16 - 8, row * 15 + 4, null); break; //Earth kingdom sprite
-					case AIR: g2.drawImage(airDude1, col * 16 - 8, row * 15 + 4, null); break; //Air nomad sprite
+					case WATER: g2.drawImage(waterDude1, col * 16 - 8, row * 15 + 8, null); break; //Water tribe sprite
+					case FIRE: g2.drawImage(fireDude1, col * 16 - 8, row * 15 + 8, null); break; //Fire nation sprite
+					case EARTH: g2.drawImage(earthDude1, col * 16 - 8, row * 15 + 8, null); break; //Earth kingdom sprite
+					case AIR: g2.drawImage(airDude1, col * 16 - 8, row * 15 + 8, null); break; //Air nomad sprite
 					}
 				}
 				
