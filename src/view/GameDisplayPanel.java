@@ -45,6 +45,8 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage fireDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "fireDude1.png");
 	private static BufferedImage earthDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "earthDude1.png");
 	private static BufferedImage airDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "airDude1.png");
+	private static BufferedImage kitchenImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "kitchenTile.png");
+	private static BufferedImage barracksImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "woodenFloor.png");
 
 	//Sub-panels
 	private JPanel gamePanel;
@@ -246,8 +248,13 @@ public class GameDisplayPanel extends JPanel {
 					switch( t ) {
 					case AIR: g2.drawImage(cloudImg, j * 16, i * 16, null); break; //Picking air draws clouds
 					default:  g2.drawImage(waterImg, j * 16, i * 16, null); break; //Water for everyone else
-					
 					}
+				} 
+				else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain().equals(Terrain.kitchen)) {
+					g2.drawImage(kitchenImg, j * 16, i * 16, null);
+				}
+				else if (Civilization.getInstance().getMap().getCell(i, j).equals(Terrain.barracks)) {
+					g2.drawImage(barracksImg, j * 16, i * 16, null);
 				}
 				
 				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
