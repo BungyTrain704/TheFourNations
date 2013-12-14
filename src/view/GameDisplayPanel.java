@@ -272,22 +272,23 @@ public class GameDisplayPanel extends JPanel {
 				
 				//Draw grid lines
 				if(drawGridlines) {
-					int cols = Civilization.getInstance().getMap().getCols();
-					int rows = Civilization.getInstance().getMap().getRows();
-					
-					for( int k = 0; k < cols; k++ ) {
-						Color previous = g2.getColor();
-						g2.setColor( Color.black );
-						g2.drawLine( 16 * k, 0, 16 * k, this.getHeight() );
-						g2.setColor( previous );
-					}
-					
-					for( int g = 0; g < rows; g ++ ) {
-						Color previous = g2.getColor();
-						g2.setColor( Color.black );
-						g2.drawLine( 0, 16 * g, this.getWidth(), 16 * g );
-						g2.setColor( previous );
-					}
+//					int cols = Civilization.getInstance().getMap().getCols();
+//					int rows = Civilization.getInstance().getMap().getRows();
+//					
+//					for( int k = 0; k < cols; k++ ) {
+//						Color previous = g2.getColor();
+//						g2.setColor( Color.black );
+//						g2.drawLine( 16 * k, 0, 16 * k, (int) this.getVisibleRect().getHeight() );
+//						g2.setColor( previous );
+//					}
+//					
+//					for( int g = 0; g < rows; g ++ ) {
+//						Color previous = g2.getColor();
+//						g2.setColor( Color.black );
+//						g2.setColor( new Color(0,0,0) );
+//						g2.drawLine( 0, 16 * g, this.getVisibleRect().width, 16 * g );
+//						g2.setColor( previous );
+//					}
 				}
 				
 				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
