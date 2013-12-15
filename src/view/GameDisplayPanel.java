@@ -75,10 +75,11 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage wellImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "well.png");
 	private static BufferedImage bedImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "bed.png");
 	private static BufferedImage barrelImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "barrel.png");
-	private static BufferedImage goldImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "gold.png" );
-	private static BufferedImage cabbageImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "cabbage.png" );
+	private static BufferedImage goldImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "goldMine.png" );
+	private static BufferedImage cabbageImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "cabbage1.png" );
 	private static BufferedImage stockpileImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "stockpile.png" );
-
+	private static BufferedImage rockyPlainsImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "emptyMine.png" );
+	
 	//Sub-panels
 	private JPanel gamePanel;
 	private JPanel mapView;
@@ -566,10 +567,19 @@ public class GameDisplayPanel extends JPanel {
 					switch( t ) {
 					case AIR: g2.drawImage(cloudImg, j * 16, i * 16, null); break;
 					default:  g2.drawImage(waterImg, j * 16, i * 16, null); break;
-
 					}
-
-				} 
+				}
+				else if (currentCell.getTerrain().equals(Terrain.rockyPlains)) {
+					switch( t ) {
+					case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); 
+								g2.drawImage(rockyPlainsImg, j * 16, i * 16, null); break;
+					case EARTH: g2.drawImage(desertImg, j * 16, i * 16, null); 
+								g2.drawImage(rockyPlainsImg, j * 16, i * 16, null); break;
+					default: 	g2.drawImage(grassImg, j * 16, i * 16, null); 
+								g2.drawImage(rockyPlainsImg, j * 16, i * 16, null); break;
+					}
+					g2.drawImage(rockyPlainsImg, j * 16, i * 16, null);
+				}
 				else if (currentCell.getTerrain().equals(Terrain.kitchen)) {
 					g2.drawImage(kitchenImg, j * 16, i * 16, null);
 				}

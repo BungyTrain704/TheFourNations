@@ -64,8 +64,12 @@ public class MapGenerator {
 					map[i][j].setResource(Resource.tree);
 				} else if (a > 290) {
 					map[i][j].setResource(Resource.stone);
-				} else if (a >= 40 && a <= 50) {
+				} else if (a >= 40 && a <= 43) {
 					map[i][j].setResource(Resource.goldMine);
+				} else if (a >= 44 && a < 50) {
+					map[i][j].setResource(Resource.garden);
+				} else if (a >=50 && a < 55) {
+					map[i][j].setTerrain(Terrain.rockyPlains);
 				}
 			}
 		}
