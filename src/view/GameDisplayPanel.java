@@ -215,7 +215,7 @@ public class GameDisplayPanel extends JPanel {
 			//		        panel.repaint();
 		}
 		public void mouseClicked(MouseEvent e)  {
-			currentlySelectedLocation = ((((e.getX()+viewPosition.x)/16))%map.getCols()) + ((((e.getY()+viewPosition.y)/16)) * map.getCols());
+			currentlySelectedLocation = ((((e.getX() + viewPosition.x - 1)/16)) % map.getCols()) + ((((e.getY() + viewPosition.y - 1) / 16)) * map.getCols());
 		}
 	}
 	
