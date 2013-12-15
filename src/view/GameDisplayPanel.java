@@ -97,7 +97,7 @@ public class GameDisplayPanel extends JPanel {
 	private JFrame parent;
 
 	//Tile selection
-	private int currentlySelectedLocation = new Random().nextInt( Civilization.getInstance().getMap().getMapSize() ); //TODO: Uhh
+	private int currentlySelectedLocation = 0;
 
 	public GameDisplayPanel( JFrame parent ) {
 		this.parent = parent;
@@ -209,6 +209,9 @@ public class GameDisplayPanel extends JPanel {
 			panel.setCursor(defaultCursor);
 			//		        panel.repaint();
 		}
+		public void mouseClicked(MouseEvent e)  {
+			currentlySelectedLocation = ((((e.getX()+viewPosition.x)/16))%map.getCols()) + ((((e.getY()+viewPosition.y)/16)) * map.getCols());
+		}
 	}
 	
 	private class CellInformationPanel extends JPanel {
@@ -272,7 +275,7 @@ public class GameDisplayPanel extends JPanel {
 			}
 			
 			//Print out cell information
-			Cell c = map.getCell(currentlySelectedLocation);
+			Cell c = Civilization.getInstance().getMap().getCell(currentlySelectedLocation);
 			this.cellInformation.append( "Location: (" + 
 					( currentlySelectedLocation % map.getCols() ) + ", " +
 					currentlySelectedLocation / map.getCols() + ")" + System.lineSeparator() );
@@ -320,6 +323,7 @@ public class GameDisplayPanel extends JPanel {
 			panel.setCursor(defaultCursor);
 			//			        panel.repaint();
 		}
+
 	}
 
 	private class CommandsPanel extends JPanel implements ActionListener {
