@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import javax.swing.JOptionPane;
+
 import model.map.Cell;
 import model.map.Map;
 import model.map.Resource;
@@ -44,7 +46,7 @@ public class Civilization {
 		this.unitsToBeBorn = new ArrayList<>();
 		for(int i = 0; i < numberOfStartingUnits; i++)
 		{
-			units.add(new BasicUnit("U", 100, 500, cols));
+			units.add(new BasicUnit("U", 500, 500, cols));
 		}	
 		this.structures = new ArrayList<AbstractStructure>();
 		this.globalResourcePool = new HashMap<ResourceType, Integer>();
@@ -85,11 +87,13 @@ public class Civilization {
 	public void update()
 	{
 		if(units.size() == 0){
+			JOptionPane.showMessageDialog( null, "Your units have died!" );
 			System.out.println("YOU HAVE BEEN DEFEATED!"); 
 			System.exit(0);
 		}	
 		if(units.size() >= 10){
-			System.out.println("YOUR CIVILIZATION HAS REACHED THE GOAL POPULATION!"); 
+			JOptionPane.showMessageDialog( null, "Your units have reached the goal population!" +
+					"\n\nYou may continue playing if you so desire." );
 		}
 		
 		for(Unit person: units)
