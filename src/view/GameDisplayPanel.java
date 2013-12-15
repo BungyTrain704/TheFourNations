@@ -126,6 +126,7 @@ public class GameDisplayPanel extends JPanel {
 		ClickDragListener cdl = new ClickDragListener(mapView);
 		gameView.getViewport().addMouseMotionListener(cdl);
 		gameView.getViewport().addMouseListener(cdl);
+		viewport = gameView.getViewport();
 		gameView.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		gameView.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		gameView.setBackground(Color.GRAY);
@@ -134,10 +135,10 @@ public class GameDisplayPanel extends JPanel {
 		
 		// Set up mini map
 		miniMapView = new MiniMapPanel();
-		miniMapView.setLayout(null);
 		MiniClickDragListener mcdl = new MiniClickDragListener(mapView);
 		miniMapView.addMouseMotionListener(mcdl);
 		miniMapView.addMouseListener(mcdl);
+		miniMapView.setLayout(null);
 		miniMapView.setLocation(775, 360);
 		miniMapView.setSize(255, 250);
 		miniMapView.setVisible(true);
@@ -146,7 +147,8 @@ public class GameDisplayPanel extends JPanel {
 		super.add(miniMapView);
 
 		// Set up command panel
-		commandPanel = new CommandsPanel();
+		commandPanel = new JPanel();
+		commandPanel.setLayout(null);
 		commandPanel.setLocation(0, 610);
 		commandPanel.setSize(1030, 125);
 		commandPanel.setVisible(true);
@@ -155,7 +157,8 @@ public class GameDisplayPanel extends JPanel {
 		super.add(commandPanel);
 
 		// Set up stats panel
-		statsPanel = new GameControlPanel();
+		statsPanel = new JPanel();
+		statsPanel.setLayout(null);
 		statsPanel.setLocation(0, 0);
 		statsPanel.setSize(775, 60);
 		statsPanel.setVisible(true);
@@ -175,47 +178,14 @@ public class GameDisplayPanel extends JPanel {
 	}
 	
 	// moves mapView with click & drag
-	private class ClickDragListener extends MouseAdapter {
-	
-	    private final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
-	    private final Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-	    private final Point pointClicked = new Point();
-	    private JPanel panel;
-
-	    public ClickDragListener(JPanel panel) {
-	        this.panel = panel;
-	    }
-
-	    public void mouseDragged(final MouseEvent e) {
-	    	if( SwingUtilities.isRightMouseButton(e) ) {
-		        JViewport viewport = (JViewport)e.getSource();
-		        Point endPoint = e.getPoint();
-		        Point viewPosition = viewport.getViewPosition();
-		        viewPosition.translate(pointClicked.x-endPoint.x, pointClicked.y-endPoint.y);
-		        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
-		        pointClicked.setLocation(endPoint);
-	    	}
-	    }
-
-	    public void mousePressed(MouseEvent e) {
-	        panel.setCursor(handCursor);
-	        pointClicked.setLocation(e.getPoint());
-	    }
-
-	    public void mouseReleased(MouseEvent e) {
-	        panel.setCursor(defaultCursor);
-	        panel.repaint();
-	    }
-	}
-	
-	private class MiniClickDragListener extends MouseAdapter{
+		private class ClickDragListener extends MouseAdapter {
 		
-		 private final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+		    private final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
 		    private final Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
 		    private final Point pointClicked = new Point();
 		    private JPanel panel;
 
-		    public MiniClickDragListener(JPanel panel) {
+		    public ClickDragListener(JPanel panel) {
 		        this.panel = panel;
 		        viewPosition = new Point(0,0);
 		    }
@@ -223,7 +193,7 @@ public class GameDisplayPanel extends JPanel {
 		    public void mouseDragged(final MouseEvent e) {
 		        endPoint = e.getPoint();
 		        viewPosition = viewport.getViewPosition();
-		        viewPosition.translate(-4*(pointClicked.x-endPoint.x), -4*(pointClicked.y-endPoint.y));
+		        viewPosition.translate(pointClicked.x-endPoint.x, pointClicked.y-endPoint.y);
 		        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
 		        pointClicked.setLocation(endPoint);
 		    }
@@ -237,7 +207,39 @@ public class GameDisplayPanel extends JPanel {
 		        panel.setCursor(defaultCursor);
 //		        panel.repaint();
 		    }
-	}
+		}
+		
+		
+		private class MiniClickDragListener extends MouseAdapter{
+			
+			 private final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+			    private final Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+			    private final Point pointClicked = new Point();
+			    private JPanel panel;
+
+			    public MiniClickDragListener(JPanel panel) {
+			        this.panel = panel;
+			        viewPosition = new Point(0,0);
+			    }
+
+			    public void mouseDragged(final MouseEvent e) {
+			        endPoint = e.getPoint();
+			        viewPosition = viewport.getViewPosition();
+			        viewPosition.translate(-4*(pointClicked.x-endPoint.x), -4*(pointClicked.y-endPoint.y));
+			        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
+			        pointClicked.setLocation(endPoint);
+			    }
+
+			    public void mousePressed(MouseEvent e) {
+			        panel.setCursor(handCursor);
+			        pointClicked.setLocation(e.getPoint());
+			    }
+
+			    public void mouseReleased(MouseEvent e) {
+			        panel.setCursor(defaultCursor);
+//			        panel.repaint();
+			    }
+		}
 	
 	private class CommandsPanel extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 138601043040511594L;
@@ -398,7 +400,7 @@ public class GameDisplayPanel extends JPanel {
 	}
 
 	// Special panel for drawing the main map
-	private class MainMapPanel extends JPanel implements MouseListener {
+	private class MainMapPanel extends JPanel {
 		private static final long serialVersionUID = 3447252446251327666L;
 
 		public MainMapPanel() {
@@ -411,163 +413,140 @@ public class GameDisplayPanel extends JPanel {
 			drawMap(g2, true );
 		}
 
-		/* Unused inherited methods */
-		@Override public void mouseClicked(MouseEvent e) { }
-		@Override public void mouseEntered(MouseEvent e) { }
-		@Override public void mouseExited(MouseEvent e) { }
-		@Override public void mousePressed(MouseEvent e) { }
-		@Override public void mouseReleased(MouseEvent e) { }
 	}
 
 	// Special panel for drawing the mini map and navigating the main map
-	private class MiniMapPanel extends JPanel implements MouseListener {
-		private static final long serialVersionUID = 2911016188722752273L;
-		private BufferedImage mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
-				BufferedImage.TYPE_INT_ARGB);
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			Graphics2D g2 = (Graphics2D) g;
-			
-			mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
+		private class MiniMapPanel extends JPanel {
+			private static final long serialVersionUID = 2911016188722752273L;
+			private BufferedImage mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
 					BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2d = mapImg.createGraphics();
-			g2d.scale(.35, .35); 
-			drawMap( g2d, false );
-			g2d.dispose();
-			
-			g2.drawImage(mapImg, 0, 0, null);
-			g2.setPaint(Color.RED);
-			g2.drawRect(3, 3, (int) (gamePanel.getWidth() * .175),
-					(int) (gamePanel.getHeight() * .175));
-		}
 
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-
-		}
-
-		/* Unused inherited methods */
-		@Override public void mouseEntered(MouseEvent arg0) { }
-		@Override public void mouseExited(MouseEvent arg0) { }
-		@Override public void mousePressed(MouseEvent arg0) { }
-		@Override public void mouseReleased(MouseEvent arg0) { }
-	}
-
-	public void drawMap( Graphics2D g2, boolean drawGridlines ) {
-		Tribe t = Civilization.getInstance().getTribe();
-
-		for (int i = 0; i < map.getRows(); i++) {
-			for (int j = 0; j < map.getCols(); j++) {
-				// Draw plains of the map
-				if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
-						.equals(Terrain.plains)) {
-					switch( t ) {
-					case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); break; //Draw snow
-					case EARTH: g2.drawImage(desertImg, j * 16, i * 16, null); break; //Draw desert 
-					default: 	g2.drawImage(grassImg, j * 16, i * 16, null); break; //Grass for everyone else
-					}
-				}
-				// Draw coast
-				else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
-						.equals(Terrain.coast)) {
-					switch( t ) {
-					case AIR: g2.drawImage(cloudCoastImg, j * 16, i * 16, null); break;
-					case WATER: g2.drawImage(snowCoastImg, j * 16, i * 16, null); break;
-					case EARTH: g2.drawImage(desertCoastImg, j * 16, i * 16, null); break;
-					default:  g2.drawImage(coastImg, j * 16, i * 16, null); break;
-					
-					}
-				}
-				// Draw water
-				else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
-						.equals(Terrain.water)) {
-					switch( t ) {
-					case AIR: g2.drawImage(cloudImg, j * 16, i * 16, null); break; //Picking air draws clouds
-					default:  g2.drawImage(waterImg, j * 16, i * 16, null); break; //Water for everyone else
-					}
-				} 
-				else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain().equals(Terrain.kitchen)) {
-					g2.drawImage(kitchenImg, j * 16, i * 16, null);
-				}
-				else if (Civilization.getInstance().getMap().getCell(i, j).equals(Terrain.barracks)) {
-					g2.drawImage(barracksImg, j * 16, i * 16, null);
-				}
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				Graphics2D g2 = (Graphics2D) g;
 				
-				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
-					int location = Civilization.getInstance().getUnits().get(k).getLocation();
-					int row = location/map.getCols();
-					int col = location%map.getCols();
-					switch( t ) {
-					case WATER: g2.drawImage(waterDude1, col * 16 - 8, row * 15 + 8, null); break; //Water tribe sprite
-					case FIRE: g2.drawImage(fireDude1, col * 16 - 8, row * 15 + 8, null); break; //Fire nation sprite
-					case EARTH: g2.drawImage(earthDude1, col * 16 - 8, row * 15 + 8, null); break; //Earth kingdom sprite
-					case AIR: g2.drawImage(airDude1, col * 16 - 8, row * 15 + 8, null); break; //Air nomad sprite
-					}
-				}
+				mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
+						BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2d = mapImg.createGraphics();
+				g2d.scale(.24, .24); 
+				drawMap( g2d, false );
+				g2d.dispose();
 				
-				// Overlay resources
-				if (Civilization.getInstance().getMap().getCell(i, j).hasResource()) {
-					// Draw trees
-					if (Civilization.getInstance().getMap().getCell(i, j).getResource()
-							.equals(Resource.tree)) {
-						switch( t ) {
-						case WATER: g2.drawImage( snowTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break; //Snowy tree
-						case EARTH:g2.drawImage( bareTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break; //Bare tree
-						default: g2.drawImage(treeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break; //Regular tree
-						}
-					}
-					// Draw stones
-					else if (Civilization.getInstance().getMap().getCell(i, j).getResource()
-							.equals(Resource.stone)) {
-						switch( t ) {
-						case WATER: g2.drawImage(snowStoneImg, j * 16, i * 16, null); break; //snow covered stones
-						case EARTH: g2.drawImage(earthStoneImg, j * 16, i * 16, null); break; //darker stones for earth
-						default: g2.drawImage(stoneImg, j * 16, i * 16, null); break; //light stones for fire/air
-						}
-					}
-				}
-				// Draw tops of trees
-				if (i + 1 < map.getRows()
-						&& Civilization.getInstance().getMap().getCell(i+1, j).hasResource()) {
-					if (Civilization.getInstance().getMap().getCell(i+1, j).getResource()
-							.equals(Resource.tree)) {
-						switch( t ) {
-						case WATER: g2.drawImage(snowTreeImg.getSubimage(0, 0, 16, 16), j * 16, i * 16, null); break; //snow-covered
-						case EARTH: g2.drawImage(bareTreeImg.getSubimage(0, 0, 16, 16), j * 16, i * 16, null); break; //less-bushy
-						default: g2.drawImage(treeImg.getSubimage(0, 0, 16, 16), j * 16, i * 16, null); break; //bushy trees
-						}
-					}
-				}
-				
-				//Draw grid lines
-				if(drawGridlines) {
-//					int cols = Civilization.getInstance().getMap().getCols();
-//					int rows = Civilization.getInstance().getMap().getRows();
-//					
-//					for( int k = 0; k < cols; k++ ) {
-//						Color previous = g2.getColor();
-//						g2.setColor( Color.black );
-//						g2.drawLine( 16 * k, 0, 16 * k, (int) this.getVisibleRect().getHeight() );
-//						g2.setColor( previous );
-//					}
-//					
-//					for( int g = 0; g < rows; g ++ ) {
-//						Color previous = g2.getColor();
-//						g2.setColor( Color.black );
-//						g2.setColor( new Color(0,0,0) );
-//						g2.drawLine( 0, 16 * g, this.getVisibleRect().width, 16 * g );
-//						g2.setColor( previous );
-//					}
-				}
-				
-
+				g2.drawImage(mapImg, 0, 0, null);
+//				g2.setPaint(Color.RED);
+//				g2.drawRect(2, 2, (int) (gamePanel.getWidth() * .24),
+//						(int) (gamePanel.getHeight() * .24));
 			}
+
 		}
-		// Draw rectangle
-		g2.setPaint(Color.RED);
-		g2.drawRect(viewPosition.x-2, viewPosition.y-2, (int) (gamePanel.getWidth()+10),
-				(int) (gamePanel.getHeight()+10));
+
+		public void drawMap( Graphics2D g2, boolean drawGridlines ) {
+			Tribe t = Civilization.getInstance().getTribe();
+
+			for (int i = 0; i < map.getRows(); i++) {
+				for (int j = 0; j < map.getCols(); j++) {
+					// Draw plains of the map
+					if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
+							.equals(Terrain.plains)) {
+						switch( t ) {
+						case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); break;
+						case EARTH: g2.drawImage(desertImg, j * 16, i * 16, null); break;
+						default: 	g2.drawImage(grassImg, j * 16, i * 16, null); break;
+						}
+					}
+					// Draw coast
+					else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
+							.equals(Terrain.coast)) {
+						switch( t ) {
+						case AIR: g2.drawImage(cloudCoastImg, j * 16, i * 16, null); break;
+						case WATER: g2.drawImage(snowCoastImg, j * 16, i * 16, null); break;
+						case EARTH: g2.drawImage(desertCoastImg, j * 16, i * 16, null); break;
+						default:  g2.drawImage(coastImg, j * 16, i * 16, null); break;
+						
+						}
+					}
+					// Draw water
+					else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
+							.equals(Terrain.water)) {
+						switch( t ) {
+						case AIR: g2.drawImage(cloudImg, j * 16, i * 16, null); break;
+						default:  g2.drawImage(waterImg, j * 16, i * 16, null); break;
+						
+						}
+					}
+					
+					for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
+						int location = Civilization.getInstance().getUnits().get(k).getLocation();
+						int row = location/map.getCols();
+						int col = location%map.getCols();
+						switch( t ) {
+						case WATER: g2.drawImage(waterDude1, col * 16 - 8, row * 15 + 4, null); break;
+						case FIRE: g2.drawImage(fireDude1, col * 16 - 8, row * 15 + 4, null); break;
+						case EARTH: g2.drawImage(earthDude1, col * 16 - 8, row * 15 + 4, null); break;
+						case AIR: g2.drawImage(airDude1, col * 16 - 8, row * 15 + 4, null); break;
+						}
+					}
+					
+					// Overlay resources
+					if (Civilization.getInstance().getMap().getCell(i, j).hasResource()) {
+						// Draw trees
+						if (Civilization.getInstance().getMap().getCell(i, j).getResource()
+								.equals(Resource.tree)) {
+							switch( t ) {
+							case WATER: g2.drawImage( snowTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break;
+							case EARTH:g2.drawImage( bareTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break;
+							default: g2.drawImage(treeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break;
+							}
+						}
+						// Draw stones
+						else if (Civilization.getInstance().getMap().getCell(i, j).getResource()
+								.equals(Resource.stone)) {
+							switch( t ) {
+							case WATER: g2.drawImage(snowStoneImg, j * 16, i * 16, null); break; //snow covered stones
+							case EARTH: g2.drawImage(earthStoneImg, j * 16, i * 16, null); break; //darker stones for earth
+							default: g2.drawImage(stoneImg, j * 16, i * 16, null); break; //light stones for fire/air
+							}
+						}
+					}
+					// Draw tops of trees
+					if (i + 1 < map.getRows()
+							&& Civilization.getInstance().getMap().getCell(i+1, j).hasResource()) {
+						if (Civilization.getInstance().getMap().getCell(i+1, j).getResource()
+								.equals(Resource.tree)) {
+							switch( t ) {
+							case WATER: g2.drawImage(snowTreeImg.getSubimage(0, 0, 16, 16), j * 16, i * 16, null); break; //snow-covered
+							case EARTH: g2.drawImage(bareTreeImg.getSubimage(0, 0, 16, 16), j * 16, i * 16, null); break; //less-bushy
+							default: g2.drawImage(treeImg.getSubimage(0, 0, 16, 16), j * 16, i * 16, null); break; //bushy trees
+							}
+						}
+					}
+					
+					//Draw grid lines
+					if(drawGridlines) {
+//						int cols = Civilization.getInstance().getMap().getCols();
+//						int rows = Civilization.getInstance().getMap().getRows();
+//						
+//						for( int k = 0; k < cols; k++ ) {
+//							Color previous = g2.getColor();
+//							g2.setColor( Color.black );
+//							g2.drawLine( 16 * k, 0, 16 * k, (int) this.getVisibleRect().getHeight() );
+//							g2.setColor( previous );
+//						}
+//						
+//						for( int g = 0; g < rows; g ++ ) {
+//							Color previous = g2.getColor();
+//							g2.setColor( Color.black );
+//							g2.setColor( new Color(0,0,0) );
+//							g2.drawLine( 0, 16 * g, this.getVisibleRect().width, 16 * g );
+//							g2.setColor( previous );
+//						}
+					}		
+				}
+			}
+			// Draw rectangle
+			g2.setPaint(Color.RED);
+			g2.drawRect(viewPosition.x-2, viewPosition.y-2, (int) (gamePanel.getWidth()+10),
+					(int) (gamePanel.getHeight()+10));
+		}
 	}
-}
