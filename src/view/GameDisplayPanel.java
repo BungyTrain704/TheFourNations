@@ -578,6 +578,7 @@ public class GameDisplayPanel extends JPanel {
 					default:  g2.drawImage(waterImg, j * 16, i * 16, null); break;
 					}
 				}
+				// Draw rocky plains
 				else if (currentCell.getTerrain().equals(Terrain.rockyPlains)) {
 					switch( t ) {
 					case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); 
@@ -589,6 +590,7 @@ public class GameDisplayPanel extends JPanel {
 					}
 					g2.drawImage(rockyPlainsImg, j * 16, i * 16, null);
 				}
+				// Draw rooms
 				else if (currentCell.getTerrain().equals(Terrain.kitchen)) {
 					g2.drawImage(kitchenImg, j * 16, i * 16, null);
 				}
@@ -599,49 +601,40 @@ public class GameDisplayPanel extends JPanel {
 					g2.drawImage( stockpileImg, j * 16, i * 16, null );
 				}
 				
-
+				// Draws units
 				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
 					Unit unit = Civilization.getInstance().getUnits().get(k);
 					int location = unit.getLocation();
 					int spriteType = unit.getSpriteType();
-					int row = location/map.getCols();
-					int col = location%map.getCols();
+					int row = location / map.getCols();
+					int col = location % map.getCols();
 					
 					switch( t ) {
 					case WATER: 
-						if (spriteType == 0) {
-							g2.drawImage(waterDude1, col * 16 - 8, (row - 1) * 16, null); break;
-						} else if (spriteType == 1) {
-							g2.drawImage(waterDude2, col * 16 - 8, (row - 1) * 16, null); break;
-						} else {
-							g2.drawImage(waterDude3, col * 16 - 8, (row - 1) * 16, null); break;
+						switch(spriteType) {
+						case 0: g2.drawImage(waterDude1, col * 16 - 8, (row - 1) * 16, null); break;
+						case 1: g2.drawImage(waterDude2, col * 16 - 8, (row - 1) * 16, null); break;
+						case 2: g2.drawImage(waterDude3, col * 16 - 8, (row - 1) * 16, null); break;
 						}
-					
 					case FIRE: 
-						if (spriteType == 0) {
-							g2.drawImage(fireDude1, col * 16 - 8, (row - 1) * 16, null); break;
-						} else if (spriteType == 1) {
-							g2.drawImage(fireDude2, col * 16 - 8, (row - 1) * 16, null); break;
-						} else {
-							g2.drawImage(fireDude3, col * 16 - 8, (row - 1) * 16, null); break;
-						}
-					case EARTH: 
-						if (spriteType == 0) {
-							g2.drawImage(earthDude1, col * 16 - 8, (row - 1) * 16, null); break;
-						} else if (spriteType == 1) {
-							g2.drawImage(earthDude2, col * 16 - 8, (row - 1) * 16, null); break;
-						} else {
-							g2.drawImage(earthDude3, col * 16 - 8, (row - 1) * 16, null); break;
+						switch(spriteType) {
+						case 0: g2.drawImage(fireDude1, col * 16 - 8, (row - 1) * 16, null); break;
+						case 1: g2.drawImage(fireDude2, col * 16 - 8, (row - 1) * 16, null); break;
+						case 2: g2.drawImage(fireDude3, col * 16 - 8, (row - 1) * 16, null); break;
 						}
 					case AIR: 
-						if (spriteType == 0) {
-							g2.drawImage(airDude1, col * 16 - 8, (row - 1) * 16, null); break;
-						} else if (spriteType == 1) {
-							g2.drawImage(airDude2, col * 16 - 8, (row - 1) * 16, null); break;
-						} else {
-							g2.drawImage(airDude3, col * 16 - 8, (row - 1) * 16, null); break;
+						switch(spriteType) {
+						case 0: g2.drawImage(airDude1, col * 16 - 8, (row - 1) * 16, null); break;
+						case 1: g2.drawImage(airDude2, col * 16 - 8, (row - 1) * 16, null); break;
+						case 2: g2.drawImage(airDude3, col * 16 - 8, (row - 1) * 16, null); break;
 						}
-					}
+					case EARTH: 
+						switch(spriteType) {
+						case 0: g2.drawImage(earthDude1, col * 16 - 8, (row - 1) * 16, null); break;
+						case 1: g2.drawImage(earthDude2, col * 16 - 8, (row - 1) * 16, null); break;
+						case 2: g2.drawImage(earthDude3, col * 16 - 8, (row - 1) * 16, null); break;
+						}
+					}	
 				}
 
 				// Overlay resources
