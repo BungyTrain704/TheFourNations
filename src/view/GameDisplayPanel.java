@@ -75,6 +75,7 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage wellImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "well.png");
 	private static BufferedImage bedImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "bed.png");
 	private static BufferedImage barrelImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "barrel.png");
+	private static BufferedImage goldImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "gold.png" );
 
 	//Sub-panels
 	private JPanel gamePanel;
@@ -606,6 +607,9 @@ public class GameDisplayPanel extends JPanel {
 						case EARTH: g2.drawImage(earthStoneImg, j * 16, i * 16, null); break; //darker stones for earth
 						default: g2.drawImage(stoneImg, j * 16, i * 16, null); break; //light stones for fire/air
 						}
+					}
+					else if( currentCell.getResource() == Resource.goldMine ) {
+						g2.drawImage( goldImg, j * 16, i * 16, null );
 					}
 				}
 				// Draw tops of trees
