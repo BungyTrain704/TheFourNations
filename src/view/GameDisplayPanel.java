@@ -70,6 +70,10 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage airDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "airDude1.png");
 	private static BufferedImage kitchenImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "kitchenTile.png");
 	private static BufferedImage barracksImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "woodenFloor.png");
+	private static BufferedImage tableImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "table.png");
+	private static BufferedImage wellImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "well.png");
+	private static BufferedImage bedImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "bed.png");
+	private static BufferedImage barrelImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "barrel.png");
 
 	//Sub-panels
 	private JPanel gamePanel;
@@ -461,7 +465,8 @@ public class GameDisplayPanel extends JPanel {
 		for (int i = 0; i < map.getRows(); i++) {
 			for (int j = 0; j < map.getCols(); j++) {
 				// Draw plains of the map
-				if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
+				Cell currentCell = Civilization.getInstance().getMap().getCell(i, j);
+				if (currentCell.getTerrain()
 						.equals(Terrain.plains)) {
 					switch( t ) {
 					case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); break; //Draw snow
@@ -470,7 +475,7 @@ public class GameDisplayPanel extends JPanel {
 					}
 				}
 				// Draw coast
-				else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
+				else if (currentCell.getTerrain()
 						.equals(Terrain.coast)) {
 					switch( t ) {
 					case AIR: g2.drawImage(cloudCoastImg, j * 16, i * 16, null); break;
@@ -481,17 +486,17 @@ public class GameDisplayPanel extends JPanel {
 					}
 				}
 				// Draw water
-				else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain()
+				else if (currentCell.getTerrain()
 						.equals(Terrain.water)) {
 					switch( t ) {
 					case AIR: g2.drawImage(cloudImg, j * 16, i * 16, null); break; //Picking air draws clouds
 					default:  g2.drawImage(waterImg, j * 16, i * 16, null); break; //Water for everyone else
 					}
 				} 
-				else if (Civilization.getInstance().getMap().getCell(i, j).getTerrain().equals(Terrain.kitchen)) {
+				else if (currentCell.getTerrain().equals(Terrain.kitchen)) {
 					g2.drawImage(kitchenImg, j * 16, i * 16, null);
 				}
-				else if (Civilization.getInstance().getMap().getCell(i, j).equals(Terrain.barracks)) {
+				else if (currentCell.equals(Terrain.barracks)) {
 					g2.drawImage(barracksImg, j * 16, i * 16, null);
 				}
 				
@@ -508,9 +513,9 @@ public class GameDisplayPanel extends JPanel {
 				}
 				
 				// Overlay resources
-				if (Civilization.getInstance().getMap().getCell(i, j).hasResource()) {
+				if (currentCell.hasResource()) {
 					// Draw trees
-					if (Civilization.getInstance().getMap().getCell(i, j).getResource()
+					if (currentCell.getResource()
 							.equals(Resource.tree)) {
 						switch( t ) {
 						case WATER: g2.drawImage( snowTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break; //Snowy tree
@@ -519,7 +524,7 @@ public class GameDisplayPanel extends JPanel {
 						}
 					}
 					// Draw stones
-					else if (Civilization.getInstance().getMap().getCell(i, j).getResource()
+					else if (currentCell.getResource()
 							.equals(Resource.stone)) {
 						switch( t ) {
 						case WATER: g2.drawImage(snowStoneImg, j * 16, i * 16, null); break; //snow covered stones
@@ -541,26 +546,17 @@ public class GameDisplayPanel extends JPanel {
 					}
 				}
 				
-				//Draw grid lines
-				if(drawGridlines) {
-//					int cols = Civilization.getInstance().getMap().getCols();
-//					int rows = Civilization.getInstance().getMap().getRows();
-//					
-//					for( int k = 0; k < cols; k++ ) {
-//						Color previous = g2.getColor();
-//						g2.setColor( Color.black );
-//						g2.drawLine( 16 * k, 0, 16 * k, (int) this.getVisibleRect().getHeight() );
-//						g2.setColor( previous );
-//					}
-//					
-//					for( int g = 0; g < rows; g ++ ) {
-//						Color previous = g2.getColor();
-//						g2.setColor( Color.black );
-//						g2.setColor( new Color(0,0,0) );
-//						g2.drawLine( 0, 16 * g, this.getVisibleRect().width, 16 * g );
-//						g2.setColor( previous );
-//					}
-				}
+				if (currentCell.hasStructure()) {
+					if (currentCell.getStructure().providesFood()) {
+						g2.drawImage(tableImg, j * 16, i * 16, null);
+					} else if (currentCell.getStructure().providesDrink()) {
+						g2.drawImage(wellImg, j * 16, i * 16, null);
+					} else if (currentCell.getStructure().providesBed()) {
+						g2.drawImage(bedImg, j * 16, i * 16, null);
+					} else if (currentCell.getStructure().isAContainer()) {
+						g2.drawImage(barrelImg, j * 16, i * 16, null);
+					}
+ 				}
 				
 
 			}

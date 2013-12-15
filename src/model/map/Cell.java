@@ -93,6 +93,10 @@ public class Cell implements Serializable {
 		return item != null;
 	}
 	
+	public AbstractStructure getStructure() {
+		return item;
+	}
+	
 	public void addStructure(AbstractStructure built)	{
 		item = built;
 	}
