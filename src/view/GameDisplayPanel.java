@@ -83,7 +83,7 @@ public class GameDisplayPanel extends JPanel {
 	private JPanel commandPanel;
 	private JPanel infoPanel;
 	private JScrollPane gameView;
-	
+
 	// Viewport variables
 	private Point viewPosition;
 	private JViewport viewport;
@@ -91,10 +91,10 @@ public class GameDisplayPanel extends JPanel {
 
 	//Game components
 	private Map map = Civilization.getInstance().getMap();
-	
+
 	//Four nation frame
 	private JFrame parent;
-	
+
 	//Tile selection
 	private int currentlySelectedLocation = new Random().nextInt( Civilization.getInstance().getMap().getMapSize() ); //TODO: Uhh
 
@@ -109,7 +109,7 @@ public class GameDisplayPanel extends JPanel {
 		super.setLocation(0, 0);
 		super.setSize(1030, 735);
 		super.setBackground( new Color(0, 0, 0, 0 ) );
-		
+
 		// Set up map view
 		mapView = new MainMapPanel();
 		mapView.setLayout(null);
@@ -124,24 +124,25 @@ public class GameDisplayPanel extends JPanel {
 		gamePanel.setSize(775, 550);
 		gamePanel.setVisible(true);
 		super.add(gamePanel);
-		
+
 		// gameView displays mapView
 		gameView = new JScrollPane(mapView);
 		ClickDragListener cdl = new ClickDragListener(mapView);
 		gameView.getViewport().addMouseMotionListener(cdl);
 		gameView.getViewport().addMouseListener(cdl);
+		viewport = gameView.getViewport();
 		gameView.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		gameView.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		gameView.setBackground(Color.GRAY);
-        gameView.setSize(775, 550);
-        gamePanel.add(gameView);
-		
+		gameView.setSize(775, 550);
+		gamePanel.add(gameView);
+
 		// Set up mini map
 		miniMapView = new MiniMapPanel();
-		miniMapView.setLayout(null);
 		MiniClickDragListener mcdl = new MiniClickDragListener(mapView);
 		miniMapView.addMouseMotionListener(mcdl);
 		miniMapView.addMouseListener(mcdl);
+		miniMapView.setLayout(null);
 		miniMapView.setLocation(775, 360);
 		miniMapView.setSize(255, 250);
 		miniMapView.setVisible(true);
@@ -177,98 +178,97 @@ public class GameDisplayPanel extends JPanel {
 		infoPanel.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		super.add(infoPanel);
 	}
-	
+
 	// moves mapView with click & drag
 	private class ClickDragListener extends MouseAdapter {
-	
-	    private final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
-	    private final Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-	    private final Point pointClicked = new Point();
-	    private JPanel panel;
 
-	    public ClickDragListener(JPanel panel) {
-	        this.panel = panel;
-	    }
+		private final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+		private final Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+		private final Point pointClicked = new Point();
+		private JPanel panel;
 
-	    public void mouseDragged(final MouseEvent e) {
-	    	if( SwingUtilities.isRightMouseButton(e) ) {
-		        JViewport viewport = (JViewport)e.getSource();
-		        Point endPoint = e.getPoint();
-		        Point viewPosition = viewport.getViewPosition();
-		        viewPosition.translate(pointClicked.x-endPoint.x, pointClicked.y-endPoint.y);
-		        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
-		        pointClicked.setLocation(endPoint);
-	    	}
-	    }
+		public ClickDragListener(JPanel panel) {
+			this.panel = panel;
+			viewPosition = new Point(0,0);
+		}
 
-	    public void mousePressed(MouseEvent e) {
-	        panel.setCursor(handCursor);
-	        pointClicked.setLocation(e.getPoint());
-	    }
+		public void mouseDragged(final MouseEvent e) {
+			endPoint = e.getPoint();
+			viewPosition = viewport.getViewPosition();
+			viewPosition.translate(pointClicked.x-endPoint.x, pointClicked.y-endPoint.y);
+			panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
+			pointClicked.setLocation(endPoint);
+		}
 
-	    public void mouseReleased(MouseEvent e) {
-	        panel.setCursor(defaultCursor);
-	        panel.repaint();
-	    }
+		public void mousePressed(MouseEvent e) {
+			panel.setCursor(handCursor);
+			pointClicked.setLocation(e.getPoint());
+		}
+
+		public void mouseReleased(MouseEvent e) {
+			panel.setCursor(defaultCursor);
+			//		        panel.repaint();
+		}
 	}
-	
+
+
 	private class MiniClickDragListener extends MouseAdapter{
-		
-		 private final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
-		    private final Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-		    private final Point pointClicked = new Point();
-		    private JPanel panel;
 
-		    public MiniClickDragListener(JPanel panel) {
-		        this.panel = panel;
-		        viewPosition = new Point(0,0);
-		    }
+		private final Cursor defaultCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+		private final Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+		private final Point pointClicked = new Point();
+		private JPanel panel;
 
-		    public void mouseDragged(final MouseEvent e) {
-		        endPoint = e.getPoint();
-		        viewPosition = viewport.getViewPosition();
-		        viewPosition.translate(-4*(pointClicked.x-endPoint.x), -4*(pointClicked.y-endPoint.y));
-		        panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
-		        pointClicked.setLocation(endPoint);
-		    }
+		public MiniClickDragListener(JPanel panel) {
+			this.panel = panel;
+			viewPosition = new Point(0,0);
+		}
 
-		    public void mousePressed(MouseEvent e) {
-		        panel.setCursor(handCursor);
-		        pointClicked.setLocation(e.getPoint());
-		    }
+		public void mouseDragged(final MouseEvent e) {
+			endPoint = e.getPoint();
+			viewPosition = viewport.getViewPosition();
+			viewPosition.translate(-4*(pointClicked.x-endPoint.x), -4*(pointClicked.y-endPoint.y));
+			panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
+			pointClicked.setLocation(endPoint);
+		}
 
-		    public void mouseReleased(MouseEvent e) {
-		        panel.setCursor(defaultCursor);
-//		        panel.repaint();
-		    }
+		public void mousePressed(MouseEvent e) {
+			panel.setCursor(handCursor);
+			pointClicked.setLocation(e.getPoint());
+		}
+
+		public void mouseReleased(MouseEvent e) {
+			panel.setCursor(defaultCursor);
+			//			        panel.repaint();
+		}
 	}
-	
+
 	private class CommandsPanel extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 138601043040511594L;
 		private JButton plantFood, plantTree, collectResource, buildWell, buildTable, buildBed;
-		
+
 		public CommandsPanel() {
 			super.setLayout( new FlowLayout() );
-			
+
 			//Buttons
 			this.plantFood = new JButton( "Plant food" );
 			this.plantFood.addActionListener( this );
-			
+
 			this.plantTree = new JButton( "Plant tree" );
 			this.plantTree.addActionListener( this );
-			
+
 			this.collectResource = new JButton( "Collect resource" );
 			this.collectResource.addActionListener( this );
-			
+
 			this.buildBed = new JButton( "Build bed" );
 			this.buildBed.addActionListener( this );
-			
+
 			this.buildTable = new JButton( "Build table" );
 			this.buildTable.addActionListener( this );
-			
+
 			this.buildWell = new JButton( "Build well" );
 			this.buildWell.addActionListener( this );
-			
+
 			super.add( this.plantFood );
 			super.add( this.plantTree );
 			super.add( this.collectResource );
@@ -276,13 +276,13 @@ public class GameDisplayPanel extends JPanel {
 			super.add( this.buildWell );
 			super.add( this.buildTable );
 		}
-		
+
 		@Override public void actionPerformed(ActionEvent e) {
 			Civilization civ = Civilization.getInstance();
 			Map m = civ.getMap();
 			Cell c = m.getCell(currentlySelectedLocation);
-			
-			
+
+
 			if( e.getSource() == this.plantFood ) {
 				try {
 					Civilization.getInstance().addTaskToQueue( new PlantResourceTask(currentlySelectedLocation, m, Resource.garden ) );
@@ -291,7 +291,7 @@ public class GameDisplayPanel extends JPanel {
 					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
 				}
 			}
-			
+
 			else if( e.getSource() == this.plantTree ) {
 				try {
 					Civilization.getInstance().addTaskToQueue( new PlantResourceTask(currentlySelectedLocation, m, Resource.tree ) );
@@ -300,7 +300,7 @@ public class GameDisplayPanel extends JPanel {
 					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
 				}
 			}
-			
+
 			else if( e.getSource() == this.collectResource ) {
 				if( c.hasResource() ) {
 					try {
@@ -314,7 +314,7 @@ public class GameDisplayPanel extends JPanel {
 					JOptionPane.showMessageDialog( parent, "There is no resource to collect" , "Invalid Task!", JOptionPane.ERROR_MESSAGE );
 				}
 			}
-		
+
 			else if( e.getSource() == this.buildBed ) {
 				try {
 					Civilization.getInstance().addTaskToQueue( new BuildStructureTask( 5, m, 
@@ -324,7 +324,7 @@ public class GameDisplayPanel extends JPanel {
 					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
 				}
 			}
-			
+
 			else if( e.getSource() == this.buildTable ) {
 				try {
 					Civilization.getInstance().addTaskToQueue( new BuildStructureTask( 10, m, 
@@ -334,7 +334,7 @@ public class GameDisplayPanel extends JPanel {
 					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
 				}
 			}
-			
+
 			else if( e.getSource() == this.buildWell ) {
 				try {
 					Civilization.getInstance().addTaskToQueue( new BuildStructureTask( 20, m, 
@@ -346,26 +346,26 @@ public class GameDisplayPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	private class GameControlPanel extends JPanel implements ActionListener {
 		private static final long serialVersionUID = -8816383781883960549L;
 		private JButton pauseResumeButton, exit;
 		private final String PAUSE_GAME_TEXT = "Pause Game";
 		private final String RESUME_GAME_TEXT = "Resume Game";
-		
+
 		public GameControlPanel() {
 			super.setLayout( new FlowLayout() );
-			
+
 			this.pauseResumeButton = new JButton( PAUSE_GAME_TEXT );
 			this.pauseResumeButton.addActionListener( this );
-			
+
 			this.exit = new JButton( "Exit" );
 			this.exit.addActionListener( this );
-			
+
 			super.add( this.pauseResumeButton );
 			super.add( this.exit );
 		}
-		
+
 		@Override public void actionPerformed(ActionEvent ae) {
 			if( ae.getSource() == this.pauseResumeButton ) {
 				switch( this.pauseResumeButton.getText() ) {
@@ -382,7 +382,7 @@ public class GameDisplayPanel extends JPanel {
 					break;
 				}
 			}
-			
+
 			else if ( ae.getSource() == this.exit ) {
 				int saveGame = JOptionPane.showConfirmDialog( this, "Would you like to save your game?",
 						"Save game?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE );
@@ -402,7 +402,7 @@ public class GameDisplayPanel extends JPanel {
 	}
 
 	// Special panel for drawing the main map
-	private class MainMapPanel extends JPanel implements MouseListener {
+	private class MainMapPanel extends JPanel {
 		private static final long serialVersionUID = 3447252446251327666L;
 
 		public MainMapPanel() {
@@ -415,16 +415,10 @@ public class GameDisplayPanel extends JPanel {
 			drawMap(g2, true );
 		}
 
-		/* Unused inherited methods */
-		@Override public void mouseClicked(MouseEvent e) { }
-		@Override public void mouseEntered(MouseEvent e) { }
-		@Override public void mouseExited(MouseEvent e) { }
-		@Override public void mousePressed(MouseEvent e) { }
-		@Override public void mouseReleased(MouseEvent e) { }
 	}
 
 	// Special panel for drawing the mini map and navigating the main map
-	private class MiniMapPanel extends JPanel implements MouseListener {
+	private class MiniMapPanel extends JPanel {
 		private static final long serialVersionUID = 2911016188722752273L;
 		private BufferedImage mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
@@ -433,30 +427,20 @@ public class GameDisplayPanel extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
-			
+
 			mapImg = new BufferedImage(mapView.getWidth(), mapView.getHeight(),
 					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = mapImg.createGraphics();
-			g2d.scale(.35, .35); 
+			g2d.scale(.24, .24); 
 			drawMap( g2d, false );
 			g2d.dispose();
-			
+
 			g2.drawImage(mapImg, 0, 0, null);
-			g2.setPaint(Color.RED);
-			g2.drawRect(3, 3, (int) (gamePanel.getWidth() * .175),
-					(int) (gamePanel.getHeight() * .175));
+			//				g2.setPaint(Color.RED);
+			//				g2.drawRect(2, 2, (int) (gamePanel.getWidth() * .24),
+			//						(int) (gamePanel.getHeight() * .24));
 		}
 
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-
-		}
-
-		/* Unused inherited methods */
-		@Override public void mouseEntered(MouseEvent arg0) { }
-		@Override public void mouseExited(MouseEvent arg0) { }
-		@Override public void mousePressed(MouseEvent arg0) { }
-		@Override public void mouseReleased(MouseEvent arg0) { }
 	}
 
 	public void drawMap( Graphics2D g2, boolean drawGridlines ) {
@@ -469,9 +453,9 @@ public class GameDisplayPanel extends JPanel {
 				if (currentCell.getTerrain()
 						.equals(Terrain.plains)) {
 					switch( t ) {
-					case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); break; //Draw snow
-					case EARTH: g2.drawImage(desertImg, j * 16, i * 16, null); break; //Draw desert 
-					default: 	g2.drawImage(grassImg, j * 16, i * 16, null); break; //Grass for everyone else
+					case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); break;
+					case EARTH: g2.drawImage(desertImg, j * 16, i * 16, null); break;
+					default: 	g2.drawImage(grassImg, j * 16, i * 16, null); break;
 					}
 				}
 				// Draw coast
@@ -482,16 +466,18 @@ public class GameDisplayPanel extends JPanel {
 					case WATER: g2.drawImage(snowCoastImg, j * 16, i * 16, null); break;
 					case EARTH: g2.drawImage(desertCoastImg, j * 16, i * 16, null); break;
 					default:  g2.drawImage(coastImg, j * 16, i * 16, null); break;
-					
+
 					}
 				}
 				// Draw water
 				else if (currentCell.getTerrain()
 						.equals(Terrain.water)) {
 					switch( t ) {
-					case AIR: g2.drawImage(cloudImg, j * 16, i * 16, null); break; //Picking air draws clouds
-					default:  g2.drawImage(waterImg, j * 16, i * 16, null); break; //Water for everyone else
+					case AIR: g2.drawImage(cloudImg, j * 16, i * 16, null); break;
+					default:  g2.drawImage(waterImg, j * 16, i * 16, null); break;
+
 					}
+
 				} 
 				else if (currentCell.getTerrain().equals(Terrain.kitchen)) {
 					g2.drawImage(kitchenImg, j * 16, i * 16, null);
@@ -500,27 +486,28 @@ public class GameDisplayPanel extends JPanel {
 					g2.drawImage(barracksImg, j * 16, i * 16, null);
 				}
 				
+
 				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
 					int location = Civilization.getInstance().getUnits().get(k).getLocation();
 					int row = location/map.getCols();
 					int col = location%map.getCols();
 					switch( t ) {
-					case WATER: g2.drawImage(waterDude1, col * 16 - 8, row * 15 + 8, null); break; //Water tribe sprite
-					case FIRE: g2.drawImage(fireDude1, col * 16 - 8, row * 15 + 8, null); break; //Fire nation sprite
-					case EARTH: g2.drawImage(earthDude1, col * 16 - 8, row * 15 + 8, null); break; //Earth kingdom sprite
-					case AIR: g2.drawImage(airDude1, col * 16 - 8, row * 15 + 8, null); break; //Air nomad sprite
+					case WATER: g2.drawImage(waterDude1, col * 16 - 8, row * 15 + 4, null); break;
+					case FIRE: g2.drawImage(fireDude1, col * 16 - 8, row * 15 + 4, null); break;
+					case EARTH: g2.drawImage(earthDude1, col * 16 - 8, row * 15 + 4, null); break;
+					case AIR: g2.drawImage(airDude1, col * 16 - 8, row * 15 + 4, null); break;
 					}
 				}
-				
+
 				// Overlay resources
 				if (currentCell.hasResource()) {
 					// Draw trees
 					if (currentCell.getResource()
 							.equals(Resource.tree)) {
 						switch( t ) {
-						case WATER: g2.drawImage( snowTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break; //Snowy tree
-						case EARTH:g2.drawImage( bareTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break; //Bare tree
-						default: g2.drawImage(treeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break; //Regular tree
+						case WATER: g2.drawImage( snowTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break;
+						case EARTH:g2.drawImage( bareTreeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break;
+						default: g2.drawImage(treeImg.getSubimage(0, 16, 16, 16), j * 16, i * 16, null); break;
 						}
 					}
 					// Draw stones
@@ -545,6 +532,7 @@ public class GameDisplayPanel extends JPanel {
 						}
 					}
 				}
+
 				
 				if (currentCell.hasStructure()) {
 					if (currentCell.getStructure().providesFood()) {
@@ -557,13 +545,11 @@ public class GameDisplayPanel extends JPanel {
 						g2.drawImage(barrelImg, j * 16, i * 16, null);
 					}
  				}
-				
-
-			}
+			
 		}
 		// Draw rectangle
 		g2.setPaint(Color.RED);
-		g2.drawRect(viewPosition.x-2, viewPosition.y-2, (int) (gamePanel.getWidth()+10),
-				(int) (gamePanel.getHeight()+10));
+		g2.drawRect(viewPosition.x-2, viewPosition.y-2, (int) (gamePanel.getWidth()+10), (int) (gamePanel.getHeight()+10));
 	}
+}
 }
