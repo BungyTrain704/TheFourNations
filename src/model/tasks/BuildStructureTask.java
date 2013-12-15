@@ -40,6 +40,16 @@ public class BuildStructureTask extends Task {
 							 validTypes + " but the cell is " + civ.getMap().getCell(location).getTerrain().name();
 			throw new DisallowedTaskException( this, message );
 		}
+		
+		Civilization civ = Civilization.getInstance();
+		int resourceAmount = structureToBuild.getAmountOfResourceUsed();
+		ResourceType typeUsed = structureToBuild.getResourceTypeUsed();
+		
+		if( civ.getResourceAmount( typeUsed ) < resourceAmount ) {
+			String message = "This building requires " + resourceAmount + " " + typeUsed + " but you only have " +
+					civ.getResourceAmount(typeUsed) + ".";
+			throw new DisallowedTaskException( this, message );
+		}
 	}
 	
 	private boolean isValidStructureLocation() {
@@ -55,20 +65,10 @@ public class BuildStructureTask extends Task {
 		int resourceAmount = structureToBuild.getAmountOfResourceUsed();
 		ResourceType typeUsed = structureToBuild.getResourceTypeUsed();
 		
-		//Check that the user has enough resources to build the structure
-		if( civ.getResourceAmount( typeUsed ) >= resourceAmount) {
-			map.getCell(super.locationOfTask).addStructure(this.structureToBuild);
-			map.makeInaccesible(super.locationOfTask);
-			civ.addStructure( this.structureToBuild );
-			civ.pollResource( typeUsed, resourceAmount );
-			this.isDone = true;
-		}
-		
-		//Throw an exception if not
-		else {
-			String message = "This building requires " + resourceAmount + " " + typeUsed + " but you only have " +
-					civ.getResourceAmount(typeUsed) + ".";
-			throw new DisallowedTaskException( this, message );
-		}
+		map.getCell(super.locationOfTask).addStructure(this.structureToBuild);
+		map.makeInaccesible(super.locationOfTask);
+		civ.addStructure( this.structureToBuild );
+		civ.pollResource( typeUsed, resourceAmount );
+		this.isDone = true;
 	}
 }
