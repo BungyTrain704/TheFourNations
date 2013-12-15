@@ -77,6 +77,7 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage barrelImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "barrel.png");
 	private static BufferedImage goldImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "gold.png" );
 	private static BufferedImage cabbageImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "cabbage.png" );
+	private static BufferedImage stockpileImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "stockpile.png" );
 
 	//Sub-panels
 	private JPanel gamePanel;
@@ -574,6 +575,9 @@ public class GameDisplayPanel extends JPanel {
 				}
 				else if (currentCell.equals(Terrain.barracks)) {
 					g2.drawImage(barracksImg, j * 16, i * 16, null);
+				}
+				else if( currentCell.equals( Terrain.stockpile ) ) {
+					g2.drawImage( stockpileImg, j * 16, i * 16, null );
 				}
 				
 
