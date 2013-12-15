@@ -25,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 
 import model.Civilization;
 import model.CivilizationState;
@@ -193,11 +194,15 @@ public class GameDisplayPanel extends JPanel {
 		}
 
 		public void mouseDragged(final MouseEvent e) {
-			endPoint = e.getPoint();
-			viewPosition = viewport.getViewPosition();
-			viewPosition.translate(pointClicked.x-endPoint.x, pointClicked.y-endPoint.y);
-			panel.scrollRectToVisible(new Rectangle(viewPosition, viewport.getSize()));
-			pointClicked.setLocation(endPoint);
+			if ( SwingUtilities.isRightMouseButton(e) ) {
+				endPoint = e.getPoint();
+				viewPosition = viewport.getViewPosition();
+				viewPosition.translate(pointClicked.x - endPoint.x,
+						pointClicked.y - endPoint.y);
+				panel.scrollRectToVisible(new Rectangle(viewPosition, viewport
+						.getSize()));
+				pointClicked.setLocation(endPoint);
+			}
 		}
 
 		public void mousePressed(MouseEvent e) {
@@ -212,6 +217,7 @@ public class GameDisplayPanel extends JPanel {
 	}
 	
 	private class CellInformationPanel extends JPanel {
+		private static final long serialVersionUID = -7578063348993240808L;
 		private JTextArea civilizationInformation, unitInformation, cellInformation;
 		private JScrollPane civilizationInformationScroller, unitInformationScroller, cellInformationScroller;
 		
