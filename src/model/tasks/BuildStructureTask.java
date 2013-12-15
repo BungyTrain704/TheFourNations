@@ -33,8 +33,11 @@ public class BuildStructureTask extends Task {
 		if( ! isValidStructureLocation() ) {
 			int location = structure.getLocation();
 			Set<Terrain> types = structure.getValidTerrainTypes();
+			String validTypes = "";
+			for( Terrain t : types ) validTypes += t.name() + ",";
+			if( validTypes.endsWith("," ) ) validTypes = validTypes.substring(0, validTypes.lastIndexOf("," ) );
 			String message = "The location " + location + " is not valid. " + structure.getName() + " requires " +
-							 types.toString() + " but the cell is " + civ.getMap().getCell(location).getTerrain();
+							 validTypes + " but the cell is " + civ.getMap().getCell(location).getTerrain().name();
 			throw new DisallowedTaskException( this, message );
 		}
 	}
