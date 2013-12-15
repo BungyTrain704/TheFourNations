@@ -66,9 +66,17 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage snowStoneImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "snowStones.png");
 	private static BufferedImage earthStoneImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "earthStones.png");
 	private static BufferedImage waterDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "waterDude1.png");
+	private static BufferedImage waterDude2 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "waterDude2.png");
+	private static BufferedImage waterDude3 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "waterDude3.png");
 	private static BufferedImage fireDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "fireDude1.png");
+	private static BufferedImage fireDude2 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "fireDude2.png");
+	private static BufferedImage fireDude3 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "fireDude3.png");
 	private static BufferedImage earthDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "earthDude1.png");
+	private static BufferedImage earthDude2 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "earthDude2.png");
+	private static BufferedImage earthDude3 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "earthDude3.png");
 	private static BufferedImage airDude1 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "airDude1.png");
+	private static BufferedImage airDude2 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "airDude2.png");
+	private static BufferedImage airDude3 = GameImageLoader.getImage(GameImageLoader.imagesFolder + "airDude3.png");
 	private static BufferedImage kitchenImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "kitchenTile.png");
 	private static BufferedImage barracksImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "woodenFloor.png");
 	private static BufferedImage tableImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "table.png");
@@ -217,6 +225,7 @@ public class GameDisplayPanel extends JPanel {
 			panel.setCursor(defaultCursor);
 			//		        panel.repaint();
 		}
+		
 		public void mouseClicked(MouseEvent e)  {
 			currentlySelectedLocation = ((((e.getX() + viewPosition.x - 1)/16)) % map.getCols()) + ((((e.getY() + viewPosition.y - 1) / 16)) * map.getCols());
 		}
@@ -592,14 +601,46 @@ public class GameDisplayPanel extends JPanel {
 				
 
 				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
-					int location = Civilization.getInstance().getUnits().get(k).getLocation();
+					Unit unit = Civilization.getInstance().getUnits().get(k);
+					int location = unit.getLocation();
+					int spriteType = unit.getSpriteType();
 					int row = location/map.getCols();
 					int col = location%map.getCols();
+					
 					switch( t ) {
-					case WATER: g2.drawImage(waterDude1, col * 16 - 8, row * 15 + 4, null); break;
-					case FIRE: g2.drawImage(fireDude1, col * 16 - 8, row * 15 + 4, null); break;
-					case EARTH: g2.drawImage(earthDude1, col * 16 - 8, row * 15 + 4, null); break;
-					case AIR: g2.drawImage(airDude1, col * 16 - 8, row * 15 + 4, null); break;
+					case WATER: 
+						if (spriteType == 0) {
+							g2.drawImage(waterDude1, col * 16 - 8, (row - 1) * 16, null); break;
+						} else if (spriteType == 1) {
+							g2.drawImage(waterDude2, col * 16 - 8, (row - 1) * 16, null); break;
+						} else {
+							g2.drawImage(waterDude3, col * 16 - 8, (row - 1) * 16, null); break;
+						}
+					
+					case FIRE: 
+						if (spriteType == 0) {
+							g2.drawImage(fireDude1, col * 16 - 8, (row - 1) * 16, null); break;
+						} else if (spriteType == 1) {
+							g2.drawImage(fireDude2, col * 16 - 8, (row - 1) * 16, null); break;
+						} else {
+							g2.drawImage(fireDude3, col * 16 - 8, (row - 1) * 16, null); break;
+						}
+					case EARTH: 
+						if (spriteType == 0) {
+							g2.drawImage(earthDude1, col * 16 - 8, (row - 1) * 16, null); break;
+						} else if (spriteType == 1) {
+							g2.drawImage(earthDude2, col * 16 - 8, (row - 1) * 16, null); break;
+						} else {
+							g2.drawImage(earthDude3, col * 16 - 8, (row - 1) * 16, null); break;
+						}
+					case AIR: 
+						if (spriteType == 0) {
+							g2.drawImage(airDude1, col * 16 - 8, (row - 1) * 16, null); break;
+						} else if (spriteType == 1) {
+							g2.drawImage(airDude2, col * 16 - 8, (row - 1) * 16, null); break;
+						} else {
+							g2.drawImage(airDude3, col * 16 - 8, (row - 1) * 16, null); break;
+						}
 					}
 				}
 

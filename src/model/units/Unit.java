@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -38,6 +39,9 @@ public abstract class Unit implements Serializable {
 	private boolean currentlyWorking = false;
 	private int location;
 	private int cols;
+	private int spriteType;
+	private Random rand = new Random();
+
 
 	/**
 	 * Creates a unit that has a specific set of skills
@@ -60,6 +64,8 @@ public abstract class Unit implements Serializable {
 		this.movementQueue = new LinkedList<Integer>();
 		this.location = location;
 		this.cols = cols;
+
+		this.spriteType = rand.nextInt(3);
 	}
 
 	/**
@@ -72,6 +78,7 @@ public abstract class Unit implements Serializable {
 	 */
 	public Unit( String name, int maxEnergyLevel, int maxHungerLevel, int cols) {
 		this.name = name;
+		this.spriteType = rand.nextInt(3);
 		this.energyLevel = (int)(maxEnergyLevel * 0.75);
 		this.hungerLevel = (int)(maxHungerLevel * 0.75);
 		this.thirstLevel = (int)(maxHungerLevel * 0.75);
@@ -80,6 +87,7 @@ public abstract class Unit implements Serializable {
 		this.MAX_THIRST_LEVEL = maxHungerLevel; //TODO:
 		this.cols = cols;
 		this.movementQueue = new LinkedList<Integer>();
+
 
 		//Initialize all skills at one
 		this.skills = new HashMap<UnitSkill, Integer>();
@@ -435,6 +443,10 @@ public abstract class Unit implements Serializable {
 	public void setCols(int cols2) {
 		this.cols = cols2;
 
+	}
+	
+	public int getSpriteType() {
+		return this.spriteType;
 	}
 	
 	public String toString() {

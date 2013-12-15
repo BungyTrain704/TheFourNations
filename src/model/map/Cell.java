@@ -86,7 +86,7 @@ public class Cell implements Serializable {
 	}
 	
 	public boolean isAccessible() {
-		return !( this.hasResource || this.terrain == Terrain.water || this.hasStructure() );
+		return !( this.hasResource || this.terrain == Terrain.water || this.hasStructure() || this.terrain == Terrain.rockyPlains );
 	}
 	
 	public boolean hasStructure() {
