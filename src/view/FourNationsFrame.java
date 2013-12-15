@@ -7,11 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import model.Civilization;
 import model.Tribe;
+import model.map.ResourceType;
 
 /**
  * The primary frame for The Four Nations game. Handles panel switching
@@ -41,8 +43,17 @@ public class FourNationsFrame extends JFrame {
 		civ.setTribe( Tribe.values()[ (int) (Math.random() * Tribe.values().length) ] );
 		this.timer = new Timer( 300, new ActionListener() {
 			@Override public void actionPerformed(ActionEvent arg0) {
+				//1% chance to lose 10% food stores
+				if( Math.random() < 0.01 ) {
+					ResourceType food = ResourceType.food;
+					Civilization.getInstance().setResourceAmount(food,  (int) (Civilization.getInstance().getResourceAmount(food) * 0.9) );
+					pause();
+					JOptionPane.showMessageDialog( null,  "Famine strikes and eliminates 10% of your food stores!" );
+					resume();
+				}
 				Civilization.getInstance().update();
 				repaint();
+				gameDisplayPanel.update();
 			}
 		});
 		initComponents();

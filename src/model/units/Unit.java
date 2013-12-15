@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import javax.swing.JOptionPane;
+
 import model.Civilization;
 import model.map.ResourceType;
 import model.structures.AbstractStructure;
@@ -324,6 +326,7 @@ public abstract class Unit implements Serializable {
 			civ.addTaskToQueue(this.currentTask);
 		civ.removeUnit(this);
 		civ.getMap().getCell(this.location).setUnit(false);
+		JOptionPane.showMessageDialog( null, "A unit has died!" );
 	}
 
 	/**
@@ -432,5 +435,17 @@ public abstract class Unit implements Serializable {
 	public void setCols(int cols2) {
 		this.cols = cols2;
 
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		String lineSep = System.lineSeparator();
+		
+		sb.append( "Hunger Level: ").append( this.hungerLevel).append("/").append( this.MAX_HUNGER_LEVEL ).append(lineSep);
+		sb.append( "Energy Level: ").append( this.energyLevel).append("/").append( this.MAX_ENERGY_LEVEL ).append(lineSep);
+		sb.append( "Thirst Level: ").append( this.thirstLevel).append("/").append( this.MAX_THIRST_LEVEL ).append(lineSep);
+		sb.append( "Location: " ).append( "(" ).append( this.location % cols ).append(",").append( this.location/cols).append( lineSep );
+		
+		return sb.toString();
 	}
 }

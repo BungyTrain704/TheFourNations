@@ -12,8 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -22,9 +22,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 
 import model.Civilization;
 import model.CivilizationState;
@@ -43,6 +43,7 @@ import model.structures.Well;
 import model.tasks.BuildStructureTask;
 import model.tasks.CollectResourceTask;
 import model.tasks.PlantResourceTask;
+import model.units.Unit;
 
 public class GameDisplayPanel extends JPanel {
 
@@ -165,8 +166,7 @@ public class GameDisplayPanel extends JPanel {
 		super.add(statsPanel);
 
 		// Set up info panel
-		infoPanel = new JPanel();
-		infoPanel.setLayout(null);
+		infoPanel = new CellInformationPanel();
 		infoPanel.setLocation(775, 0);
 		infoPanel.setSize(255, 360);
 		infoPanel.setVisible(true);
@@ -204,6 +204,85 @@ public class GameDisplayPanel extends JPanel {
 		public void mouseReleased(MouseEvent e) {
 			panel.setCursor(defaultCursor);
 			//		        panel.repaint();
+		}
+	}
+	
+	private class CellInformationPanel extends JPanel {
+		private JTextArea civilizationInformation, unitInformation, cellInformation;
+		private JScrollPane civilizationInformationScroller, unitInformationScroller, cellInformationScroller;
+		
+		public CellInformationPanel() {
+			super.setLayout( new FlowLayout() );
+			
+			//Text areas
+			this.civilizationInformation = new JTextArea();
+			this.civilizationInformation.setEditable( false );
+			this.civilizationInformation.setSize( 210, 110 );
+			
+			this.unitInformation = new JTextArea();
+			this.unitInformation.setEditable( false );
+			this.unitInformation.setSize( 210, 110 );
+			
+			this.cellInformation = new JTextArea();
+			this.cellInformation.setEditable( false );
+			this.cellInformation.setSize( 210, 110 );
+			
+			//Scrollpanes
+			this.civilizationInformationScroller = new JScrollPane( this.civilizationInformation );
+			this.civilizationInformationScroller.setBorder( BorderFactory.createTitledBorder( "Civilization: " ) );
+			this.civilizationInformationScroller.setPreferredSize( this.civilizationInformation.getSize() );
+			
+			this.unitInformationScroller = new JScrollPane( this.unitInformation );
+			this.unitInformationScroller.setBorder( BorderFactory.createTitledBorder( "Units: " ) );
+			this.unitInformationScroller.setPreferredSize( this.unitInformation.getSize() );
+			
+			this.cellInformationScroller = new JScrollPane( this.cellInformation );
+			this.cellInformationScroller.setBorder( BorderFactory.createTitledBorder( "Selected Cell: " ) );
+			this.cellInformationScroller.setPreferredSize( this.cellInformation.getSize() );
+			
+			//Add components
+			super.add( this.civilizationInformationScroller );
+			super.add( this.unitInformationScroller );
+			super.add( this.cellInformationScroller );
+			
+			updateTextAreas();
+		}
+		
+		public void updateTextAreas() {
+			//Clear out text areas
+			this.civilizationInformation.setText("");
+			this.unitInformation.setText("");
+			this.cellInformation.setText("");
+			
+			//Print resource counts
+			for( ResourceType rt : ResourceType.values() )
+				this.civilizationInformation.append( rt + ": " + 
+							Civilization.getInstance().getResourceAmount(rt) + System.lineSeparator() );
+			
+			//Print out unit information
+			ArrayList<Unit> units = Civilization.getInstance().getUnits();
+			for( int i = 0; i < units.size(); i++ ) {
+				this.unitInformation.append( "Unit #" );
+				this.unitInformation.append( (i + 1) + System.lineSeparator());
+				this.unitInformation.append( units.get(i).toString() + System.lineSeparator() );
+			}
+			
+			//Print out cell information
+			Cell c = map.getCell(currentlySelectedLocation);
+			this.cellInformation.append( "Location: (" + 
+					( currentlySelectedLocation % map.getCols() ) + ", " +
+					currentlySelectedLocation / map.getCols() + ")" + System.lineSeparator() );
+			this.cellInformation.append( "Terrain: " + c.getTerrain().name() + System.lineSeparator() );
+			this.cellInformation.append( "Resource: " + (c.hasResource() ? c.getResource() : "None" ) + System.lineSeparator() );
+		}
+	}
+	
+	/**
+	 * Method that can be called from outside of this class to 
+	 */
+	public void update() {
+		if( this.infoPanel != null ) {
+			((CellInformationPanel) this.infoPanel).updateTextAreas();
 		}
 	}
 

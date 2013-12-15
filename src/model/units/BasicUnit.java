@@ -20,12 +20,15 @@ public class BasicUnit extends Unit {
 	}
 
 	/**
-	 * Lose 1 hunger per update
+	 * Lose 1 hunger, energy, thirst per update
 	 */
 	@Override protected void updateUnitCounters() {
-		this.hungerLevel -= 1;
+		this.hungerLevel--;
+		this.energyLevel--;
+		this.thirstLevel--;
 		
-		if( this.hungerLevel <= 0 ) Civilization.getInstance().sentenceToDeath( this );
+		if( hungerLevel <= 0 || energyLevel <= 0 || thirstLevel <= 0) 
+			Civilization.getInstance().sentenceToDeath( this );
 	}
 
 	
@@ -41,7 +44,7 @@ public class BasicUnit extends Unit {
 			{
 				if(m.getCell(loc).isAccessible())
 				{
-					Unit baby = new BasicUnit("U", 100, 500, cols);
+					Unit baby = new BasicUnit("U", 500, 500, cols);
 					baby.setLocation(loc);
 					baby.setHungerLevel( baby.getHungerLevel() / 2 );
 					m.getCell(loc).setUnit(true);
