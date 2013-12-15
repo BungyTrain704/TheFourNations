@@ -46,7 +46,7 @@ public class BuildStructureTask extends Task {
 		ResourceType typeUsed = structureToBuild.getResourceTypeUsed();
 		
 		if( civ.getResourceAmount( typeUsed ) < resourceAmount ) {
-			String message = "This building requires " + resourceAmount + " " + typeUsed + " but you only have " +
+			String message = "This building requires " + resourceAmount + " " + typeUsed.name() + " but you only have " +
 					civ.getResourceAmount(typeUsed) + ".";
 			throw new DisallowedTaskException( this, message );
 		}

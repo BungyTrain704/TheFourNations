@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -286,7 +285,7 @@ public class GameDisplayPanel extends JPanel {
 					( currentlySelectedLocation % map.getCols() ) + ", " +
 					currentlySelectedLocation / map.getCols() + ")" + System.lineSeparator() );
 			this.cellInformation.append( "Terrain: " + c.getTerrain().name() + System.lineSeparator() );
-			this.cellInformation.append( "Resource: " + (c.hasResource() ? c.getResource() : "None" ) + System.lineSeparator() );
+			this.cellInformation.append( "Resource: " + (c.hasResource() ? c.getResource().name() : "None" ) + System.lineSeparator() );
 		}
 	}
 	
