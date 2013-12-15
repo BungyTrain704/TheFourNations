@@ -56,6 +56,7 @@ public class Civilization {
 		
 		this.globalResourcePool.put( ResourceType.wood, 3 );
 		this.globalResourcePool.put( ResourceType.food, 500 );
+		this.globalResourcePool.put( ResourceType.gold, 10 );
 	}
 
 	/**
