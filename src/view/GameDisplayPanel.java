@@ -76,6 +76,7 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage bedImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "bed.png");
 	private static BufferedImage barrelImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "barrel.png");
 	private static BufferedImage goldImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "gold.png" );
+	private static BufferedImage cabbageImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "cabbage.png" );
 
 	//Sub-panels
 	private JPanel gamePanel;
@@ -610,6 +611,9 @@ public class GameDisplayPanel extends JPanel {
 					}
 					else if( currentCell.getResource() == Resource.goldMine ) {
 						g2.drawImage( goldImg, j * 16, i * 16, null );
+					}
+					else if( currentCell.getResource() == Resource.garden ) {
+						g2.drawImage( cabbageImg, j * 16, i * 16, null );
 					}
 				}
 				// Draw tops of trees
