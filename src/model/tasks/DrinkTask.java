@@ -22,7 +22,7 @@ public class DrinkTask extends Task {
 	@Override public void performAction() {
 		int maxThirstLevel = unit.getMAX_THIRST_LEVEL();
 		
-		unit.setHungerLevel( maxThirstLevel);
+		unit.setThirstLevel( maxThirstLevel);
 		this.isDone = true;
 	}
 

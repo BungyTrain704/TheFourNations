@@ -231,7 +231,7 @@ public abstract class Unit implements Serializable {
 					}
 				}
 			}
-			else if(this.needsToSleep())
+			if(this.needsToSleep() && !this.workingOnNeed())
 			{
 				//Place task back on queue
 				if( this.currentTask != null ) {
@@ -258,7 +258,7 @@ public abstract class Unit implements Serializable {
 					}
 				}	
 			}
-			else if(this.needsToDrink())
+			if(this.needsToDrink() && !this.workingOnNeed())
 			{
 				//Place task back on queue
 				if( this.currentTask != null ) {
@@ -468,5 +468,9 @@ public abstract class Unit implements Serializable {
 		sb.append( "Location: " ).append( "(" ).append( this.location % cols ).append(",").append( this.location/cols).append( lineSep );
 		
 		return sb.toString();
+	}
+
+	public void setThirstLevel(int maxThirstLevel) {
+		this.thirstLevel = maxThirstLevel;
 	}
 }
