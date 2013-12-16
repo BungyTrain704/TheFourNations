@@ -38,6 +38,7 @@ import model.map.Resource;
 import model.map.ResourceType;
 import model.map.Terrain;
 import model.structures.Bed;
+import model.structures.Container;
 import model.structures.Table;
 import model.structures.Well;
 import model.tasks.BuildStructureTask;
@@ -87,7 +88,7 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage cabbageImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "cabbage1.png" );
 	private static BufferedImage stockpileImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "stockpile.png" );
 	private static BufferedImage rockyPlainsImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "emptyMine.png" );
-	
+
 	//Sub-panels
 	private JPanel gamePanel;
 	private JPanel mapView;
@@ -225,65 +226,65 @@ public class GameDisplayPanel extends JPanel {
 			panel.setCursor(defaultCursor);
 			//		        panel.repaint();
 		}
-		
+
 		public void mouseClicked(MouseEvent e)  {
 			currentlySelectedLocation = ((((e.getX() + viewPosition.x - 1)/16)) % map.getCols()) + ((((e.getY() + viewPosition.y - 1) / 16)) * map.getCols());
 		}
 	}
-	
+
 	private class CellInformationPanel extends JPanel {
 		private static final long serialVersionUID = -7578063348993240808L;
 		private JTextArea civilizationInformation, unitInformation, cellInformation;
 		private JScrollPane civilizationInformationScroller, unitInformationScroller, cellInformationScroller;
-		
+
 		public CellInformationPanel() {
 			super.setLayout( new FlowLayout() );
-			
+
 			//Text areas
 			this.civilizationInformation = new JTextArea();
 			this.civilizationInformation.setEditable( false );
 			this.civilizationInformation.setSize( 210, 110 );
-			
+
 			this.unitInformation = new JTextArea();
 			this.unitInformation.setEditable( false );
 			this.unitInformation.setSize( 210, 110 );
-			
+
 			this.cellInformation = new JTextArea();
 			this.cellInformation.setEditable( false );
 			this.cellInformation.setSize( 210, 110 );
-			
+
 			//Scrollpanes
 			this.civilizationInformationScroller = new JScrollPane( this.civilizationInformation );
 			this.civilizationInformationScroller.setBorder( BorderFactory.createTitledBorder( "Civilization: " ) );
 			this.civilizationInformationScroller.setPreferredSize( this.civilizationInformation.getSize() );
-			
+
 			this.unitInformationScroller = new JScrollPane( this.unitInformation );
 			this.unitInformationScroller.setBorder( BorderFactory.createTitledBorder( "Units: " ) );
 			this.unitInformationScroller.setPreferredSize( this.unitInformation.getSize() );
-			
+
 			this.cellInformationScroller = new JScrollPane( this.cellInformation );
 			this.cellInformationScroller.setBorder( BorderFactory.createTitledBorder( "Selected Cell: " ) );
 			this.cellInformationScroller.setPreferredSize( this.cellInformation.getSize() );
-			
+
 			//Add components
 			super.add( this.civilizationInformationScroller );
 			super.add( this.unitInformationScroller );
 			super.add( this.cellInformationScroller );
-			
+
 			updateTextAreas();
 		}
-		
+
 		public void updateTextAreas() {
 			//Clear out text areas
 			this.civilizationInformation.setText("");
 			this.unitInformation.setText("");
 			this.cellInformation.setText("");
-			
+
 			//Print resource counts
 			for( ResourceType rt : ResourceType.values() )
 				this.civilizationInformation.append( rt + ": " + 
-							Civilization.getInstance().getResourceAmount(rt) + System.lineSeparator() );
-			
+						Civilization.getInstance().getResourceAmount(rt) + System.lineSeparator() );
+
 			//Print out unit information
 			ArrayList<Unit> units = Civilization.getInstance().getUnits();
 			for( int i = 0; i < units.size(); i++ ) {
@@ -291,7 +292,7 @@ public class GameDisplayPanel extends JPanel {
 				this.unitInformation.append( (i + 1) + System.lineSeparator());
 				this.unitInformation.append( units.get(i).toString() + System.lineSeparator() );
 			}
-			
+
 			//Print out cell information
 			Cell c = Civilization.getInstance().getMap().getCell(currentlySelectedLocation);
 			this.cellInformation.append( "Location: (" + 
@@ -301,7 +302,7 @@ public class GameDisplayPanel extends JPanel {
 			this.cellInformation.append( "Resource: " + (c.hasResource() ? c.getResource().name() : "None" ) + System.lineSeparator() );
 		}
 	}
-	
+
 	/**
 	 * Method that can be called from outside of this class to 
 	 */
@@ -346,7 +347,7 @@ public class GameDisplayPanel extends JPanel {
 
 	private class CommandsPanel extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 138601043040511594L;
-		private JButton plantFood, plantTree, collectResource, buildWell, buildTable, buildBed;
+		private JButton plantFood, plantTree, collectResource, buildWell, buildTable, buildBed, buildContainer;
 
 		public CommandsPanel() {
 			super.setLayout( new FlowLayout() );
@@ -369,6 +370,9 @@ public class GameDisplayPanel extends JPanel {
 
 			this.buildWell = new JButton( "Build well" );
 			this.buildWell.addActionListener( this );
+			
+			this.buildContainer = new JButton( "Build container" );
+			this.buildContainer.addActionListener( this );
 
 			super.add( this.plantFood );
 			super.add( this.plantTree );
@@ -376,6 +380,7 @@ public class GameDisplayPanel extends JPanel {
 			super.add( this.buildBed );
 			super.add( this.buildWell );
 			super.add( this.buildTable );
+			super.add( this.buildContainer );
 		}
 
 		@Override public void actionPerformed(ActionEvent e) {
@@ -440,6 +445,16 @@ public class GameDisplayPanel extends JPanel {
 				try {
 					Civilization.getInstance().addTaskToQueue( new BuildStructureTask( 20, m, 
 							new Well(currentlySelectedLocation, "Well", ResourceType.stone ) ) );
+				}
+				catch( DisallowedTaskException dte ) {
+					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
+				}
+			}
+			
+			else if( e.getSource() == this.buildContainer ) {
+				try {
+					Civilization.getInstance().addTaskToQueue( new BuildStructureTask( 5, m, 
+							new Container(currentlySelectedLocation) ) );
 				}
 				catch( DisallowedTaskException dte ) {
 					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
@@ -582,11 +597,11 @@ public class GameDisplayPanel extends JPanel {
 				else if (currentCell.getTerrain().equals(Terrain.rockyPlains)) {
 					switch( t ) {
 					case WATER: g2.drawImage(snowImg, j * 16, i * 16, null); 
-								g2.drawImage(rockyPlainsImg, j * 16, i * 16, null); break;
+					g2.drawImage(rockyPlainsImg, j * 16, i * 16, null); break;
 					case EARTH: g2.drawImage(desertImg, j * 16, i * 16, null); 
-								g2.drawImage(rockyPlainsImg, j * 16, i * 16, null); break;
+					g2.drawImage(rockyPlainsImg, j * 16, i * 16, null); break;
 					default: 	g2.drawImage(grassImg, j * 16, i * 16, null); 
-								g2.drawImage(rockyPlainsImg, j * 16, i * 16, null); break;
+					g2.drawImage(rockyPlainsImg, j * 16, i * 16, null); break;
 					}
 					g2.drawImage(rockyPlainsImg, j * 16, i * 16, null);
 				}
@@ -594,10 +609,10 @@ public class GameDisplayPanel extends JPanel {
 				else if (currentCell.getTerrain().equals(Terrain.kitchen)) {
 					g2.drawImage(kitchenImg, j * 16, i * 16, null);
 				}
-				else if (currentCell.equals(Terrain.barracks)) {
+				else if (currentCell.getTerrain().equals(Terrain.barracks)) {
 					g2.drawImage(barracksImg, j * 16, i * 16, null);
 				}
-				
+
 				// Draws units
 				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
 					Unit unit = Civilization.getInstance().getUnits().get(k);
@@ -605,7 +620,7 @@ public class GameDisplayPanel extends JPanel {
 					int spriteType = unit.getSpriteType();
 					int row = location / map.getCols();
 					int col = location % map.getCols();
-					
+
 					switch( t ) {
 					case WATER: 
 						switch(spriteType) {
@@ -673,7 +688,7 @@ public class GameDisplayPanel extends JPanel {
 						}
 					}
 				}
-				
+
 				if (currentCell.hasStructure()) {
 					if (currentCell.getStructure().providesFood()) {
 						g2.drawImage(tableImg, j * 16, i * 16, null);
@@ -684,12 +699,12 @@ public class GameDisplayPanel extends JPanel {
 					} else if (currentCell.getStructure().isAContainer()) {
 						g2.drawImage(barrelImg, j * 16, i * 16, null);
 					}
- 				}
-			
+				}
+
+			}
+			// Draw rectangle
+			g2.setPaint(Color.RED);
+			g2.drawRect(viewPosition.x-2, viewPosition.y-2, (int) (gamePanel.getWidth()+10), (int) (gamePanel.getHeight()+10));
 		}
-		// Draw rectangle
-		g2.setPaint(Color.RED);
-		g2.drawRect(viewPosition.x-2, viewPosition.y-2, (int) (gamePanel.getWidth()+10), (int) (gamePanel.getHeight()+10));
 	}
-}
 }

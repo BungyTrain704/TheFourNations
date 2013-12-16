@@ -6,7 +6,7 @@ import model.Civilization;
 import model.exceptions.DisallowedTaskException;
 import model.map.Map;
 import model.map.Resource;
-import model.map.Terrain;
+import model.structures.AbstractStructure;
 
 
 /**
@@ -23,15 +23,14 @@ public class CollectResourceTask extends Task{
 	public CollectResourceTask(int work, int locTask, Map map) {
 		super(work, locTask, map);
 
-		Map m = Civilization.getInstance().getMap();
-
-		// Find stockpiles on the map
-		for( int i = 0; i < m.getMapSize(); i++ ) {
-			if( m.getCell(i).getTerrain() == Terrain.stockpile ) {
-				storedCells.add( i );
-			}
+		// Find containers on the map
+		for(AbstractStructure struct: Civilization.getInstance().getStructures())
+		{
+			if(struct.isAContainer())
+				storedCells.add(struct.getLocation());
 		}
-		
+
+
 		if( storedCells.size() == 0 ) {
 			String message = "Collecting resources required a stockpile to store them in!";
 			throw new DisallowedTaskException( this, message );
