@@ -597,9 +597,6 @@ public class GameDisplayPanel extends JPanel {
 				else if (currentCell.equals(Terrain.barracks)) {
 					g2.drawImage(barracksImg, j * 16, i * 16, null);
 				}
-				else if( currentCell.equals( Terrain.stockpile ) ) {
-					g2.drawImage( stockpileImg, j * 16, i * 16, null );
-				}
 				
 				// Draws units
 				for (int k = 0; k < Civilization.getInstance().getUnits().size(); k++) {
@@ -676,7 +673,6 @@ public class GameDisplayPanel extends JPanel {
 						}
 					}
 				}
-
 				
 				if (currentCell.hasStructure()) {
 					if (currentCell.getStructure().providesFood()) {
