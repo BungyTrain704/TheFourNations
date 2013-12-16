@@ -27,6 +27,7 @@ import javax.swing.JTextArea;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.text.DefaultCaret;
 
 import model.Civilization;
 import model.CivilizationState;
@@ -48,6 +49,12 @@ import model.tasks.CollectResourceTask;
 import model.tasks.PlantResourceTask;
 import model.units.Unit;
 
+/**
+ * The primary panel for The Four Nations game view. Displays main map with right-click-to-drag functionality, 
+ * mini map with click-to-drag functionality, unit information, and stockpile information
+ * @author Christopher Chapline, James Fagan, Emily Leones, Michelle Yung
+ *
+ */
 public class GameDisplayPanel extends JPanel {
 
 	private static final long serialVersionUID = 2343561989439374616L;
@@ -256,6 +263,9 @@ public class GameDisplayPanel extends JPanel {
 			this.unitInformation = new JTextArea();
 			this.unitInformation.setEditable( false );
 			this.unitInformation.setSize( 210, 110 );
+			
+			DefaultCaret caret = (DefaultCaret)unitInformation.getCaret();
+			caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
 			this.cellInformation = new JTextArea();
 			this.cellInformation.setEditable( false );
@@ -312,7 +322,7 @@ public class GameDisplayPanel extends JPanel {
 	}
 
 	/**
-	 * Method that can be called from outside of this class to 
+	 * Method that can be called from outside of this class to update
 	 */
 	public void update() {
 		if( this.infoPanel != null ) {

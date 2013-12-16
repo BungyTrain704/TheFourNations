@@ -465,7 +465,7 @@ public abstract class Unit implements Serializable {
 		sb.append( "Hunger Level: ").append( this.hungerLevel).append("/").append( this.MAX_HUNGER_LEVEL ).append(lineSep);
 		sb.append( "Energy Level: ").append( this.energyLevel).append("/").append( this.MAX_ENERGY_LEVEL ).append(lineSep);
 		sb.append( "Thirst Level: ").append( this.thirstLevel).append("/").append( this.MAX_THIRST_LEVEL ).append(lineSep);
-		sb.append( "Location: " ).append( "(" ).append( this.location % cols ).append(",").append( this.location/cols).append( lineSep );
+		sb.append( "Location: " ).append( "(" ).append( this.location % cols ).append(",").append( this.location/cols).append(")").append( lineSep );
 		
 		return sb.toString();
 	}
