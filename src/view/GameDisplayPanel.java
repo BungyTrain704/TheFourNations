@@ -481,6 +481,29 @@ public class GameDisplayPanel extends JPanel {
 					JOptionPane.showMessageDialog( parent, dte.getMessage(), "Invalid Task!", JOptionPane.ERROR_MESSAGE );
 				}
 			}
+			else if( e.getSource() == this.buildRoom ) {
+				int roomBuilt;
+				if (roomList.getSelectedIndex() == 0) {
+					roomBuilt = civ.getMap().buildRoom(roomStart/70, roomStart%70, roomEnd/70, roomEnd%70, Terrain.kitchen);
+					if (roomBuilt == 1) {
+						JOptionPane.showMessageDialog(parent, "You currently do not have enough funds to build barracks!");
+					} else if (roomBuilt == 2) {
+						JOptionPane.showMessageDialog(parent, "You cannot build on this area, either due to presence of water or other structure!");
+					} else if (roomBuilt == 3) {
+						JOptionPane.showMessageDialog(parent, "You must clear the resources from the area you wish to build on!");
+					}
+				}
+				else if (roomList.getSelectedIndex() == 1) {
+					roomBuilt = civ.getMap().buildRoom(roomStart/70, roomStart%70, roomEnd/70, roomEnd%70, Terrain.barracks);
+					if (roomBuilt == 1) {
+						JOptionPane.showMessageDialog(parent, "You currently do not have enough funds to build barracks!");
+					} else if (roomBuilt == 2) {
+						JOptionPane.showMessageDialog(parent, "You cannot build on this area, either due to presence of water or other structure!");
+					} else if (roomBuilt == 3) {
+						JOptionPane.showMessageDialog(parent, "You must clear the resources from the area you wish to build on!");
+					} 
+				}
+			}
 		}
 	}
 
