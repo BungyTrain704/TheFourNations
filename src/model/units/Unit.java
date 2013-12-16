@@ -214,16 +214,17 @@ public abstract class Unit implements Serializable {
 				}
 
 				ArrayList<AbstractStructure> structures = civ.getStructures();
+				ArrayList<AbstractStructure> validStructures = new ArrayList<AbstractStructure>();
 
 				for( AbstractStructure as : structures ) {
-					if( ! as.providesFood() )
-						structures.remove(as);
+					if( as.providesFood() )
+						validStructures.add(as);
 				}
 
 				//Create task to eat
-				if( ! structures.isEmpty() )
+				if( ! validStructures.isEmpty() )
 				{	
-					this.currentTask = new EatTask( 1, structures.get(0).getLocation(), civ.getMap(), this );
+					this.currentTask = new EatTask( 1, validStructures.get(0).getLocation(), civ.getMap(), this );
 					if(!generatePath(currentTask.getTaskLocation()))
 						currentTask = null;
 				}
@@ -238,16 +239,17 @@ public abstract class Unit implements Serializable {
 				}
 
 				ArrayList<AbstractStructure> structures = civ.getStructures();
+				ArrayList<AbstractStructure> validStructures = new ArrayList<AbstractStructure>();
 
 				for( AbstractStructure as : structures ) {
-					if( ! as.providesBed() )
-						structures.remove(as);
+					if( as.providesBed() )
+						validStructures.add(as);
 				}
 
 				//Create task to sleep
-				if( ! structures.isEmpty() )
+				if( ! validStructures.isEmpty() )
 				{	
-					this.currentTask = new SleepTask( 1, structures.get(0).getLocation(), civ.getMap(), this );
+					this.currentTask = new SleepTask( 1, validStructures.get(0).getLocation(), civ.getMap(), this );
 					if(!generatePath(currentTask.getTaskLocation()))
 						currentTask = null;
 				}	
@@ -262,16 +264,17 @@ public abstract class Unit implements Serializable {
 				}	
 
 				ArrayList<AbstractStructure> structures = civ.getStructures();
+				ArrayList<AbstractStructure> validStructures = new ArrayList<AbstractStructure>();
 
 				for( AbstractStructure as : structures ) {
-					if( ! as.providesDrink() )
-						structures.remove(as);
+					if( as.providesDrink() )
+						validStructures.add(as);
 				}
 
 				//Create task to drink
-				if( ! structures.isEmpty() )
+				if( ! validStructures.isEmpty() )
 				{	
-					this.currentTask = new DrinkTask( 1, structures.get(0).getLocation(), civ.getMap(), this );
+					this.currentTask = new DrinkTask( 1, validStructures.get(0).getLocation(), civ.getMap(), this );
 					if(!generatePath(currentTask.getTaskLocation()))
 						currentTask = null;
 				}	
