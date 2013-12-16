@@ -196,7 +196,7 @@ public abstract class Unit implements Serializable {
 		updateUnitCounters();
 
 		//make babies
-		if(Math.random() < .0005)
+		if(Math.random() < .001)
 		{	
 			this.giveBirth();
 			System.out.println("A new birth!");
@@ -291,7 +291,7 @@ public abstract class Unit implements Serializable {
 			move();
 //			System.out.println("moving");
 		}
-		else if(this.currentlyWorking)
+		else if(this.currentlyWorking && this.currentTask != null )
 		{
 //			System.out.println("working");
 			if( this.currentTask.getUnit() == null ) this.currentTask.setUnit( this );
