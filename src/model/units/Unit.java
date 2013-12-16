@@ -225,8 +225,10 @@ public abstract class Unit implements Serializable {
 				if( ! validStructures.isEmpty() )
 				{	
 					this.currentTask = new EatTask( 1, validStructures.get(0).getLocation(), civ.getMap(), this );
-					if(!generatePath(currentTask.getTaskLocation()))
+					if(!generatePath(currentTask.getTaskLocation())) {
 						currentTask = null;
+						currentlyWorking = false;
+					}
 				}
 			}
 			else if(this.needsToSleep())
@@ -250,8 +252,10 @@ public abstract class Unit implements Serializable {
 				if( ! validStructures.isEmpty() )
 				{	
 					this.currentTask = new SleepTask( 1, validStructures.get(0).getLocation(), civ.getMap(), this );
-					if(!generatePath(currentTask.getTaskLocation()))
+					if(!generatePath(currentTask.getTaskLocation())) {
 						currentTask = null;
+						currentlyWorking = false;
+					}
 				}	
 			}
 			else if(this.needsToDrink())
@@ -275,8 +279,10 @@ public abstract class Unit implements Serializable {
 				if( ! validStructures.isEmpty() )
 				{	
 					this.currentTask = new DrinkTask( 1, validStructures.get(0).getLocation(), civ.getMap(), this );
-					if(!generatePath(currentTask.getTaskLocation()))
+					if(!generatePath(currentTask.getTaskLocation())) {
 						currentTask = null;
+						currentlyWorking = false;
+					}
 				}	
 			}
 		}
