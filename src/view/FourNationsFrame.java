@@ -44,9 +44,9 @@ public class FourNationsFrame extends JFrame {
 		this.timer = new Timer( 300, new ActionListener() {
 			@Override public void actionPerformed(ActionEvent arg0) {
 				//1% chance to lose 10% food stores
-				if( Math.random() < 0.01 ) {
+				if( Math.random() < 0.005 ) {
 					ResourceType food = ResourceType.food;
-					Civilization.getInstance().setResourceAmount(food,  (int) (Civilization.getInstance().getResourceAmount(food) * 0.9) );
+					Civilization.getInstance().setResourceAmount(food,  (int) (Civilization.getInstance().getResourceAmount(food) * 0.75) );
 					pause();
 					JOptionPane.showMessageDialog( null,  "Famine strikes and eliminates 10% of your food stores!" );
 					resume();
