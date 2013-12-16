@@ -102,6 +102,8 @@ public class GameDisplayPanel extends JPanel {
 	private Point viewPosition;
 	private JViewport viewport;
 	private Point endPoint;
+	private int roomStart;
+	private int roomEnd;
 
 	//Game components
 	private Map map = Civilization.getInstance().getMap();
@@ -220,13 +222,17 @@ public class GameDisplayPanel extends JPanel {
 		public void mousePressed(MouseEvent e) {
 			panel.setCursor(handCursor);
 			pointClicked.setLocation(e.getPoint());
+			currentlySelectedLocation = ((((e.getX() + viewPosition.x - 1)/16)) % map.getCols()) + ((((e.getY() + viewPosition.y - 1) / 16)) * map.getCols());
+			roomStart = ((((e.getX() + viewPosition.x - 1)/16)) % map.getCols()) + ((((e.getY() + viewPosition.y - 1) / 16)) * map.getCols());
 		}
 
 		public void mouseReleased(MouseEvent e) {
 			panel.setCursor(defaultCursor);
+			currentlySelectedLocation = ((((e.getX() + viewPosition.x - 1)/16)) % map.getCols()) + ((((e.getY() + viewPosition.y - 1) / 16)) * map.getCols());
+			roomEnd = ((((e.getX() + viewPosition.x - 1)/16)) % map.getCols()) + ((((e.getY() + viewPosition.y - 1) / 16)) * map.getCols());
 			//		        panel.repaint();
 		}
-
+		
 		public void mouseClicked(MouseEvent e)  {
 			currentlySelectedLocation = ((((e.getX() + viewPosition.x - 1)/16)) % map.getCols()) + ((((e.getY() + viewPosition.y - 1) / 16)) * map.getCols());
 		}
@@ -373,7 +379,18 @@ public class GameDisplayPanel extends JPanel {
 			
 			this.buildContainer = new JButton( "Build container" );
 			this.buildContainer.addActionListener( this );
-
+			
+			this.buildRoom = new JButton( "Build Room" );
+			this.buildRoom.addActionListener( this );
+			
+			roomListModel = new DefaultListModel<String>();
+			roomList = new JList<String>();
+			roomList.setModel(roomListModel);
+			roomListModel.addElement("Kitchen");
+			roomListModel.addElement("Barracks");
+			
+			super.add( this.roomList );
+			super.add( this.buildRoom );
 			super.add( this.plantFood );
 			super.add( this.plantTree );
 			super.add( this.collectResource );

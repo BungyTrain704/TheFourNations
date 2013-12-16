@@ -130,11 +130,12 @@ public class Map implements Serializable {
 		// Check for water and resources within the given area
 		for (int i = startRow; i <= endRow; i++) {
 			for (int j = startCol; j <= endCol; j++) {
-				if (this.map[i][j].hasResource()
-						|| this.map[i][j].getTerrain().equals(Terrain.water)
-						|| this.map[i][j].hasStructure()) {
+				if (this.map[i][j].getTerrain().equals(Terrain.water)|| this.map[i][j].hasStructure()) {
 					return 2;
 				}
+				else if (this.map[i][j].hasResource()) {
+					return 3;
+				} 
 			}
 		}
 
