@@ -177,6 +177,7 @@ public class Civilization {
 	 * Stores the given resource in the resource stores
 	 */
 	public void storeResource(Resource resource) {
+		if( resource == null ) return;
 		this.globalResourcePool.put(resource.getResourceType(), 
 				this.globalResourcePool.get(resource.getResourceType() ) + resource.getResourceValue() );
 	}

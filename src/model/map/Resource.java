@@ -7,7 +7,7 @@ package model.map;
  */
 public enum Resource {
 
-	tree( "#", ResourceType.wood, 1 ), stone( "^", ResourceType.stone, 1 ), goldMine( "g", ResourceType.gold, 10 ), garden( "f", ResourceType.food, 20 );
+	tree( "#", ResourceType.wood, 1 ), stone( "^", ResourceType.stone, 1 ), goldMine( "g", ResourceType.gold, 10 ), garden( "f", ResourceType.food, 50 );
 
 	private String symbol;
 	private ResourceType type;
