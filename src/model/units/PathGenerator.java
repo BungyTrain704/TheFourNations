@@ -32,7 +32,7 @@ public class PathGenerator {
 	
 	public PathGenerator (int[][] map, int start, int end)
 	{
-		this.map=map;
+		this.map= map;
 		this.start = start;
 		this.end = end;
 		cols = map[0].length;

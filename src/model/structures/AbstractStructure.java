@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import model.map.Resource;
 import model.map.ResourceType;
 import model.map.Terrain;
 

@@ -95,7 +95,6 @@ public class GameDisplayPanel extends JPanel {
 	private static BufferedImage barrelImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "barrel.png");
 	private static BufferedImage goldImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "goldMine.png" );
 	private static BufferedImage cabbageImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "cabbage1.png" );
-	private static BufferedImage stockpileImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "stockpile.png" );
 	private static BufferedImage rockyPlainsImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "emptyMine.png" );
 
 	//Sub-panels

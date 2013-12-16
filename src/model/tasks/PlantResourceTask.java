@@ -1,6 +1,5 @@
 package model.tasks;
 
-import model.Civilization;
 import model.exceptions.DisallowedTaskException;
 import model.map.Map;
 import model.map.Resource;
@@ -35,7 +34,6 @@ public class PlantResourceTask extends Task {
 	 * <p>Adds the resource to the map</p>
 	 */
 	@Override public void performAction() {
-		Civilization civ = Civilization.getInstance();
 		map.getCell(super.locationOfTask).setResource(resourceToPlant);
 		map.makeInaccesible(super.locationOfTask);
 		this.isDone = true;

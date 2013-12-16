@@ -43,6 +43,7 @@ public class SerializationTest {
 		civ.setResourceAmount( ResourceType.wood, 5000 );
 		civ.setMap( new Map() );
 		civ.getMap().getCell(300).setTerrain(Terrain.plains); //Prevent DisallowedTaskException
+		civ.setResourceAmount( ResourceType.stone, 1 );
 		civ.addTaskToQueue( new BuildStructureTask(5, civ.getMap(), new Well( 300, "WELL", ResourceType.stone ) ) );
 
 		//Assertions
@@ -82,7 +83,7 @@ public class SerializationTest {
 		//Get the saves located in the file tree
 		System.out.print( "Existing saves: " );
 		ArrayList<String> firstTwoSaves = SaveLoadManager.getSavedGames();
-		System.out.println( firstTwoSaves );
+		System.out.println( firstTwoSaves ); 
 		assertEquals( 2, firstTwoSaves.size() );
 		System.out.println();
 
