@@ -16,8 +16,10 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -353,7 +355,9 @@ public class GameDisplayPanel extends JPanel {
 
 	private class CommandsPanel extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 138601043040511594L;
-		private JButton plantFood, plantTree, collectResource, buildWell, buildTable, buildBed, buildContainer;
+		private JButton plantFood, plantTree, collectResource, buildWell, buildTable, buildBed, buildContainer, buildRoom;
+		private DefaultListModel<String> roomListModel;
+		private JList<String> roomList;
 
 		public CommandsPanel() {
 			super.setLayout( new FlowLayout() );
