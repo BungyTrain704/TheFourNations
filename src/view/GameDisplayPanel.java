@@ -60,6 +60,7 @@ public class GameDisplayPanel extends JPanel {
 	private static final long serialVersionUID = 2343561989439374616L;
 
 	//Images
+	// Sprites provided by: http://www.musogato.com/avatar/sprites/sprites.php?atla
 	private static BufferedImage grassImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "grass.png");
 	private static BufferedImage waterImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "water.png");
 	private static BufferedImage snowImg = GameImageLoader.getImage(GameImageLoader.imagesFolder + "snow.png");
@@ -681,24 +682,28 @@ public class GameDisplayPanel extends JPanel {
 						case 1: g2.drawImage(waterDude2, col * 16 - 8, (row - 1) * 16, null); break;
 						case 2: g2.drawImage(waterDude3, col * 16 - 8, (row - 1) * 16, null); break;
 						}
+					break;
 					case FIRE: 
 						switch(spriteType) {
 						case 0: g2.drawImage(fireDude1, col * 16 - 8, (row - 1) * 16, null); break;
 						case 1: g2.drawImage(fireDude2, col * 16 - 8, (row - 1) * 16, null); break;
 						case 2: g2.drawImage(fireDude3, col * 16 - 8, (row - 1) * 16, null); break;
 						}
+					break;
 					case AIR: 
 						switch(spriteType) {
 						case 0: g2.drawImage(airDude1, col * 16 - 8, (row - 1) * 16, null); break;
 						case 1: g2.drawImage(airDude2, col * 16 - 8, (row - 1) * 16, null); break;
 						case 2: g2.drawImage(airDude3, col * 16 - 8, (row - 1) * 16, null); break;
 						}
+					break;
 					case EARTH: 
 						switch(spriteType) {
 						case 0: g2.drawImage(earthDude1, col * 16 - 8, (row - 1) * 16, null); break;
 						case 1: g2.drawImage(earthDude2, col * 16 - 8, (row - 1) * 16, null); break;
 						case 2: g2.drawImage(earthDude3, col * 16 - 8, (row - 1) * 16, null); break;
 						}
+					break;
 					}	
 				}
 
